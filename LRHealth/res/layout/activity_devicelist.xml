@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="42dp"
+        android:background="@drawable/title_bg"
+        android:gravity="center_vertical"
+        android:paddingBottom="1dp"
+        android:paddingLeft="13.67dp"
+        android:paddingRight="10dp"
+        android:paddingTop="1dp" >
+        
+        <Button
+			android:id="@+id/button_back"
+			style="?android:attr/buttonStyleSmall"
+			android:layout_width="80dp"
+			android:layout_height="35dp"
+			android:layout_alignParentLeft="true"
+			android:layout_centerVertical="true"
+			android:background="@drawable/selector_navibutton"
+			android:text="Back"
+			android:textColor="@color/snow"
+			android:visibility="visible"/>
+	    
+		<Button
+			android:id="@+id/button_scan"
+			style="?android:attr/buttonStyleSmall"
+			android:layout_width="80dp"
+			android:layout_height="35dp"
+			android:layout_alignParentRight="true"
+			android:layout_centerVertical="true"
+			android:background="@drawable/selector_navibutton"
+			android:text="Scan"
+			android:textColor="@color/snow"
+			android:visibility="visible"/>
+
+		<TextView
+		    android:id="@+id/textView_title"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_centerHorizontal="true"
+		    android:layout_centerVertical="true"
+		    android:text="Bluetooth Devices"
+		    android:textAppearance="?android:attr/textAppearanceLarge"
+		    android:textColor="@color/snow" />
+        
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/listView_dev"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+
+</LinearLayout>

@@ -1,0 +1,327 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linelayout_selfview"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/icon_bgstyle00"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/linelayout_vent"
+        android:layout_width="fill_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="35dp"
+        android:background="@drawable/icon_title00"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/textView_venttitle"
+                style="@style/Text.primaryTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ventilation"
+                android:textColor="@color/snow" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="80dp"
+            android:layout_marginLeft="135dp"
+            android:layout_marginRight="135dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/button_vent"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/icon_funvent00"
+                android:textColor="@color/snow" />
+
+            <Button
+                android:id="@+id/button_ventback"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="80dp"
+                android:background="@drawable/icon_btback00"
+                android:textColor="@color/snow" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linelayout_refri"
+        android:layout_width="fill_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="35dp"
+        android:background="@drawable/icon_title00"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/textView_refrititle"
+                style="@style/Text.primaryTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Refrigeration"
+                android:textColor="@color/snow" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="80dp"
+            android:layout_marginLeft="135dp"
+            android:layout_marginRight="135dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/button_refri"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/icon_funrefri01"
+                android:textColor="@color/snow" />
+
+            <Button
+                android:id="@+id/button_refriback"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="80dp"
+                android:background="@drawable/icon_btback00"
+                android:textColor="@color/snow" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linelayout_heat"
+        android:layout_width="fill_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="35dp"
+        android:background="@drawable/icon_title00"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/textView_heattitle"
+                style="@style/Text.primaryTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Heat"
+                android:textColor="@color/snow" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="80dp"
+            android:layout_marginLeft="135dp"
+            android:layout_marginRight="135dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/button_heat"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/icon_funheat01"
+                android:textColor="@color/snow" />
+
+            <Button
+                android:id="@+id/button_heatback"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="80dp"
+                android:background="@drawable/icon_btback00"
+                android:textColor="@color/snow" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linelayout_setting"
+        android:layout_width="fill_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="35dp"
+        android:background="@drawable/icon_title00"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/textView_settingtitle"
+                style="@style/Text.primaryTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Setting"
+                android:textColor="@color/snow" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center" >
+
+                <Button
+                    android:id="@+id/button_setting"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/icon_funsettingui00"
+                    android:textColor="@color/snow" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <Button
+                    android:id="@+id/button_uistyle00"
+                    android:layout_width="80dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/icon_funsettingitembg"
+                    android:textColor="@color/snow" />
+
+                <Button
+                    android:id="@+id/button_uistyle01"
+                    android:layout_width="80dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/icon_funsettingitembg"
+                    android:textColor="@color/snow" />
+
+                <Button
+                    android:id="@+id/button_uistyle02"
+                    android:layout_width="80dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/icon_funsettingitembg"
+                    android:textColor="@color/snow" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:gravity="center" >
+
+                <Button
+                    android:id="@+id/button_settingback"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/icon_funsettinglan00"
+                    android:textColor="@color/snow" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <Button
+                    android:id="@+id/button_uistyle00"
+                    android:layout_width="80dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/icon_funsettingitembg"
+                    android:textColor="@color/snow" />
+
+                <Button
+                    android:id="@+id/button_uistyle01"
+                    android:layout_width="80dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/icon_funsettingitembg"
+                    android:textColor="@color/snow" />
+
+                <Button
+                    android:id="@+id/button_uistyle02"
+                    android:layout_width="80dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/icon_funsettingitembg"
+                    android:textColor="@color/snow" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linelayout_menu"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom|center_horizontal"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/button_menuvent"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/icon_btvent00"
+            android:textColor="@color/snow" />
+
+        <Button
+            android:id="@+id/button_menurefri"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/icon_btrefri00"
+            android:textColor="@color/snow" />
+
+        <Button
+            android:id="@+id/button_menuheat"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/icon_btheat00"
+            android:textColor="@color/snow" />
+
+        <Button
+            android:id="@+id/button_menusetting"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/icon_btsetting00"
+            android:textColor="@color/snow" />
+
+        <Button
+            android:id="@+id/button_menuback"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/icon_btback00"
+            android:textColor="@color/snow" />
+    </LinearLayout>
+
+</LinearLayout>

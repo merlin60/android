@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/icon_bgstyle00"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="80dp"
+        android:gravity="center" >
+
+        <Button
+            android:id="@+id/button_vent"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/icon_btvent00"
+            android:textColor="@color/snow" />
+        
+        <Button
+            android:id="@+id/button_refri"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/icon_btrefri00"
+            android:textColor="@color/snow" />
+        
+        <Button
+            android:id="@+id/button_heat"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/icon_btheat00"
+            android:textColor="@color/snow" />
+        
+        <Button
+            android:id="@+id/button_setting"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/icon_btsetting00"
+            android:textColor="@color/snow" />
+        
+        <Button
+            android:id="@+id/button_back"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/icon_btback00"
+            android:textColor="@color/snow" />
+
+        
+
+    </LinearLayout>
+    
+
+</LinearLayout>

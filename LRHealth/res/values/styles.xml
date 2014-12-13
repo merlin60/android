@@ -1,0 +1,68 @@
+<resources>
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+    
+    <style name="ButtonBarButton" />
+   
+    <style name="Text" />
+    <style name="Text.primaryTitle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="Text.secondaryTitle">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">#4d4d4d</item>
+    </style>
+
+     <style name="Text.thirdTitle">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">#4d4d4d</item>
+    </style> 
+
+    <style name="Text.primaryListTitle">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="Text.secondaryListTitle">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">#6d6d6d</item>
+    </style>
+
+    <style name="Text.thirdListTitle">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">#6d6d6d</item>
+    </style>
+    
+    <style name="Text.fourthListTitle">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="Text.defButton">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>    
+
+    <style name="Text.defListItem">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+</resources>
