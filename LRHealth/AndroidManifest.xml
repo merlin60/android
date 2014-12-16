@@ -41,6 +41,7 @@
             android:name=".BluetoothServe.BluetoothService"
             android:enabled="true" >
         </service>
+        
         <service
             android:name="com.jinoux.android.bledatawarehouse.BluetoothService"
             android:enabled="true" />
