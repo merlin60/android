@@ -22,6 +22,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -34,6 +35,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 public class DeviceListActivity extends Activity {
 	private static final int REQUEST_OPEN_BT_CODE = 0x01;
@@ -68,29 +70,6 @@ public class DeviceListActivity extends Activity {
 
 	public BluetoothService mbluetoothService;
 
-	private final BroadcastReceiver m_bdreceiver = new BroadcastReceiver() {
-		public void onReceive(Context context, Intent intent) {
-
-			String action = intent.getAction();
-			if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-				// add to array
-				BluetoothDevice device = intent
-						.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-				HashMap<String, Object> map;
-				map = new HashMap<String, Object>();
-				map.put(ObjectName, device.getName());
-				map.put(ObjectDetail, device.getAddress());
-				map.put(ObjectIcon, R.drawable.icon_update);
-				m_listInfo.add(map);
-
-				// send message
-				Message message = Message.obtain();
-				message.what = MESSAGE_UPDATELIST;
-				m_handler.sendMessage(message);
-			}
-		}
-	};
-
 	private Handler m_handler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -99,10 +78,12 @@ public class DeviceListActivity extends Activity {
 			}
 				break;
 			case MESSAGE_CONNECT:
-				//connect();
+				connect();
 				break;
 			case MESSAGE_CONNECTED:
+				//TODO:
 				Log.d("===", "connected");
+				Toast.makeText(DeviceListActivity.this, "连接成功", 0).show();
 				break;
 			default:
 				break;
@@ -142,13 +123,13 @@ public class DeviceListActivity extends Activity {
 	}
 
 	@Override
-	public void onResume() {		
+	public void onResume() {
 		// register receiver
 		IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-		// registerReceiver(m_bdreceiver, filter);
+		// registerReceiver(m_bdreceiver, filter);		
 		
-		SharedSetting mySharedSetting = new SharedSetting(DeviceListActivity.this);
-
+		SharedSetting mySharedSetting = new SharedSetting(DeviceListActivity.this);		
+		
 		super.onResume();
 	}
 
@@ -277,9 +258,9 @@ public class DeviceListActivity extends Activity {
 
 			Bundle bundle = new Bundle();
 			bundle.putInt("FunIdx", 0);
-//			if (macBleModule != null) {
-//				bundle.putString("mac", macBleModule);
-//			}
+			if (macBleModule != null) {
+				bundle.putString("mac", macBleModule);
+			}
 
 			//if connectted, start activity. if not, do nothing
 			Intent intent = new Intent();
@@ -293,6 +274,7 @@ public class DeviceListActivity extends Activity {
 	}
 
 	private void updateBluetoothDevList() {
+		Log.d("===", "notifylistupdate");
 		m_itemSimAdapter.notifyDataSetChanged();
 	}
 
@@ -304,7 +286,7 @@ public class DeviceListActivity extends Activity {
 			BluetoothAdapter.getDefaultAdapter().enable();
 		}
 
-		return 0;
+		return 0; 
 	}
 
 	private int startScanBluetoothDev() {
@@ -332,11 +314,15 @@ public class DeviceListActivity extends Activity {
 			Message message = Message.obtain();
 			message.what = MESSAGE_UPDATELIST;
 			m_handler.sendMessage(message);
+			
+			
+		
 
 			if (device.getName().equalsIgnoreCase(nameBleModule)) {
 				macBleModule = device.getAddress();
 				android.util.Log.d("===", "finded " + macBleModule);
-				//service_init();
+				stopScanBluetoothDev();
+				service_init();
 
 			}
 		}
@@ -353,10 +339,11 @@ public class DeviceListActivity extends Activity {
 
 	private void connect() {
 		// TODO Auto-generated method stub
+		
+		
 		mbluetoothService.gethandler(deviceHandler);
 		mbluetoothService.connect(macBleModule);
 
-		service_init();
 	}
 
 	@SuppressLint("InlinedApi")
@@ -451,7 +438,8 @@ public class DeviceListActivity extends Activity {
 				break;
 			case 1:
 				String str = (String) msg.obj;
-				Log.d("===", "received data: " + str);
+				//str = Tools.bytesToHexString(str.getBytes());
+				Log.d("===", "received data:" + str);
 				break;
 			case 2:
 				// String ss = (String) msg.obj;
