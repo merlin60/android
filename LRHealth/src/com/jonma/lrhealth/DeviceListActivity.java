@@ -281,6 +281,7 @@ public class DeviceListActivity extends Activity {
 //				bundle.putString("mac", macBleModule);
 //			}
 
+			//if connectted, start activity. if not, do nothing
 			Intent intent = new Intent();
 			intent.putExtras(bundle);
 			intent.setClass(DeviceListActivity.this,
@@ -350,116 +351,116 @@ public class DeviceListActivity extends Activity {
 		return 0;
 	}
 
-//	private void connect() {
-//		// TODO Auto-generated method stub
-//		mbluetoothService.gethandler(deviceHandler);
-//		mbluetoothService.connect(macBleModule);
-//
-//		//service_init();
-//	}
-//
-//	@SuppressLint("InlinedApi")
-//	private void service_init() {
-//		Intent gattServiceIntent = new Intent(this, BluetoothService.class);
-//		boolean bll = bindService(gattServiceIntent, mServiceConnection,
-//				BIND_AUTO_CREATE);
-//		if (bll) {
-//			Log.i("===", "绑定服务gattServiceIntent成功");
-//		} else {
-//			Log.i("===", "绑定服务gattServiceIntent失败");
-//		}
-//		registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-//	}
-//
-//	private static IntentFilter makeGattUpdateIntentFilter() {
-//		final IntentFilter intentFilter = new IntentFilter();
-//		intentFilter.addAction(BluetoothService.ACTION_GATT_DISCONNECTED);
-//		intentFilter.addAction(BluetoothService.ACTION_GATT_CONNECTED);
-//		intentFilter
-//				.addAction(BluetoothService.ACTION_GATT_READCHARACTERISTICSUCCESS);
-//		return intentFilter;
-//	}
-//
-//	private final ServiceConnection mServiceConnection = new ServiceConnection() {
-//		@Override
-//		public void onServiceConnected(ComponentName componentName,
-//				IBinder service) {
-//			mbluetoothService = ((BluetoothService.LocalBinder) service)
-//					.getService();
-//			if (mbluetoothService == null) {
-//				Log.d("===", "mbluetoothService is null");
-//
-//			} else {
-//				Log.d("===", "mbluetoothService is not null");
-//
-//				Message message = Message.obtain();
-//				message.what = MESSAGE_CONNECT;
-//				m_handler.sendMessage(message);
-//			}
-//			boolean ba = mbluetoothService.initialize();
-//			if (!ba) {
-//				Log.i("===", "Unable to initialize Bluetooth");
-//			} else {
-//				Log.i("===", "initialize Bluetooth");
-//			}
-//		}
-//
-//		@Override
-//		public void onServiceDisconnected(ComponentName componentName) {
-//			mbluetoothService = null;
-//		}
-//	};
-//
-//	// 接收广播
-//	private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
-//		@Override
-//		public void onReceive(Context context, Intent intent) {
-//			final String action = intent.getAction();
-//			Log.i("===", "action = " + action);
-//			if (BluetoothService.ACTION_GATT_READCHARACTERISTICSUCCESS
-//					.equals(action)) { // 连接成功 并读取characteristic成功
-//				// String connecttext = "disconnect";
-//				// connectButton.setText(connecttext);
-//				// ConnectProgressBarzt(false);
-//				connectstate = true;
-//				Message message = Message.obtain();
-//				message.what = MESSAGE_CONNECTED;
-//				m_handler.sendMessage(message);
-//			} else if (BluetoothService.ACTION_GATT_DISCONNECTED.equals(action)) { // 模块已断开连接
-//				if (connectstate == true) { // 正在连接中
-//					// showAlertDialog(
-//					// "模块已关闭连接，请断开!",
-//					// getResources().getString(
-//					// R.string.alertOneButtonTitle), null, 0);
-//					Log.d("===", "模块已关闭连接，请断开!");
-//				}
-//			}
-//		}
-//	};
-//
-//	@SuppressLint("HandlerLeak")
-//	public Handler deviceHandler = new Handler() {
-//		@Override
-//		public void handleMessage(Message msg) {
-//			super.handleMessage(msg);
-//			// Log.i("what === "+msg.what);
-//			switch (msg.what) {
-//			case 0:
-//				Log.i("===", "连接失败");
-//				connectstate = false;
-//				break;
-//			case 1:
-//				String str = (String) msg.obj;
-//				Log.d("===", "received data: " + str);
-//				break;
-//			case 2:
-//				// String ss = (String) msg.obj;
-//				// receivetop_text.setText("接收数据：已接收 "+ss+" 个字节");
-//				break;
-//			default:
-//				break;
-//			}
-//		}
-//	};
+	private void connect() {
+		// TODO Auto-generated method stub
+		mbluetoothService.gethandler(deviceHandler);
+		mbluetoothService.connect(macBleModule);
+
+		service_init();
+	}
+
+	@SuppressLint("InlinedApi")
+	private void service_init() {
+		Intent gattServiceIntent = new Intent(this, BluetoothService.class);
+		boolean bll = bindService(gattServiceIntent, mServiceConnection,
+				BIND_AUTO_CREATE);
+		if (bll) {
+			Log.i("===", "绑定服务gattServiceIntent成功");
+		} else {
+			Log.i("===", "绑定服务gattServiceIntent失败");
+		}
+		registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+	}
+
+	private static IntentFilter makeGattUpdateIntentFilter() {
+		final IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(BluetoothService.ACTION_GATT_DISCONNECTED);
+		intentFilter.addAction(BluetoothService.ACTION_GATT_CONNECTED);
+		intentFilter
+				.addAction(BluetoothService.ACTION_GATT_READCHARACTERISTICSUCCESS);
+		return intentFilter;
+	}
+
+	private final ServiceConnection mServiceConnection = new ServiceConnection() {
+		@Override
+		public void onServiceConnected(ComponentName componentName,
+				IBinder service) {
+			mbluetoothService = ((BluetoothService.LocalBinder) service)
+					.getService();
+			if (mbluetoothService == null) {
+				Log.d("===", "mbluetoothService is null");
+
+			} else {
+				Log.d("===", "mbluetoothService is not null");
+
+				Message message = Message.obtain();
+				message.what = MESSAGE_CONNECT;
+				m_handler.sendMessage(message);
+			}
+			boolean ba = mbluetoothService.initialize();
+			if (!ba) {
+				Log.i("===", "Unable to initialize Bluetooth");
+			} else {
+				Log.i("===", "initialize Bluetooth");
+			}
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName componentName) {
+			mbluetoothService = null;
+		}
+	};
+
+	// 接收广播
+	private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			final String action = intent.getAction();
+			Log.i("===", "action = " + action);
+			if (BluetoothService.ACTION_GATT_READCHARACTERISTICSUCCESS
+					.equals(action)) { // 连接成功 并读取characteristic成功
+				// String connecttext = "disconnect";
+				// connectButton.setText(connecttext);
+				// ConnectProgressBarzt(false);
+				connectstate = true;
+				Message message = Message.obtain();
+				message.what = MESSAGE_CONNECTED;
+				m_handler.sendMessage(message);
+			} else if (BluetoothService.ACTION_GATT_DISCONNECTED.equals(action)) { // 模块已断开连接
+				if (connectstate == true) { // 正在连接中
+					// showAlertDialog(
+					// "模块已关闭连接，请断开!",
+					// getResources().getString(
+					// R.string.alertOneButtonTitle), null, 0);
+					Log.d("===", "模块已关闭连接，请断开!");
+				}
+			}
+		}
+	};
+
+	@SuppressLint("HandlerLeak")
+	public Handler deviceHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			// Log.i("what === "+msg.what);
+			switch (msg.what) {
+			case 0:
+				Log.i("===", "连接失败");
+				connectstate = false;
+				break;
+			case 1:
+				String str = (String) msg.obj;
+				Log.d("===", "received data: " + str);
+				break;
+			case 2:
+				// String ss = (String) msg.obj;
+				// receivetop_text.setText("接收数据：已接收 "+ss+" 个字节");
+				break;
+			default:
+				break;
+			}
+		}
+	};
 
 }
