@@ -3,17 +3,22 @@ package com.jonma.lrhealth;
 import com.jinoux.android.bledatawarehouse.BluetoothService;
 import com.jinoux.android.bledatawarehouse.SampleGattAttributes;
 
+import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,6 +32,7 @@ import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.ImageView;
 
 public class OperationCenterActivity extends Activity {
 	private static View m_layoutViewSelf;// self view
@@ -47,11 +53,16 @@ public class OperationCenterActivity extends Activity {
 	private static Button m_btnVentBack;
 	private static Button m_btnRefriBack;
 	private static Button m_btnHeatBack;
-	private static Button m_btnSettingBack;
 
 	private static Button m_btnFunVent;
 	private static Button m_btnFunRefri;
 	private static Button m_btnFunHeat;
+	
+	private static Button m_btnUIStyle00;
+	private static Button m_btnUIStyle01;
+	private static Button m_btnUIStyle02;
+	private static Button m_btnDevManage;
+	private static ImageView m_imgviewUIStyle;
 
 	private TranslateAnimation m_animationShow;
 	private TranslateAnimation m_animationHide;
@@ -72,8 +83,7 @@ public class OperationCenterActivity extends Activity {
 	public static boolean senddatastate = false; // 是否开始发送自定义数据 false:未开始
 
 	private static int m_nViewType = 0;
-	private static int m_nValueVent, m_nValueRefri, m_nValueHeat,
-			m_nValueUIStyle, m_nValueLanType;
+	private static int m_nValueVent, m_nValueRefri, m_nValueHeat, m_nValueLanType, m_nValueUIStyle;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,12 +100,6 @@ public class OperationCenterActivity extends Activity {
 		Bundle bundle = getIntent().getExtras();
 		if (null != bundle)
 			m_nViewType = bundle.getInt("FunIdx");
-
-//		macBleModule = bundle.getString("mac");
-//		Log.d("===", "main menu:" + macBleModule);
-//		if (macBleModule == null) {
-//			finish();
-//		}
 		
 		LRHealthApp application = (LRHealthApp)getApplication();
 		mbluetoothService = application.mbluetoothService;
@@ -103,9 +107,10 @@ public class OperationCenterActivity extends Activity {
 		// init value
 		m_nValueVent = 0;
 		m_nValueRefri = 1;
-		m_nValueHeat = 1;
-		m_nValueUIStyle = 0;
+		m_nValueHeat = 1;		
 		m_nValueLanType = 0;
+		
+		m_nValueUIStyle = 0;
 
 		// init view
 		initView();
@@ -194,10 +199,36 @@ public class OperationCenterActivity extends Activity {
 		m_btnMenuBack.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				switchViewType(m_nViewType, 0);
-				m_nViewType = 0;
+				if (m_nViewType != 0) 
+				{
+					switchViewType(m_nViewType, 0);
+					m_nViewType = 0;					
+				} 
+				else 
+				{
+					String strMsg = String.format("退出左右冷热系统?");
+					new AlertDialog.Builder(OperationCenterActivity.this)
+							.setTitle("温馨提示")
+							.setMessage(strMsg)
+							.setNegativeButton("取消",
+									new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(DialogInterface dialog,
+												int which) {
 
-				finish();
+										}
+									})
+							.setPositiveButton("确定",
+									new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(DialogInterface dialog,
+												int which) {
+											//mbluetoothService.stop
+											finish();
+											System.exit(0);
+										}
+									}).show();
+				}				
 			}
 		});
 
@@ -233,15 +264,6 @@ public class OperationCenterActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				switchViewType(3, 0);
-				m_nViewType = 0;
-			}
-		});
-
-		m_btnSettingBack = (Button) findViewById(R.id.button_settingback);
-		m_btnSettingBack.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				switchViewType(4, 0);
 				m_nViewType = 0;
 			}
 		});
@@ -288,6 +310,71 @@ public class OperationCenterActivity extends Activity {
 			}
 		});
 
+		//setting view
+		m_imgviewUIStyle = (ImageView) findViewById(R.id.imageView_uistyle);
+		
+		m_btnUIStyle00 = (Button) findViewById(R.id.button_uistyle00);
+		m_btnUIStyle00.setOnClickListener(new OnClickListener() {			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				m_nValueUIStyle = 0;
+				setViewBackground(m_nValueUIStyle,1);
+				m_imgviewUIStyle.setImageDrawable(getResources().getDrawable(R.drawable.icon_funsettingui00));
+								
+				m_btnUIStyle00.setTextColor(Color.BLUE);
+				m_btnUIStyle01.setTextColor(Color.BLACK);
+				m_btnUIStyle02.setTextColor(Color.BLACK);
+			}
+		});
+		
+		m_btnUIStyle01 = (Button) findViewById(R.id.button_uistyle01);
+		m_btnUIStyle01.setOnClickListener(new OnClickListener() {			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				m_nValueUIStyle = 1;
+				setViewBackground(m_nValueUIStyle,1);
+				m_imgviewUIStyle.setImageDrawable(getResources().getDrawable(R.drawable.icon_funsettingui01));
+				
+				m_btnUIStyle00.setTextColor(Color.BLACK);
+				m_btnUIStyle01.setTextColor(Color.BLUE);
+				m_btnUIStyle02.setTextColor(Color.BLACK);
+			}
+		});
+		
+		m_btnUIStyle02 = (Button) findViewById(R.id.button_uistyle02);
+		m_btnUIStyle02.setOnClickListener(new OnClickListener() {			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				m_nValueUIStyle = 2;
+				setViewBackground(m_nValueUIStyle,1);
+				m_imgviewUIStyle.setImageDrawable(getResources().getDrawable(R.drawable.icon_funsettingui02));
+				
+				m_btnUIStyle00.setTextColor(Color.BLACK);
+				m_btnUIStyle01.setTextColor(Color.BLACK);
+				m_btnUIStyle02.setTextColor(Color.BLUE);
+			}
+		});
+		
+		m_btnDevManage = (Button) findViewById(R.id.button_devmanage);
+		m_btnDevManage.setOnClickListener(new OnClickListener() {			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent();
+				intent.setClass(OperationCenterActivity.this,
+						DeviceListActivity.class);
+				startActivity(intent);
+			}
+		});
+		
+		//set default ui
+		m_imgviewUIStyle.setImageDrawable(getResources().getDrawable(R.drawable.icon_funsettingui00));
+		m_btnUIStyle00.setTextColor(Color.BLUE);
+		m_btnUIStyle01.setTextColor(Color.BLACK);
+		m_btnUIStyle02.setTextColor(Color.BLACK);
 	}
 
 	private void initTranslateAnimation() {
@@ -303,7 +390,7 @@ public class OperationCenterActivity extends Activity {
 		m_animationShow.setDuration(500);
 		m_animationHide.setDuration(500);
 
-		// pull down/down
+		// pull up/down
 		m_animationPullUp = new TranslateAnimation(Animation.RELATIVE_TO_SELF,
 				0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
 				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
@@ -326,7 +413,7 @@ public class OperationCenterActivity extends Activity {
 			m_layoutViewHeat.setVisibility(View.GONE);
 			m_layoutViewSetting.setVisibility(View.GONE);
 
-			setViewBackground(0, 0);
+			setViewBackground(m_nValueUIStyle, 0);
 			return;
 		}
 
@@ -335,24 +422,36 @@ public class OperationCenterActivity extends Activity {
 			switch (curtype) {
 			case 1: {
 				m_layoutViewVent.startAnimation(m_animationHide);
+				m_layoutViewMenu.startAnimation(m_animationPullUp);
+				
 				m_layoutViewVent.setVisibility(View.GONE);
+				m_layoutViewMenu.setVisibility(View.VISIBLE);
 			}
 				break;
 			case 2: {
 				m_layoutViewRefri.startAnimation(m_animationHide);
+				m_layoutViewMenu.startAnimation(m_animationPullUp);
+				
 				m_layoutViewRefri.setVisibility(View.GONE);
+				m_layoutViewMenu.setVisibility(View.VISIBLE);
 
 			}
 				break;
 			case 3: {
 				m_layoutViewHeat.startAnimation(m_animationHide);
+				m_layoutViewMenu.startAnimation(m_animationPullUp);
+				
 				m_layoutViewHeat.setVisibility(View.GONE);
+				m_layoutViewMenu.setVisibility(View.VISIBLE);
 
 			}
 				break;
 			case 4: {
 				m_layoutViewSetting.startAnimation(m_animationHide);
+				m_layoutViewMenu.startAnimation(m_animationPullUp);
+				
 				m_layoutViewSetting.setVisibility(View.GONE);
+				m_layoutViewMenu.setVisibility(View.VISIBLE);
 			}
 				break;
 			default: {
@@ -361,34 +460,42 @@ public class OperationCenterActivity extends Activity {
 				break;
 			}
 
-			m_layoutViewMenu.startAnimation(m_animationPullUp);
-			m_layoutViewMenu.setVisibility(View.VISIBLE);
+			setViewBackground(m_nValueUIStyle, 0);
 
-			setViewBackground(0, 0);
-
-		} else// will show function
+		}
+		else// will show function
 		{
 			switch (willtype) {
 			case 1: {
 				m_layoutViewVent.startAnimation(m_animationShow);
 				m_layoutViewVent.setVisibility(View.VISIBLE);
+				
+				m_layoutViewMenu.startAnimation(m_animationPullDown);
+				m_layoutViewMenu.setVisibility(View.VISIBLE);
 			}
 				break;
 			case 2: {
 				m_layoutViewRefri.startAnimation(m_animationShow);
 				m_layoutViewRefri.setVisibility(View.VISIBLE);
-
+				
+				m_layoutViewMenu.startAnimation(m_animationPullDown);
+				m_layoutViewMenu.setVisibility(View.VISIBLE);
 			}
 				break;
 			case 3: {
 				m_layoutViewHeat.startAnimation(m_animationShow);
 				m_layoutViewHeat.setVisibility(View.VISIBLE);
-
+				
+				m_layoutViewMenu.startAnimation(m_animationPullDown);
+				m_layoutViewMenu.setVisibility(View.VISIBLE);
 			}
 				break;
 			case 4: {
 				m_layoutViewSetting.startAnimation(m_animationShow);
 				m_layoutViewSetting.setVisibility(View.VISIBLE);
+				
+				m_layoutViewMenu.startAnimation(m_animationPullDown);
+				m_layoutViewMenu.setVisibility(View.VISIBLE);
 			}
 				break;
 			default: {
@@ -397,10 +504,7 @@ public class OperationCenterActivity extends Activity {
 				break;
 			}
 
-			m_layoutViewMenu.startAnimation(m_animationPullDown);
-			m_layoutViewMenu.setVisibility(View.VISIBLE);
-
-			setViewBackground(0, 1);
+			setViewBackground(m_nValueUIStyle, 1);
 		}
 	}
 

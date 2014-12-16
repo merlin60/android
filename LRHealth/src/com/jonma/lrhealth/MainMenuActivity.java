@@ -24,14 +24,33 @@ import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class MainMenuActivity extends Activity {
+public class MainMenuActivity extends Activity {	
+	private static final int MESSAGE_SHOWDEVLIST = 0x2000;
 
 	private static Button m_btnVent;
 	private static Button m_btnRefri;
 	private static Button m_btnHeat;
 	private static Button m_btnSetting;
 	private static Button m_btnBack;
-
+	
+	private Handler m_handler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case MESSAGE_SHOWDEVLIST: 
+			{
+				Intent intent = new Intent();
+				intent.setClass(MainMenuActivity.this,
+						DeviceListActivity.class);
+				//intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+				startActivity(intent);
+			}
+				break;			
+			default:
+				break;
+			}
+			super.handleMessage(msg);
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +61,26 @@ public class MainMenuActivity extends Activity {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
-		setContentView(R.layout.activity_mainmenu);
-
-		
+		setContentView(R.layout.activity_mainmenu);		
 
 		// init view
 		initView();
+		
+		new  Thread(new Runnable() {
+			public void run() {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				Message message = Message.obtain();
+				message.what = MESSAGE_SHOWDEVLIST;
+				m_handler.sendMessage(message);
+			}			
+			
+		}).run();
 	}
 
 	
@@ -77,83 +110,7 @@ public class MainMenuActivity extends Activity {
 	}
 
 	private void initView() {
-		m_btnVent = (Button) findViewById(R.id.button_vent);
-		m_btnVent.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Bundle bundle = new Bundle();
-				bundle.putInt("FunIdx", 1);
-
-				Intent intent = new Intent();
-				intent.putExtras(bundle);
-				intent.setClass(MainMenuActivity.this,
-						OperationCenterActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-						| Intent.FLAG_ACTIVITY_SINGLE_TOP);
-				startActivity(intent);
-
-			}
-		});
-
-		m_btnRefri = (Button) findViewById(R.id.button_refri);
-		m_btnRefri.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Bundle bundle = new Bundle();
-				bundle.putInt("FunIdx", 2);
-
-				Intent intent = new Intent();
-				intent.putExtras(bundle);
-				intent.setClass(MainMenuActivity.this,
-						OperationCenterActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-						| Intent.FLAG_ACTIVITY_SINGLE_TOP);
-				startActivity(intent);
-			}
-		});
-
-		m_btnHeat = (Button) findViewById(R.id.button_heat);
-		m_btnHeat.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Bundle bundle = new Bundle();
-				bundle.putInt("FunIdx", 3);
-
-				Intent intent = new Intent();
-				intent.putExtras(bundle);
-				intent.setClass(MainMenuActivity.this,
-						OperationCenterActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-						| Intent.FLAG_ACTIVITY_SINGLE_TOP);
-				startActivity(intent);
-			}
-		});
-
-		m_btnSetting = (Button) findViewById(R.id.button_setting);
-		m_btnSetting.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Bundle bundle = new Bundle();
-				bundle.putInt("FunIdx", 4);
-
-				Intent intent = new Intent();
-				intent.putExtras(bundle);
-				intent.setClass(MainMenuActivity.this,
-						OperationCenterActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-						| Intent.FLAG_ACTIVITY_SINGLE_TOP);
-				startActivity(intent);
-			}
-		});
-
-		m_btnBack = (Button) findViewById(R.id.button_back);
-		m_btnBack.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		});
-
+		
 	}
 
 }

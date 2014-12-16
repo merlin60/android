@@ -27,7 +27,7 @@
                 style="@style/Text.primaryTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ventilation"
+                android:text="座椅通风"
                 android:textColor="@color/snow" />
         </LinearLayout>
 
@@ -78,7 +78,7 @@
                 style="@style/Text.primaryTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Refrigeration"
+                android:text="制冷设置"
                 android:textColor="@color/snow" />
         </LinearLayout>
 
@@ -129,7 +129,7 @@
                 style="@style/Text.primaryTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Heat"
+                android:text="加热设置"
                 android:textColor="@color/snow" />
         </LinearLayout>
 
@@ -167,7 +167,7 @@
         android:background="@drawable/icon_title00"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone" >
+        android:visibility="visible" >
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -180,7 +180,7 @@
                 style="@style/Text.primaryTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Setting"
+                android:text="系统设置"
                 android:textColor="@color/snow" />
         </LinearLayout>
 
@@ -196,12 +196,11 @@
                 android:layout_height="wrap_content"
                 android:gravity="center" >
 
-                <Button
-                    android:id="@+id/button_setting"
+                <ImageView
+                    android:id="@+id/imageView_uistyle"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:background="@drawable/icon_funsettingui00"
-                    android:textColor="@color/snow" />
+                    android:src="@drawable/icon_funsettingui00" />
             </LinearLayout>
 
             <LinearLayout
@@ -215,21 +214,24 @@
                     android:layout_width="80dp"
                     android:layout_height="25dp"
                     android:background="@drawable/icon_funsettingitembg"
-                    android:textColor="@color/snow" />
+                    android:text="雨露"
+                    android:textColor="@color/black" />
 
                 <Button
                     android:id="@+id/button_uistyle01"
                     android:layout_width="80dp"
                     android:layout_height="25dp"
+                    android:text="幻蓝"
                     android:background="@drawable/icon_funsettingitembg"
-                    android:textColor="@color/snow" />
+                    android:textColor="@color/black" />
 
                 <Button
                     android:id="@+id/button_uistyle02"
                     android:layout_width="80dp"
                     android:layout_height="25dp"
+                    android:text="黎影"
                     android:background="@drawable/icon_funsettingitembg"
-                    android:textColor="@color/snow" />
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <LinearLayout
@@ -238,11 +240,10 @@
                 android:layout_marginLeft="30dp"
                 android:gravity="center" >
 
-                <Button
-                    android:id="@+id/button_settingback"
+                <ImageView
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:background="@drawable/icon_funsettinglan00"
+                    android:src="@drawable/icon_funsettinglan00"
                     android:textColor="@color/snow" />
             </LinearLayout>
 
@@ -253,25 +254,12 @@
                 android:orientation="vertical" >
 
                 <Button
-                    android:id="@+id/button_uistyle00"
+                    android:id="@+id/button_devmanage"
                     android:layout_width="80dp"
                     android:layout_height="25dp"
+                    android:text="设备管理"
                     android:background="@drawable/icon_funsettingitembg"
-                    android:textColor="@color/snow" />
-
-                <Button
-                    android:id="@+id/button_uistyle01"
-                    android:layout_width="80dp"
-                    android:layout_height="25dp"
-                    android:background="@drawable/icon_funsettingitembg"
-                    android:textColor="@color/snow" />
-
-                <Button
-                    android:id="@+id/button_uistyle02"
-                    android:layout_width="80dp"
-                    android:layout_height="25dp"
-                    android:background="@drawable/icon_funsettingitembg"
-                    android:textColor="@color/snow" />
+                    android:textColor="@color/black" />                
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

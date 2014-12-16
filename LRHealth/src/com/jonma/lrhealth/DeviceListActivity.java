@@ -223,6 +223,14 @@ public class DeviceListActivity extends Activity {
 		m_btnBack.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Intent intent = new Intent();
+				intent.setClass(DeviceListActivity.this,
+						OperationCenterActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+						| Intent.FLAG_ACTIVITY_SINGLE_TOP);
+				startActivity(intent);
+				
+				/*
 				String strMsg = String.format("Will you exit left right app?");
 				new AlertDialog.Builder(DeviceListActivity.this)
 						.setTitle("Warm Prompt")
@@ -244,6 +252,7 @@ public class DeviceListActivity extends Activity {
 										System.exit(0);
 									}
 								}).show();
+				*/
 			}
 		});
 
