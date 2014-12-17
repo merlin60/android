@@ -55,6 +55,8 @@ public class DeviceListActivity extends Activity {
 	private static final String ObjectName = "Name";
 	private static final String ObjectDetail = "Detail";
 
+	
+	/*bluetooth*/
 	private String address;
 	private String macBleModule;// 00:1B:35:0B:5E:42
 	private final static String nameBleModule = "BLE0102C2P";
@@ -64,10 +66,10 @@ public class DeviceListActivity extends Activity {
 	private static int sendxhid = 0; // 每次点击发送按钮 发送的数据的序号0--255 每发送一次加一， 清空数据时为0
 	private static int sss = 0; // 未应答个数 最多五个未应答
 	private static int nm = 0; // 发送数据成功次数
-	public static boolean senddatastate = false; // 是否开始发送自定义数据 false:未开始
-
+	public static boolean senddatastate = false; // 是否开始发送自定义数据 false:未开始	
+	
+	private BleTool m_bleTool;
 	public BluetoothAdapter bluetoothAdapter;
-
 	public BluetoothService mbluetoothService;
 
 	private Handler m_handler = new Handler() {
@@ -78,12 +80,15 @@ public class DeviceListActivity extends Activity {
 			}
 				break;
 			case MESSAGE_CONNECT:
-				connect();
+				m_bleTool.stopScan();
+				m_bleTool.connect(macBleModule, m_bleConnectCallBack);
 				break;
 			case MESSAGE_CONNECTED:
 				//TODO:
 				Log.d("===", "connected");
 				Toast.makeText(DeviceListActivity.this, "连接成功", 0).show();
+				mbluetoothService = m_bleTool.getBleService();
+				//m_bleTool.unregisterReceiver();
 				break;
 			default:
 				break;
@@ -108,10 +113,8 @@ public class DeviceListActivity extends Activity {
 		// init view
 		initView();
 
-		// config bt
-		configBluetoothDev();
-
-		// scan bt
+		//bt
+		openBluetooth();
 		startScanBluetoothDev();
 	}
 
@@ -124,35 +127,29 @@ public class DeviceListActivity extends Activity {
 
 	@Override
 	public void onResume() {
-		// register receiver
-		IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-		// registerReceiver(m_bdreceiver, filter);		
-		
-		SharedSetting mySharedSetting = new SharedSetting(DeviceListActivity.this);		
-		
 		super.onResume();
+		// register receiver
+		//IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+		// registerReceiver(m_bdreceiver, filter);		
+		SharedSetting mySharedSetting = new SharedSetting(DeviceListActivity.this);	
+		//m_bleTool.registerReceiver();	
 	}
 
 	@Override
 	public void onPause() {
-		// unregister receiver
-		// unregisterReceiver(m_bdreceiver);
-
 		super.onPause();
 	}
 
 	@Override
 	public void onStop() {
-		stopScanBluetoothDev();
+		m_bleTool.unregisterReceiver();
+		m_bleTool.stopScan();
 		super.onStop();
 	}
 
 	@Override
 	public void onDestroy() {
-		
-		unregisterReceiver(mGattUpdateReceiver);
-//		unbindService(mServiceConnection);
-
+		m_bleTool.unbindService();
 		super.onDestroy();
 	}
 
@@ -196,6 +193,10 @@ public class DeviceListActivity extends Activity {
 				// updateBluetoothDevList();
 
 				// scan bt
+				m_listInfo.clear();
+				m_bleTool.stopScan();
+				m_bleTool.unbindService();
+				//TODO: unregister
 				startScanBluetoothDev();
 			}
 		});
@@ -264,6 +265,8 @@ public class DeviceListActivity extends Activity {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
+			
+			//TODO: click,  then connect corresponding device
 
 //			Bundle bundle = new Bundle();
 //			bundle.putInt("FunIdx", 0);
@@ -282,38 +285,32 @@ public class DeviceListActivity extends Activity {
 //			startActivity(intent);
 		}
 	}
+	
 
 	private void updateBluetoothDevList() {
 		Log.d("===", "notifylistupdate");
 		m_itemSimAdapter.notifyDataSetChanged();
-	}
-
-	private int configBluetoothDev() {
-		BluetoothManager bluetoothManager = (BluetoothManager) this
-				.getSystemService(Context.BLUETOOTH_SERVICE);
-		bluetoothAdapter = bluetoothManager.getAdapter();
-		if (!BluetoothAdapter.getDefaultAdapter().isEnabled()) {
-			BluetoothAdapter.getDefaultAdapter().enable();
-		}
-
-		return 0; 
+	}	
+	
+	/*BLE codes*/
+	
+	private int openBluetooth() {
+		m_bleTool = new BleTool(DeviceListActivity.this);
+		return m_bleTool.openBle();		
 	}
 
 	private int startScanBluetoothDev() {
-		if (bluetoothAdapter == null)
-			return -1;
-		bluetoothAdapter.startLeScan(mLeScanCallback);
+		m_bleTool.startScan(m_BleScanCallback);
 		return 0;
 	}
-
-	// Device scan callback.搜索到设备则执行
-	private BluetoothAdapter.LeScanCallback mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
+	
+	/*three callback funciton of BleTool*/
+	
+	private BleTool.BleScanCallBack m_BleScanCallback = new BleTool.BleScanCallBack() {
 		@Override
-		public void onLeScan(final BluetoothDevice device, int rssi,
-				byte[] scanRecord) {
-			boolean flag = true;
+		public void scanListening(BluetoothDevice device) {
+			// TODO Auto-generated method stub
 			android.util.Log.d("===", device.getAddress());
-
 			HashMap<String, Object> map;
 			map = new HashMap<String, Object>();
 			map.put(ObjectName, device.getName());
@@ -324,141 +321,33 @@ public class DeviceListActivity extends Activity {
 			Message message = Message.obtain();
 			message.what = MESSAGE_UPDATELIST;
 			m_handler.sendMessage(message);
-			
-			
-		
 
 			if (device.getName().equalsIgnoreCase(nameBleModule)) {
 				macBleModule = device.getAddress();
 				android.util.Log.d("===", "finded " + macBleModule);
-				stopScanBluetoothDev();
-				service_init();
-
-			}
+				m_bleTool.service_init(m_bleServiceCallBack);
+			}			
+		}		
+	};
+	
+	private BleTool.BleServiceCallBack m_bleServiceCallBack = new BleTool.BleServiceCallBack() {
+		@Override
+		public void onBuild() {
+			// when in this funciton, it indicate service has been created successfully, then can connect ble device
+			// TODO Auto-generated method stub
+			Message message = Message.obtain();
+			message.what = MESSAGE_CONNECT;
+			m_handler.sendMessage(message);			
+		}		
+	};
+	
+	private BleTool.BleConnectCallBack m_bleConnectCallBack = new BleTool.BleConnectCallBack() {
+		@Override
+		public void onConnect() {
+			Message message = Message.obtain();
+			message.what = MESSAGE_CONNECTED;
+			m_handler.sendMessage(message);
 		}
 	};
-
-	private int stopScanBluetoothDev() {
-		if (bluetoothAdapter == null)
-			return -1;
-
-		bluetoothAdapter.stopLeScan(mLeScanCallback);
-
-		return 0;
-	}
-
-	private void connect() {
-		// TODO Auto-generated method stub
-		
-		
-		mbluetoothService.gethandler(deviceHandler);
-		mbluetoothService.connect(macBleModule);
-
-	}
-
-	@SuppressLint("InlinedApi")
-	private void service_init() {
-		Intent gattServiceIntent = new Intent(this, BluetoothService.class);
-		boolean bll = bindService(gattServiceIntent, mServiceConnection,
-				BIND_AUTO_CREATE);
-		if (bll) {
-			Log.i("===", "绑定服务gattServiceIntent成功");
-		} else {
-			Log.i("===", "绑定服务gattServiceIntent失败");
-		}
-		registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-	}
-
-	private static IntentFilter makeGattUpdateIntentFilter() {
-		final IntentFilter intentFilter = new IntentFilter();
-		intentFilter.addAction(BluetoothService.ACTION_GATT_DISCONNECTED);
-		intentFilter.addAction(BluetoothService.ACTION_GATT_CONNECTED);
-		intentFilter
-				.addAction(BluetoothService.ACTION_GATT_READCHARACTERISTICSUCCESS);
-		return intentFilter;
-	}
-
-	private final ServiceConnection mServiceConnection = new ServiceConnection() {
-		@Override
-		public void onServiceConnected(ComponentName componentName,
-				IBinder service) {
-			mbluetoothService = ((BluetoothService.LocalBinder) service)
-					.getService();
-			if (mbluetoothService == null) {
-				Log.d("===", "mbluetoothService is null");
-
-			} else {
-				Log.d("===", "mbluetoothService is not null");
-
-				Message message = Message.obtain();
-				message.what = MESSAGE_CONNECT;
-				m_handler.sendMessage(message);
-			}
-			boolean ba = mbluetoothService.initialize();
-			if (!ba) {
-				Log.i("===", "Unable to initialize Bluetooth");
-			} else {
-				Log.i("===", "initialize Bluetooth");
-			}
-		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName componentName) {
-			mbluetoothService = null;
-		}
-	};
-
-	// 接收广播
-	private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			final String action = intent.getAction();
-			Log.i("===", "action = " + action);
-			if (BluetoothService.ACTION_GATT_READCHARACTERISTICSUCCESS
-					.equals(action)) { // 连接成功 并读取characteristic成功
-				// String connecttext = "disconnect";
-				// connectButton.setText(connecttext);
-				// ConnectProgressBarzt(false);
-				connectstate = true;
-				Message message = Message.obtain();
-				message.what = MESSAGE_CONNECTED;
-				m_handler.sendMessage(message);
-			} else if (BluetoothService.ACTION_GATT_DISCONNECTED.equals(action)) { // 模块已断开连接
-				if (connectstate == true) { // 正在连接中
-					// showAlertDialog(
-					// "模块已关闭连接，请断开!",
-					// getResources().getString(
-					// R.string.alertOneButtonTitle), null, 0);
-					Log.d("===", "模块已关闭连接，请断开!");
-				}
-			}
-		}
-	};
-
-	@SuppressLint("HandlerLeak")
-	public Handler deviceHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
-			// Log.i("what === "+msg.what);
-			switch (msg.what) {
-			case 0:
-				Log.i("===", "连接失败");
-				connectstate = false;
-				break;
-			case 1:
-				String str = (String) msg.obj;
-				//str = Tools.bytesToHexString(str.getBytes());
-				Log.d("===", "received data:" + str);
-				break;
-			case 2:
-				// String ss = (String) msg.obj;
-				// receivetop_text.setText("接收数据：已接收 "+ss+" 个字节");
-				break;
-			default:
-				break;
-			}
-		}
-	};
-
+	
 }
