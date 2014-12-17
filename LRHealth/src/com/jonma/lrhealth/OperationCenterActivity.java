@@ -100,6 +100,11 @@ public class OperationCenterActivity extends Activity {
 		Bundle bundle = getIntent().getExtras();
 		if (null != bundle)
 			m_nViewType = bundle.getInt("FunIdx");
+		macBleModule = bundle.getString("mac");
+		Log.d("===", "main menu:" + macBleModule);
+		if (macBleModule == null) {
+			finish();
+		}
 		
 		LRHealthApp application = (LRHealthApp)getApplication();
 		mbluetoothService = application.mbluetoothService;
@@ -247,6 +252,7 @@ public class OperationCenterActivity extends Activity {
 			public void onClick(View v) {
 				switchViewType(1, 0);
 				m_nViewType = 0;
+				stopWind();
 			}
 		});
 
@@ -277,16 +283,18 @@ public class OperationCenterActivity extends Activity {
 				if (m_nValueRefri > 3)
 					m_nValueRefri = 1;
 
-				if (m_nValueRefri == 1)
+				if (m_nValueRefri == 1){
 					m_btnFunRefri
 							.setBackgroundResource(R.drawable.icon_funrefri01);
-				else if (m_nValueRefri == 2)
+					refriSetting(0x05);
+				}else if (m_nValueRefri == 2){
 					m_btnFunRefri
 							.setBackgroundResource(R.drawable.icon_funrefri02);
-				else
+					refriSetting(0x06);
+				}else
 					m_btnFunRefri
 							.setBackgroundResource(R.drawable.icon_funrefri03);
-
+					refriSetting(0x07);
 			}
 		});
 
@@ -298,15 +306,18 @@ public class OperationCenterActivity extends Activity {
 				if (m_nValueHeat > 3)
 					m_nValueHeat = 1;
 
-				if (m_nValueHeat == 1)
+				if (m_nValueHeat == 1){
 					m_btnFunHeat
 							.setBackgroundResource(R.drawable.icon_funheat01);
-				else if (m_nValueHeat == 2)
+					hotSetting(0x02);
+				}else if (m_nValueHeat == 2){
 					m_btnFunHeat
 							.setBackgroundResource(R.drawable.icon_funheat02);
-				else
+					hotSetting(0x03);
+				}else
 					m_btnFunHeat
 							.setBackgroundResource(R.drawable.icon_funheat03);
+					hotSetting(0x04);
 			}
 		});
 
@@ -543,8 +554,21 @@ public class OperationCenterActivity extends Activity {
 		// m_layoutViewSelf.setBackground(imgDrawable);
 	}
 
+	
 	private void startWind() {
 		sendDate("01");
+	}
+	
+	private void stopWind() {
+		sendDate("00");
+	}
+	
+	private void refriSetting(int value) {
+		sendDate("0"+ Integer.toHexString(value));
+	}
+	
+	private void hotSetting(int value) {
+		sendDate("0" + Integer.toHexString(value));
 	}
 
 	/**
@@ -564,7 +588,8 @@ public class OperationCenterActivity extends Activity {
 	}
 
 	private void sendDate(String sendString) {
-		boolean bs = false;
+		boolean bs = true;
+		connectstate = true;
 		Log.d("===", (connectstate)?"connectstate is true":"connectstate is falst");
 		if (connectstate == true) {
 			bs = true;
@@ -590,9 +615,9 @@ public class OperationCenterActivity extends Activity {
 		if (bs) {
 			if (!sendString.equals("") && sendString.length() <= 18) {
 				BluetoothGattCharacteristic characteristic = BluetoothService.SERIAL_PORT_WRITE_Characteristic;
-				// byte[] by = Tools.hexStrToStr(sendString); //
+				 byte[] by = Tools.hexStrToStr(sendString); //
 				// sendString.getBytes();
-				byte[] by = sendString.getBytes();
+				//byte[] by = sendString.getBytes();
 
 				Log.d("===", sendString + " | " + by.toString());
 				byte[] idByte = new byte[by.length + 2];
