@@ -143,14 +143,14 @@ public class DeviceListActivity extends Activity {
 
 	@Override
 	public void onStop() {
-
+		stopScanBluetoothDev();
 		super.onStop();
 	}
 
 	@Override
 	public void onDestroy() {
-		stopScanBluetoothDev();
-//		unregisterReceiver(mGattUpdateReceiver);
+		
+		unregisterReceiver(mGattUpdateReceiver);
 //		unbindService(mServiceConnection);
 
 		super.onDestroy();
@@ -204,11 +204,20 @@ public class DeviceListActivity extends Activity {
 		m_btnBack.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Bundle bundle = new Bundle();
+				bundle.putInt("FunIdx", 0);
+				//Log.d("===", macBleModule);
+				if (macBleModule != null) {
+					bundle.putString("mac", macBleModule);
+				}
+				
 				Intent intent = new Intent();
+				intent.putExtras(bundle);
 				intent.setClass(DeviceListActivity.this,
 						OperationCenterActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
 						| Intent.FLAG_ACTIVITY_SINGLE_TOP);
+				Log.i("===", "start intent");
 				startActivity(intent);
 				
 				/*
@@ -256,20 +265,21 @@ public class DeviceListActivity extends Activity {
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
 
-			Bundle bundle = new Bundle();
-			bundle.putInt("FunIdx", 0);
-			if (macBleModule != null) {
-				bundle.putString("mac", macBleModule);
-			}
-
-			//if connectted, start activity. if not, do nothing
-			Intent intent = new Intent();
-			intent.putExtras(bundle);
-			intent.setClass(DeviceListActivity.this,
-					OperationCenterActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-					| Intent.FLAG_ACTIVITY_SINGLE_TOP);
-			startActivity(intent);
+//			Bundle bundle = new Bundle();
+//			bundle.putInt("FunIdx", 0);
+//			if (macBleModule != null) {
+//				bundle.putString("mac", macBleModule);
+//			}
+//
+//			//if connectted, start activity. if not, do nothing
+//			Intent intent = new Intent();
+//			intent.putExtras(bundle);
+//			intent.setClass(DeviceListActivity.this,
+//					OperationCenterActivity.class);
+//			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+//					| Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//			Log.i("===", "start intent in list");
+//			startActivity(intent);
 		}
 	}
 

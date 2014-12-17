@@ -103,7 +103,7 @@ public class OperationCenterActivity extends Activity {
 		macBleModule = bundle.getString("mac");
 		Log.d("===", "main menu:" + macBleModule);
 		if (macBleModule == null) {
-			finish();
+			//finish();
 		}
 		
 		LRHealthApp application = (LRHealthApp)getApplication();
