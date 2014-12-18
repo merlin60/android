@@ -54,6 +54,8 @@ public class DeviceListActivity extends Activity {
 	private static final String ObjectIcon = "Icon";
 	private static final String ObjectName = "Name";
 	private static final String ObjectDetail = "Detail";
+	
+	private static final String LOGTAG = "test";
 
 	
 	/*bluetooth*/
@@ -85,7 +87,7 @@ public class DeviceListActivity extends Activity {
 				break;
 			case MESSAGE_CONNECTED:
 				//TODO:
-				Log.d("===", "connected");
+				Log.d(LOGTAG, "connected");
 				Toast.makeText(DeviceListActivity.this, "连接成功", 0).show();
 				mbluetoothService = m_bleTool.getBleService();
 				//m_bleTool.unregisterReceiver();
@@ -195,8 +197,10 @@ public class DeviceListActivity extends Activity {
 				// scan bt
 				m_listInfo.clear();
 				m_bleTool.stopScan();
-				m_bleTool.unbindService();
-				//TODO: unregister
+				if(mbluetoothService != null){
+					//m_bleTool.unregisterReceiver();
+					//m_bleTool.unbindService();					
+				}
 				startScanBluetoothDev();
 			}
 		});
@@ -207,7 +211,7 @@ public class DeviceListActivity extends Activity {
 			public void onClick(View v) {
 				Bundle bundle = new Bundle();
 				bundle.putInt("FunIdx", 0);
-				//Log.d("===", macBleModule);
+				//Log.d(LOGTAG, macBleModule);
 				if (macBleModule != null) {
 					bundle.putString("mac", macBleModule);
 				}
@@ -218,7 +222,7 @@ public class DeviceListActivity extends Activity {
 						OperationCenterActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
 						| Intent.FLAG_ACTIVITY_SINGLE_TOP);
-				Log.i("===", "start intent");
+				Log.i(LOGTAG, "start intent");
 				startActivity(intent);
 				
 				/*
@@ -267,6 +271,8 @@ public class DeviceListActivity extends Activity {
 				long id) {
 			
 			//TODO: click,  then connect corresponding device
+			m_bleTool.stopScan();
+			m_bleTool.connect(macBleModule, m_bleConnectCallBack);
 
 //			Bundle bundle = new Bundle();
 //			bundle.putInt("FunIdx", 0);
@@ -281,14 +287,14 @@ public class DeviceListActivity extends Activity {
 //					OperationCenterActivity.class);
 //			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
 //					| Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//			Log.i("===", "start intent in list");
+//			Log.i(LOGTAG, "start intent in list");
 //			startActivity(intent);
 		}
 	}
 	
 
 	private void updateBluetoothDevList() {
-		Log.d("===", "notifylistupdate");
+		Log.d(LOGTAG, "notifylistupdate");
 		m_itemSimAdapter.notifyDataSetChanged();
 	}	
 	
@@ -310,7 +316,7 @@ public class DeviceListActivity extends Activity {
 		@Override
 		public void scanListening(BluetoothDevice device) {
 			// TODO Auto-generated method stub
-			android.util.Log.d("===", device.getAddress());
+			android.util.Log.d(LOGTAG, device.getAddress());
 			HashMap<String, Object> map;
 			map = new HashMap<String, Object>();
 			map.put(ObjectName, device.getName());
@@ -324,7 +330,7 @@ public class DeviceListActivity extends Activity {
 
 			if (device.getName().equalsIgnoreCase(nameBleModule)) {
 				macBleModule = device.getAddress();
-				android.util.Log.d("===", "finded " + macBleModule);
+				android.util.Log.d(LOGTAG, "finded " + macBleModule);
 				m_bleTool.service_init(m_bleServiceCallBack);
 			}			
 		}		
@@ -335,9 +341,10 @@ public class DeviceListActivity extends Activity {
 		public void onBuild() {
 			// when in this funciton, it indicate service has been created successfully, then can connect ble device
 			// TODO Auto-generated method stub
-			Message message = Message.obtain();
-			message.what = MESSAGE_CONNECT;
-			m_handler.sendMessage(message);			
+			
+//			Message message = Message.obtain();
+//			message.what = MESSAGE_CONNECT;
+//			m_handler.sendMessage(message);			
 		}		
 	};
 	
@@ -347,6 +354,12 @@ public class DeviceListActivity extends Activity {
 			Message message = Message.obtain();
 			message.what = MESSAGE_CONNECTED;
 			m_handler.sendMessage(message);
+		}
+
+		@Override
+		public void onConnectFailed() {
+			//TODO: add code for failing to connect
+			//re-connect some times or do nothing			
 		}
 	};
 	

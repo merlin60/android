@@ -27,6 +27,8 @@ public class BleTool {
 	private BluetoothService m_bluetoothService;
 	private BleConnectCallBack m_bleConnectCallBack;
 	private static boolean connectstate = false; // 连接匹配状态（false:未开始连接）
+	
+	private static final String LOGTAG = "test";
 
 	public BleTool(Context context) {
 		super();
@@ -81,7 +83,7 @@ public class BleTool {
 
 	}
 
-	/* bl server */
+	/* bl service */
 	/**
 	 * connect() can be called only when service is created successfully.
 	 * 
@@ -93,9 +95,9 @@ public class BleTool {
 		boolean bll = context.bindService(gattServiceIntent,
 				mServiceConnection, context.BIND_AUTO_CREATE);
 		if (bll) {
-			Log.i("===", "绑定服务gattServiceIntent成功");
+			Log.i(LOGTAG, "绑定服务gattServiceIntent成功");
 		} else {
-			Log.i("===", "绑定服务gattServiceIntent失败");
+			Log.i(LOGTAG, "绑定服务gattServiceIntent失败");
 		}
 		//context.registerReceiver(mGattUpdateReceiver,	makeGattUpdateIntentFilter());
 		registerReceiver();
@@ -120,17 +122,17 @@ public class BleTool {
 			m_bluetoothService = ((BluetoothService.LocalBinder) service)
 					.getService();
 			if (m_bluetoothService == null) {
-				Log.d("===", "m_bluetoothService is null");
+				Log.d(LOGTAG, "m_bluetoothService is null");
 			} else {
-				Log.d("===", "m_bluetoothService is not null");
+				Log.d(LOGTAG, "m_bluetoothService is not null");
 				m_bleServiceCallBack.onBuild();
 
 			}
 			boolean ba = m_bluetoothService.initialize();
 			if (!ba) {
-				Log.i("===", "Unable to initialize Bluetooth");
+				Log.i(LOGTAG, "Unable to initialize Bluetooth");
 			} else {
-				Log.i("===", "initialize Bluetooth");
+				Log.i(LOGTAG, "initialize Bluetooth");
 			}
 		}
 
@@ -151,7 +153,7 @@ public class BleTool {
 	public void connect(String macAddr, BleConnectCallBack bleConnectCallBack) {
 		// TODO Auto-generated method stub
 		m_bluetoothService.gethandler(deviceHandler);
-		Log.d("===", "connect:"+macAddr);
+		Log.d(LOGTAG, "connect:"+macAddr);
 		m_bluetoothService.connect(macAddr);
 		m_bleConnectCallBack = bleConnectCallBack;
 	}
@@ -161,7 +163,7 @@ public class BleTool {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
-			Log.i("===", "action = " + action);
+			Log.i(LOGTAG, "action = " + action);
 			if (BluetoothService.ACTION_GATT_READCHARACTERISTICSUCCESS
 					.equals(action)) { // 连接成功 并读取characteristic成功
 				// String connecttext = "disconnect";
@@ -177,7 +179,7 @@ public class BleTool {
 					// "模块已关闭连接，请断开!",
 					// getResources().getString(
 					// R.string.alertOneButtonTitle), null, 0);
-					Log.d("===", "模块已关闭连接，请断开!");
+					Log.d(LOGTAG, "模块已关闭连接，请断开!");
 				}
 			}
 		}
@@ -188,6 +190,8 @@ public class BleTool {
 		 * when connect successfully, call this call back funciton
 		 */
 		public void onConnect();
+		
+		public void onConnectFailed();
 	}
 
 	/* handler of service */
@@ -199,13 +203,13 @@ public class BleTool {
 			// Log.i("what === "+msg.what);
 			switch (msg.what) {
 			case 0:
-				Log.i("===", "连接失败");
+				Log.i(LOGTAG, "连接失败");
 				connectstate = false;
 				break;
 			case 1:
 				String str = (String) msg.obj;
 				// str = Tools.bytesToHexString(str.getBytes());
-				Log.d("===", "received data:" + str);
+				Log.d(LOGTAG, "received data:" + str);
 				break;
 			case 2:
 				// String ss = (String) msg.obj;
