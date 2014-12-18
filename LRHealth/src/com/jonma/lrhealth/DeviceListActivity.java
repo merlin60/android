@@ -74,6 +74,12 @@ public class DeviceListActivity extends Activity {
 	private BleTool m_bleTool;
 	public BluetoothAdapter bluetoothAdapter;
 	public BluetoothService mbluetoothService;
+	
+	private static final String lvConnectStaSuc = "已连接";
+	private static final String lvConnectStaNot = "未连接";
+	private static final String lvConnectStaDoing = "连接...";
+
+
 
 	private Handler m_handler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -89,7 +95,7 @@ public class DeviceListActivity extends Activity {
 			case MESSAGE_CONNECTED:
 				Log.d(LOGTAG, "connected");
 				mbluetoothService = m_bleTool.getBleService();
-				m_listInfo.get(curListviewId).put(ObjectStatus, "已连接");
+				m_listInfo.get(curListviewId).put(ObjectStatus, lvConnectStaSuc);
 				Message message = Message.obtain();
 				message.what = MESSAGE_UPDATELIST;
 				m_handler.sendMessage(message);
@@ -137,7 +143,9 @@ public class DeviceListActivity extends Activity {
 		//IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 		// registerReceiver(m_bdreceiver, filter);		
 		SharedSetting mySharedSetting = new SharedSetting(DeviceListActivity.this);	
-		//m_bleTool.registerReceiver();	
+		//if(mbluetoothService == null){
+			m_bleTool.registerReceiver();
+		//}
 	}
 
 	@Override
@@ -147,7 +155,9 @@ public class DeviceListActivity extends Activity {
 
 	@Override
 	public void onStop() {
-		m_bleTool.unregisterReceiver();
+		if(mbluetoothService != null){
+			m_bleTool.unregisterReceiver();
+		}
 		m_bleTool.stopScan();
 		super.onStop();
 	}
@@ -199,6 +209,10 @@ public class DeviceListActivity extends Activity {
 
 				// scan bt
 				m_listInfo.clear();
+				Message message = Message.obtain();
+				message.what = MESSAGE_UPDATELIST;
+				m_handler.sendMessage(message);				
+				
 				m_bleTool.stopScan();
 				if(mbluetoothService != null){
 					//m_bleTool.unregisterReceiver();
@@ -277,7 +291,7 @@ public class DeviceListActivity extends Activity {
 			curListviewId = position;
 			m_bleTool.stopScan();
 			m_bleTool.connect(macBleModule, m_bleConnectCallBack);			
-			m_listInfo.get(curListviewId).put(ObjectStatus, "连接...");
+			m_listInfo.get(curListviewId).put(ObjectStatus, lvConnectStaDoing);
 			// send message
 			Message message = Message.obtain();
 			message.what = MESSAGE_UPDATELIST;
@@ -314,7 +328,7 @@ public class DeviceListActivity extends Activity {
 	}
 
 	private int startScanBluetoothDev() {
-		m_bleTool.startScan(m_BleScanCallback);
+		m_bleTool.startScan(m_BleScanCallback, 1000);
 		return 0;
 	}
 	
@@ -329,7 +343,7 @@ public class DeviceListActivity extends Activity {
 			map = new HashMap<String, Object>();
 			map.put(ObjectName, device.getName());
 			map.put(ObjectDetail, device.getAddress());
-			map.put(ObjectStatus, "未连接");
+			map.put(ObjectStatus, lvConnectStaNot);
 			m_listInfo.add(map);
 			// send message
 			Message message = Message.obtain();
@@ -368,7 +382,7 @@ public class DeviceListActivity extends Activity {
 		public void onConnectFailed() {
 			//TODO: add code for failing to connect
 			//re-connect some times or do nothing
-			m_listInfo.get(curListviewId).put(ObjectStatus, "未连接");
+			m_listInfo.get(curListviewId).put(ObjectStatus, lvConnectStaNot);
 			// send message
 			Message message = Message.obtain();
 			message.what = MESSAGE_UPDATELIST;

@@ -27,6 +27,7 @@ public class BleTool {
 	private BluetoothService m_bluetoothService;
 	private BleConnectCallBack m_bleConnectCallBack;
 	private static boolean connectstate = false; // 连接匹配状态（false:未开始连接）
+	private Handler mHandler;
 	
 	private static final String LOGTAG = "test";
 
@@ -52,10 +53,28 @@ public class BleTool {
 		return 0;
 	}
 
-	public int startScan(BleScanCallBack bleScanCallBack) {
+	/**
+	 * 
+	 * @param bleScanCallBack
+	 * @param period scan time. stop scanning automatically when the time is up.
+	 * @return
+	 */
+	public int startScan(BleScanCallBack bleScanCallBack, long period) {
+		if(period == 0){
+			period = 1000;
+		}
+		
 		if (bluetoothAdapter == null) {
 			return -1;
 		}
+		
+//		mHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//            	bluetoothAdapter.stopLeScan(mLeScanCallback);
+//            }
+//        }, period);
+		
 		bluetoothAdapter.startLeScan(mLeScanCallback);
 		m_bleScanCallBack = bleScanCallBack;
 		return 0;
