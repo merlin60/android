@@ -34,11 +34,18 @@
         android:layout_alignTop="@+id/linearLayout_devinfo"
         android:layout_alignParentRight="true" >
 
-        <ImageView
+        <!-- <ImageView
             android:id="@+id/imageView_devstatus"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:src="@drawable/icon_update" />
+            android:src="@drawable/icon_update" /> -->
+            
+           <TextView
+               android:id="@+id/devstatus"
+               android:layout_width="wrap_content"
+               android:layout_height="25dp"
+               android:text="未连接"
+               />
     </LinearLayout>
 
 </RelativeLayout>

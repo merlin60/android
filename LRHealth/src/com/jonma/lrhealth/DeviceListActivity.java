@@ -50,8 +50,9 @@ public class DeviceListActivity extends Activity {
 	private static ListView m_listviewDev;
 	private SimpleAdapter m_itemSimAdapter = null;
 	private ArrayList<HashMap<String, Object>> m_listInfo = null;
+	private int curListviewId;
 
-	private static final String ObjectIcon = "Icon";
+	private static final String ObjectStatus = "Icon";
 	private static final String ObjectName = "Name";
 	private static final String ObjectDetail = "Detail";
 	
@@ -86,10 +87,12 @@ public class DeviceListActivity extends Activity {
 				m_bleTool.connect(macBleModule, m_bleConnectCallBack);
 				break;
 			case MESSAGE_CONNECTED:
-				//TODO:
 				Log.d(LOGTAG, "connected");
-				Toast.makeText(DeviceListActivity.this, "连接成功", 0).show();
 				mbluetoothService = m_bleTool.getBleService();
+				m_listInfo.get(curListviewId).put(ObjectStatus, "已连接");
+				Message message = Message.obtain();
+				message.what = MESSAGE_UPDATELIST;
+				m_handler.sendMessage(message);
 				//m_bleTool.unregisterReceiver();
 				break;
 			default:
@@ -255,9 +258,9 @@ public class DeviceListActivity extends Activity {
 		m_listviewDev = (ListView) findViewById(R.id.listView_dev);
 		m_itemSimAdapter = new SimpleAdapter(this, m_listInfo,
 				R.layout.listview_item_devinfo, new String[] { ObjectName,
-						ObjectDetail, ObjectIcon }, new int[] {
+						ObjectDetail, ObjectStatus }, new int[] {
 						R.id.textView_devname, R.id.textView_devinfo,
-						R.id.imageView_devstatus });
+						R.id.devstatus });
 
 		m_listviewDev.setAdapter(m_itemSimAdapter);
 		m_listviewDev.setOnItemClickListener(new ListOnItemClickListener());
@@ -271,8 +274,14 @@ public class DeviceListActivity extends Activity {
 				long id) {
 			
 			//TODO: click,  then connect corresponding device
+			curListviewId = position;
 			m_bleTool.stopScan();
-			m_bleTool.connect(macBleModule, m_bleConnectCallBack);
+			m_bleTool.connect(macBleModule, m_bleConnectCallBack);			
+			m_listInfo.get(curListviewId).put(ObjectStatus, "连接...");
+			// send message
+			Message message = Message.obtain();
+			message.what = MESSAGE_UPDATELIST;
+			m_handler.sendMessage(message);				
 
 //			Bundle bundle = new Bundle();
 //			bundle.putInt("FunIdx", 0);
@@ -294,7 +303,6 @@ public class DeviceListActivity extends Activity {
 	
 
 	private void updateBluetoothDevList() {
-		Log.d(LOGTAG, "notifylistupdate");
 		m_itemSimAdapter.notifyDataSetChanged();
 	}	
 	
@@ -321,7 +329,7 @@ public class DeviceListActivity extends Activity {
 			map = new HashMap<String, Object>();
 			map.put(ObjectName, device.getName());
 			map.put(ObjectDetail, device.getAddress());
-			map.put(ObjectIcon, R.drawable.icon_update);
+			map.put(ObjectStatus, "未连接");
 			m_listInfo.add(map);
 			// send message
 			Message message = Message.obtain();
@@ -359,7 +367,12 @@ public class DeviceListActivity extends Activity {
 		@Override
 		public void onConnectFailed() {
 			//TODO: add code for failing to connect
-			//re-connect some times or do nothing			
+			//re-connect some times or do nothing
+			m_listInfo.get(curListviewId).put(ObjectStatus, "未连接");
+			// send message
+			Message message = Message.obtain();
+			message.what = MESSAGE_UPDATELIST;
+			m_handler.sendMessage(message);
 		}
 	};
 	

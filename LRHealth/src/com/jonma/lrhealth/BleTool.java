@@ -180,6 +180,9 @@ public class BleTool {
 					// getResources().getString(
 					// R.string.alertOneButtonTitle), null, 0);
 					Log.d(LOGTAG, "模块已关闭连接，请断开!");
+					if(m_bleConnectCallBack != null){
+						m_bleConnectCallBack.onConnectFailed();
+					}
 				}
 			}
 		}
