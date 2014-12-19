@@ -61,7 +61,9 @@ public class MainMenuActivity extends Activity {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
-		setContentView(R.layout.activity_mainmenu);		
+		setContentView(R.layout.activity_mainmenu);	
+		
+		LRHealthApp.getInstance().addActivity(this);
 
 		// init view
 		initView();

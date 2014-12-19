@@ -533,7 +533,7 @@ public final class R {
         public static final int button_uistyle02=0x7f090016;
         public static final int button_vent=0x7f090007;
         public static final int button_ventback=0x7f090008;
-        public static final int imageView_devstatus=0x7f090021;
+        public static final int devstatus=0x7f090021;
         public static final int imageView_uistyle=0x7f090013;
         public static final int linearLayout_devinfo=0x7f09001e;
         public static final int linelayout_heat=0x7f09000d;

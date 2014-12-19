@@ -35,6 +35,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 public class OperationCenterActivity extends Activity {
+	private LRHealthApp application;
+	
 	private static View m_layoutViewSelf;// self view
 	private static View m_layoutViewMenu;// 0
 	private static View m_layoutViewVent;// 1
@@ -106,8 +108,9 @@ public class OperationCenterActivity extends Activity {
 			//finish();
 		}
 		
-		LRHealthApp application = (LRHealthApp)getApplication();
+		application = LRHealthApp.getInstance();
 		mbluetoothService = application.mbluetoothService;
+		application.addActivity(this);
 
 		// init value
 		m_nValueVent = 0;
@@ -230,6 +233,7 @@ public class OperationCenterActivity extends Activity {
 												int which) {
 											//mbluetoothService.stop
 											finish();
+											application.exit();
 											System.exit(0);
 										}
 									}).show();

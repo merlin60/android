@@ -119,8 +119,9 @@ public class DeviceListActivity extends Activity {
 
 		setContentView(R.layout.activity_devicelist);
 		
-		LRHealthApp application = (LRHealthApp)getApplication();
+		LRHealthApp application = LRHealthApp.getInstance();
 		mbluetoothService = application.getBluetoothService();
+		application.addActivity(this);
 		// init view
 		initView();
 
