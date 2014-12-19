@@ -22,7 +22,7 @@
 			android:layout_alignParentLeft="true"
 			android:layout_centerVertical="true"
 			android:background="@drawable/selector_navibutton"
-			android:text="Back"
+			android:text="@string/text_back"
 			android:textColor="@color/snow"
 			android:visibility="visible"/>
 	    
@@ -34,7 +34,7 @@
 			android:layout_alignParentRight="true"
 			android:layout_centerVertical="true"
 			android:background="@drawable/selector_navibutton"
-			android:text="Scan"
+			android:text="@string/text_scan"
 			android:textColor="@color/snow"
 			android:visibility="visible"/>
 
@@ -44,7 +44,7 @@
 		    android:layout_height="wrap_content"
 		    android:layout_centerHorizontal="true"
 		    android:layout_centerVertical="true"
-		    android:text="Bluetooth Devices"
+		    android:text="@string/text_styledevmanage"
 		    android:textAppearance="?android:attr/textAppearanceLarge"
 		    android:textColor="@color/snow" />
         
@@ -53,7 +53,9 @@
     <ListView
         android:id="@+id/listView_dev"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:background="@color/white" >
+
     </ListView>
 
 </LinearLayout>

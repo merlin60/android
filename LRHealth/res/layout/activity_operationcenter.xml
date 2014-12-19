@@ -27,7 +27,7 @@
                 style="@style/Text.primaryTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="座椅通风"
+                android:text="@string/functiontitle_vent"
                 android:textColor="@color/snow" />
         </LinearLayout>
 
@@ -78,7 +78,7 @@
                 style="@style/Text.primaryTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="制冷设置"
+                android:text="@string/functiontitle_refrigeration"
                 android:textColor="@color/snow" />
         </LinearLayout>
 
@@ -129,7 +129,7 @@
                 style="@style/Text.primaryTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="加热设置"
+                android:text="@string/functiontitle_heat"
                 android:textColor="@color/snow" />
         </LinearLayout>
 
@@ -167,7 +167,7 @@
         android:background="@drawable/icon_title00"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="visible" >
+        android:visibility="gone" >
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -180,7 +180,7 @@
                 style="@style/Text.primaryTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="系统设置"
+                android:text="@string/functiontitle_setting"
                 android:textColor="@color/snow" />
         </LinearLayout>
 
@@ -214,14 +214,14 @@
                     android:layout_width="80dp"
                     android:layout_height="25dp"
                     android:background="@drawable/icon_funsettingitembg"
-                    android:text="雨露"
+                    android:text="@string/text_stylerain"
                     android:textColor="@color/black" />
 
                 <Button
                     android:id="@+id/button_uistyle01"
                     android:layout_width="80dp"
                     android:layout_height="25dp"
-                    android:text="幻蓝"
+                    android:text="@string/text_styleblue"
                     android:background="@drawable/icon_funsettingitembg"
                     android:textColor="@color/black" />
 
@@ -229,7 +229,7 @@
                     android:id="@+id/button_uistyle02"
                     android:layout_width="80dp"
                     android:layout_height="25dp"
-                    android:text="黎影"
+                    android:text="@string/text_styleshadow"
                     android:background="@drawable/icon_funsettingitembg"
                     android:textColor="@color/black" />
             </LinearLayout>
@@ -257,7 +257,7 @@
                     android:id="@+id/button_devmanage"
                     android:layout_width="80dp"
                     android:layout_height="25dp"
-                    android:text="设备管理"
+                    android:text="@string/text_styledevmanage"
                     android:background="@drawable/icon_funsettingitembg"
                     android:textColor="@color/black" />                
             </LinearLayout>
@@ -269,7 +269,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="bottom|center_horizontal"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:visibility="invisible" >
 
         <Button
             android:id="@+id/button_menuvent"

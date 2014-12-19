@@ -27,8 +27,7 @@ public class BleTool {
 	private BluetoothService m_bluetoothService;
 	private BleConnectCallBack m_bleConnectCallBack;
 	private static boolean connectstate = false; // 连接匹配状态（false:未开始连接）
-	private Handler mHandler;
-	
+	private Handler mHandler;	
 	private static final String LOGTAG = "test";
 
 	public BleTool(Context context) {

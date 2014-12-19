@@ -480,39 +480,46 @@ public final class R {
         public static final int buttonbg_pressed1=0x7f020005;
         public static final int ic_launcher=0x7f020006;
         public static final int icon_bgstyle00=0x7f020007;
-        public static final int icon_bgstyle01=0x7f020008;
-        public static final int icon_bgstyle02=0x7f020009;
-        public static final int icon_bgstyle03=0x7f02000a;
-        public static final int icon_btback00=0x7f02000b;
-        public static final int icon_btback01=0x7f02000c;
-        public static final int icon_btheat00=0x7f02000d;
-        public static final int icon_btheat01=0x7f02000e;
-        public static final int icon_btrefri00=0x7f02000f;
-        public static final int icon_btrefri01=0x7f020010;
-        public static final int icon_btsetting00=0x7f020011;
-        public static final int icon_btsetting01=0x7f020012;
-        public static final int icon_btvent00=0x7f020013;
-        public static final int icon_btvent01=0x7f020014;
-        public static final int icon_funheat01=0x7f020015;
-        public static final int icon_funheat02=0x7f020016;
-        public static final int icon_funheat03=0x7f020017;
-        public static final int icon_funrefri01=0x7f020018;
-        public static final int icon_funrefri02=0x7f020019;
-        public static final int icon_funrefri03=0x7f02001a;
-        public static final int icon_funsettingitembg=0x7f02001b;
-        public static final int icon_funsettinglan00=0x7f02001c;
-        public static final int icon_funsettinglan01=0x7f02001d;
-        public static final int icon_funsettingui00=0x7f02001e;
-        public static final int icon_funsettingui01=0x7f02001f;
-        public static final int icon_funsettingui02=0x7f020020;
-        public static final int icon_funvent00=0x7f020021;
-        public static final int icon_funvent01=0x7f020022;
-        public static final int icon_menubg00=0x7f020023;
-        public static final int icon_title00=0x7f020024;
-        public static final int icon_update=0x7f020025;
-        public static final int selector_barbutton=0x7f020026;
-        public static final int selector_navibutton=0x7f020027;
-        public static final int title_bg=0x7f020028;
+        public static final int icon_bgstyle000=0x7f020008;
+        public static final int icon_bgstyle01=0x7f020009;
+        public static final int icon_bgstyle02=0x7f02000a;
+        public static final int icon_bgstyle03=0x7f02000b;
+        public static final int icon_bgstyle10=0x7f02000c;
+        public static final int icon_bgstyle11=0x7f02000d;
+        public static final int icon_bgstyle20=0x7f02000e;
+        public static final int icon_bgstyle21=0x7f02000f;
+        public static final int icon_bgstyle30=0x7f020010;
+        public static final int icon_bgstyle31=0x7f020011;
+        public static final int icon_btback00=0x7f020012;
+        public static final int icon_btback01=0x7f020013;
+        public static final int icon_btheat00=0x7f020014;
+        public static final int icon_btheat01=0x7f020015;
+        public static final int icon_btrefri00=0x7f020016;
+        public static final int icon_btrefri01=0x7f020017;
+        public static final int icon_btsetting00=0x7f020018;
+        public static final int icon_btsetting01=0x7f020019;
+        public static final int icon_btvent00=0x7f02001a;
+        public static final int icon_btvent01=0x7f02001b;
+        public static final int icon_funheat01=0x7f02001c;
+        public static final int icon_funheat02=0x7f02001d;
+        public static final int icon_funheat03=0x7f02001e;
+        public static final int icon_funrefri01=0x7f02001f;
+        public static final int icon_funrefri02=0x7f020020;
+        public static final int icon_funrefri03=0x7f020021;
+        public static final int icon_funsettingitembg=0x7f020022;
+        public static final int icon_funsettinglan00=0x7f020023;
+        public static final int icon_funsettinglan01=0x7f020024;
+        public static final int icon_funsettingui00=0x7f020025;
+        public static final int icon_funsettingui01=0x7f020026;
+        public static final int icon_funsettingui02=0x7f020027;
+        public static final int icon_funvent00=0x7f020028;
+        public static final int icon_funvent01=0x7f020029;
+        public static final int icon_menubg00=0x7f02002a;
+        public static final int icon_title00=0x7f02002b;
+        public static final int icon_update=0x7f02002c;
+        public static final int selector_barbutton=0x7f02002d;
+        public static final int selector_navibutton=0x7f02002e;
+        public static final int title_bg=0x7f02002f;
     }
     public static final class id {
         public static final int action_settings=0x7f090022;
@@ -533,7 +540,7 @@ public final class R {
         public static final int button_uistyle02=0x7f090016;
         public static final int button_vent=0x7f090007;
         public static final int button_ventback=0x7f090008;
-        public static final int devstatus=0x7f090021;
+        public static final int imageView_devstatus=0x7f090021;
         public static final int imageView_uistyle=0x7f090013;
         public static final int linearLayout_devinfo=0x7f09001e;
         public static final int linelayout_heat=0x7f09000d;
@@ -555,7 +562,8 @@ public final class R {
         public static final int activity_devicelist=0x7f030000;
         public static final int activity_mainmenu=0x7f030001;
         public static final int activity_operationcenter=0x7f030002;
-        public static final int listview_item_devinfo=0x7f030003;
+        public static final int activity_startup=0x7f030003;
+        public static final int listview_item_devinfo=0x7f030004;
     }
     public static final class menu {
         public static final int device_list=0x7f080000;
@@ -563,7 +571,21 @@ public final class R {
     public static final class string {
         public static final int action_settings=0x7f060001;
         public static final int app_name=0x7f060000;
+        public static final int dialog_exitpromptitle=0x7f060004;
+        public static final int dialog_exitprompttext=0x7f060003;
+        public static final int functiontitle_heat=0x7f060009;
+        public static final int functiontitle_refrigeration=0x7f060008;
+        public static final int functiontitle_setting=0x7f06000a;
+        public static final int functiontitle_vent=0x7f060007;
         public static final int hello_world=0x7f060002;
+        public static final int text_back=0x7f060010;
+        public static final int text_cancel=0x7f060006;
+        public static final int text_confirm=0x7f060005;
+        public static final int text_scan=0x7f06000f;
+        public static final int text_styleblue=0x7f06000c;
+        public static final int text_styledevmanage=0x7f06000e;
+        public static final int text_stylerain=0x7f06000b;
+        public static final int text_styleshadow=0x7f06000d;
     }
     public static final class style {
         /** 
@@ -592,16 +614,20 @@ public final class R {
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f070001;
-        public static final int ButtonBarButton=0x7f070002;
-        public static final int Text=0x7f070003;
-        public static final int Text_defButton=0x7f07000b;
-        public static final int Text_defListItem=0x7f07000c;
-        public static final int Text_fourthListTitle=0x7f07000a;
-        public static final int Text_primaryListTitle=0x7f070007;
-        public static final int Text_primaryTitle=0x7f070004;
-        public static final int Text_secondaryListTitle=0x7f070008;
-        public static final int Text_secondaryTitle=0x7f070005;
-        public static final int Text_thirdListTitle=0x7f070009;
-        public static final int Text_thirdTitle=0x7f070006;
+        public static final int ButtonBar=0x7f070005;
+        public static final int ButtonBarButton=0x7f070004;
+        public static final int FullscreenTheme=0x7f070006;
+        public static final int Text=0x7f070007;
+        public static final int Text_defButton=0x7f07000f;
+        public static final int Text_defListItem=0x7f070010;
+        public static final int Text_fourthListTitle=0x7f07000e;
+        public static final int Text_primaryListTitle=0x7f07000b;
+        public static final int Text_primaryTitle=0x7f070008;
+        public static final int Text_secondaryListTitle=0x7f07000c;
+        public static final int Text_secondaryTitle=0x7f070009;
+        public static final int Text_thirdListTitle=0x7f07000d;
+        public static final int Text_thirdTitle=0x7f07000a;
+        public static final int Theme_AppStartup=0x7f070002;
+        public static final int Theme_AppStartupTranslucent=0x7f070003;
     }
 }

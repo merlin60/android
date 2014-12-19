@@ -51,7 +51,6 @@ public class DeviceListActivity extends Activity {
 	private SimpleAdapter m_itemSimAdapter = null;
 	private ArrayList<HashMap<String, Object>> m_listInfo = null;
 	private int curListviewId;
-
 	private static final String ObjectStatus = "Icon";
 	private static final String ObjectName = "Name";
 	private static final String ObjectDetail = "Detail";
@@ -74,13 +73,9 @@ public class DeviceListActivity extends Activity {
 	private BleTool m_bleTool;
 	public BluetoothAdapter bluetoothAdapter;
 	public BluetoothService mbluetoothService;
-	
 	private static final String lvConnectStaSuc = "已连接";
 	private static final String lvConnectStaNot = "未连接";
 	private static final String lvConnectStaDoing = "连接...";
-
-
-
 	private Handler m_handler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -99,7 +94,7 @@ public class DeviceListActivity extends Activity {
 				Message message = Message.obtain();
 				message.what = MESSAGE_UPDATELIST;
 				m_handler.sendMessage(message);
-				//m_bleTool.unregisterReceiver();
+				//m_bleTool.unregisterReceiver()
 				break;
 			default:
 				break;
@@ -122,6 +117,7 @@ public class DeviceListActivity extends Activity {
 		LRHealthApp application = LRHealthApp.getInstance();
 		mbluetoothService = application.getBluetoothService();
 		application.addActivity(this);
+		
 		// init view
 		initView();
 
@@ -140,14 +136,16 @@ public class DeviceListActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
+		/*
 		// register receiver
-		//IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-		// registerReceiver(m_bdreceiver, filter);		
+		IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+		registerReceiver(m_bdreceiver, filter);			
+		*/
+		
 		SharedSetting mySharedSetting = new SharedSetting(DeviceListActivity.this);	
 		//if(mbluetoothService == null){
 			m_bleTool.registerReceiver();
-		//}
-	}
+		//}	}
 
 	@Override
 	public void onPause() {
@@ -155,46 +153,25 @@ public class DeviceListActivity extends Activity {
 	}
 
 	@Override
-	public void onStop() {
+	public void onStop() {		
+		super.onStop();
+		
 		if(mbluetoothService != null){
 			m_bleTool.unregisterReceiver();
 		}
 		m_bleTool.stopScan();
-		super.onStop();
 	}
 
 	@Override
-	public void onDestroy() {
-		m_bleTool.unbindService();
+	public void onDestroy() {		
 		super.onDestroy();
+		
+		m_bleTool.unbindService();
 	}
 
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if ((keyCode == KeyEvent.KEYCODE_BACK) && (0 == event.getRepeatCount())) {
-			String strMsg = String.format("Will you exit left right app?");
-			new AlertDialog.Builder(this)
-					.setTitle("Warm Prompt")
-					.setMessage(strMsg)
-					.setNegativeButton("Cancel",
-							new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-
-								}
-							})
-					.setPositiveButton("OK",
-							new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									finish();
-									System.exit(0);
-								}
-							}).show();
-		}
-
+	public boolean onKeyDown(int keyCode, KeyEvent event) 
+	{		
 		return super.onKeyDown(keyCode, event);
 	}
 
@@ -205,15 +182,11 @@ public class DeviceListActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// clear
-				// m_listInfo.clear();
-				// updateBluetoothDevList();
+				 m_listInfo.clear();
+				 updateBluetoothDevList();
 
 				// scan bt
 				m_listInfo.clear();
-				Message message = Message.obtain();
-				message.what = MESSAGE_UPDATELIST;
-				m_handler.sendMessage(message);				
-				
 				m_bleTool.stopScan();
 				if(mbluetoothService != null){
 					//m_bleTool.unregisterReceiver();
@@ -226,7 +199,19 @@ public class DeviceListActivity extends Activity {
 		m_btnBack = (Button) findViewById(R.id.button_back);
 		m_btnBack.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v) 
+			{
+				finish();
+				/*
+				Intent intent = new Intent();
+				intent.setClass(DeviceListActivity.this,
+						OperationCenterActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+						| Intent.FLAG_ACTIVITY_SINGLE_TOP);
+				startActivity(intent);
+				*/
+				
+				/*
 				Bundle bundle = new Bundle();
 				bundle.putInt("FunIdx", 0);
 				//Log.d(LOGTAG, macBleModule);
@@ -242,29 +227,6 @@ public class DeviceListActivity extends Activity {
 						| Intent.FLAG_ACTIVITY_SINGLE_TOP);
 				Log.i(LOGTAG, "start intent");
 				startActivity(intent);
-				
-				/*
-				String strMsg = String.format("Will you exit left right app?");
-				new AlertDialog.Builder(DeviceListActivity.this)
-						.setTitle("Warm Prompt")
-						.setMessage(strMsg)
-						.setNegativeButton("Cancel",
-								new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog,
-											int which) {
-
-									}
-								})
-						.setPositiveButton("OK",
-								new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog,
-											int which) {
-										finish();
-										System.exit(0);
-									}
-								}).show();
 				*/
 			}
 		});
@@ -289,15 +251,13 @@ public class DeviceListActivity extends Activity {
 				long id) {
 			
 			//TODO: click,  then connect corresponding device
-			curListviewId = position;
-			m_bleTool.stopScan();
-			m_bleTool.connect(macBleModule, m_bleConnectCallBack);			
+			curListviewId = position;			m_bleTool.stopScan();
+			m_bleTool.connect(macBleModule, m_bleConnectCallBack);
 			m_listInfo.get(curListviewId).put(ObjectStatus, lvConnectStaDoing);
 			// send message
 			Message message = Message.obtain();
 			message.what = MESSAGE_UPDATELIST;
-			m_handler.sendMessage(message);				
-
+			m_handler.sendMessage(message);
 //			Bundle bundle = new Bundle();
 //			bundle.putInt("FunIdx", 0);
 //			if (macBleModule != null) {
@@ -325,7 +285,7 @@ public class DeviceListActivity extends Activity {
 	
 	private int openBluetooth() {
 		m_bleTool = new BleTool(DeviceListActivity.this);
-		return m_bleTool.openBle();		
+		return m_bleTool.openBle();	
 	}
 
 	private int startScanBluetoothDev() {
@@ -365,9 +325,9 @@ public class DeviceListActivity extends Activity {
 			// when in this funciton, it indicate service has been created successfully, then can connect ble device
 			// TODO Auto-generated method stub
 			
-//			Message message = Message.obtain();
-//			message.what = MESSAGE_CONNECT;
-//			m_handler.sendMessage(message);			
+			Message message = Message.obtain();
+			message.what = MESSAGE_CONNECT;
+			m_handler.sendMessage(message);			
 		}		
 	};
 	
@@ -382,7 +342,7 @@ public class DeviceListActivity extends Activity {
 		@Override
 		public void onConnectFailed() {
 			//TODO: add code for failing to connect
-			//re-connect some times or do nothing
+			//re-connect some times or do nothing			
 			m_listInfo.get(curListviewId).put(ObjectStatus, lvConnectStaNot);
 			// send message
 			Message message = Message.obtain();

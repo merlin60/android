@@ -4,5 +4,20 @@
     <string name="app_name">左右冷热系统</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="dialog_exitprompttext">您将退出左右冷热系统？</string>
+    <string name="dialog_exitpromptitle">温馨提示</string>
+    <string name="text_confirm">确定</string>
+    <string name="text_cancel">取消</string>
+    <string name="functiontitle_vent">座椅通风</string>
+    <string name="functiontitle_refrigeration">制冷设置</string>
+     <string name="functiontitle_heat">加热设置</string>
+     <string name="functiontitle_setting">系统设置</string>
+     <string name="text_stylerain">雨露</string>
+     <string name="text_styleblue">幻蓝</string>
+     <string name="text_styleshadow">黎影</string>
+     <string name="text_styledevmanage">设备管理</string>
+     <string name="text_scan">扫描</string>
+     <string name="text_back">返回</string>
+
 
 </resources>
