@@ -175,6 +175,12 @@ public class BleTool {
 		m_bluetoothService.connect(macAddr);
 		m_bleConnectCallBack = bleConnectCallBack;
 	}
+	
+	public void disconnect() {
+		Log.i(LOGTAG, "disconnect");
+		m_bluetoothService.disconnect();
+	}
+	
 
 	// 接收广播 sevice 通过接收广播来知道是否连接成功，handler还可以根据连接是否成功做出相应动作
 	private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
@@ -226,6 +232,9 @@ public class BleTool {
 			case 0:
 				Log.i(LOGTAG, "连接失败");
 				connectstate = false;
+				if(m_bleConnectCallBack != null){
+					m_bleConnectCallBack.onConnectFailed();
+				}
 				break;
 			case 1:
 				String str = (String) msg.obj;

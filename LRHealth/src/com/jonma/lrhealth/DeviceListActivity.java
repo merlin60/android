@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.jinoux.android.bledatawarehouse.BluetoothService;
 
+import android.R.bool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -57,7 +58,6 @@ public class DeviceListActivity extends Activity {
 	
 	private static final String LOGTAG = "test";
 
-	
 	/*bluetooth*/
 	private String address;
 	private String macBleModule;// 00:1B:35:0B:5E:42
@@ -76,6 +76,9 @@ public class DeviceListActivity extends Activity {
 	private static final String lvConnectStaSuc = "已连接";
 	private static final String lvConnectStaNot = "未连接";
 	private static final String lvConnectStaDoing = "连接...";
+	
+	private boolean unregisterReceiverFlag = true;
+	
 	private Handler m_handler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -123,6 +126,7 @@ public class DeviceListActivity extends Activity {
 
 		//bt
 		openBluetooth();
+		Log.i(LOGTAG, "START SCAN");
 		startScanBluetoothDev();
 	}
 
@@ -144,7 +148,7 @@ public class DeviceListActivity extends Activity {
 		
 		SharedSetting mySharedSetting = new SharedSetting(DeviceListActivity.this);	
 		//if(mbluetoothService == null){
-			m_bleTool.registerReceiver();
+			//m_bleTool.registerReceiver();
 		//}	
 	}
 
@@ -156,9 +160,13 @@ public class DeviceListActivity extends Activity {
 	@Override
 	public void onStop() {		
 		super.onStop();
-		
-		if(mbluetoothService != null){
-			m_bleTool.unregisterReceiver();
+		if(unregisterReceiverFlag){
+			if(mbluetoothService != null){
+				Log.i("===", "unregisterReceiver");
+				m_bleTool.unregisterReceiver();
+			}else{
+				Log.i("===", "no unregisterReceiver");
+			}
 		}
 		m_bleTool.stopScan();
 	}
@@ -166,8 +174,11 @@ public class DeviceListActivity extends Activity {
 	@Override
 	public void onDestroy() {		
 		super.onDestroy();
-		
-		m_bleTool.unbindService();
+		if(mbluetoothService != null){
+			Log.i(LOGTAG, "unbind");
+			m_bleTool.disconnect();
+			m_bleTool.unbindService();
+		}
 	}
 
 	@Override
@@ -189,10 +200,11 @@ public class DeviceListActivity extends Activity {
 				// scan bt
 				m_listInfo.clear();
 				m_bleTool.stopScan();
-				if(mbluetoothService != null){
-					//m_bleTool.unregisterReceiver();
-					//m_bleTool.unbindService();					
-				}
+//				if(mbluetoothService != null){
+//					m_bleTool.disconnect();
+//					//m_bleTool.unregisterReceiver();
+//					m_bleTool.unbindService();					
+//				}
 				startScanBluetoothDev();
 			}
 		});
@@ -202,7 +214,14 @@ public class DeviceListActivity extends Activity {
 			@Override
 			public void onClick(View v) 
 			{
-				finish();
+//				unregisterReceiverFlag = false;
+//				if(mbluetoothService != null){
+//					Log.i("===", "unregisterReceiver");
+//					m_bleTool.unregisterReceiver();
+//				}else{
+//					Log.i("===", "no unregisterReceiver");
+//				}
+				//finish();
 				/*
 				Intent intent = new Intent();
 				intent.setClass(DeviceListActivity.this,
@@ -212,7 +231,6 @@ public class DeviceListActivity extends Activity {
 				startActivity(intent);
 				*/
 				
-				/*
 				Bundle bundle = new Bundle();
 				bundle.putInt("FunIdx", 0);
 				//Log.d(LOGTAG, macBleModule);
@@ -222,13 +240,11 @@ public class DeviceListActivity extends Activity {
 				
 				Intent intent = new Intent();
 				intent.putExtras(bundle);
-				intent.setClass(DeviceListActivity.this,
-						OperationCenterActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-						| Intent.FLAG_ACTIVITY_SINGLE_TOP);
+				intent.setClass(DeviceListActivity.this, OperationCenterActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 				Log.i(LOGTAG, "start intent");
 				startActivity(intent);
-				*/
+				
 			}
 		});
 
@@ -290,6 +306,14 @@ public class DeviceListActivity extends Activity {
 	}
 
 	private int startScanBluetoothDev() {
+		if(mbluetoothService != null){
+			Log.i(LOGTAG, "disconnect");
+			m_bleTool.disconnect();
+			//m_bleTool.unregisterReceiver();
+			//m_bleTool.unbindService();					
+		}else{
+			Log.i(LOGTAG, "mbluetoothService is null .no disconnect");			
+		}
 		m_bleTool.startScan(m_BleScanCallback, 1000);
 		return 0;
 	}
@@ -326,9 +350,9 @@ public class DeviceListActivity extends Activity {
 			// when in this funciton, it indicate service has been created successfully, then can connect ble device
 			// TODO Auto-generated method stub
 			
-			Message message = Message.obtain();
-			message.what = MESSAGE_CONNECT;
-			m_handler.sendMessage(message);			
+//			Message message = Message.obtain();
+//			message.what = MESSAGE_CONNECT;
+//			m_handler.sendMessage(message);			
 		}		
 	};
 	
