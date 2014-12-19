@@ -145,7 +145,8 @@ public class DeviceListActivity extends Activity {
 		SharedSetting mySharedSetting = new SharedSetting(DeviceListActivity.this);	
 		//if(mbluetoothService == null){
 			m_bleTool.registerReceiver();
-		//}	}
+		//}	
+	}
 
 	@Override
 	public void onPause() {
@@ -237,7 +238,7 @@ public class DeviceListActivity extends Activity {
 				R.layout.listview_item_devinfo, new String[] { ObjectName,
 						ObjectDetail, ObjectStatus }, new int[] {
 						R.id.textView_devname, R.id.textView_devinfo,
-						R.id.devstatus });
+						R.id.devstatus});
 
 		m_listviewDev.setAdapter(m_itemSimAdapter);
 		m_listviewDev.setOnItemClickListener(new ListOnItemClickListener());
