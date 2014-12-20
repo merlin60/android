@@ -62,20 +62,20 @@ public class DeviceListActivity extends Activity {
 	private String address;
 	private String macBleModule;// 00:1B:35:0B:5E:42
 	private final static String nameBleModule = "BLE0102C2P";
-	public static boolean connectstate = false; // Á¬½ÓÆ¥Åä×´Ì¬£¨false:Î´¿ªÊ¼Á¬½Ó£©
+	public static boolean connectstate = false; // ï¿½ï¿½ï¿½ï¿½Æ¥ï¿½ï¿½×´Ì¬ï¿½ï¿½false:Î´ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½Ó£ï¿½
 
-	private static int yyd = 0; // ÒÑ·µ»ØÐòºÅ
-	private static int sendxhid = 0; // Ã¿´Îµã»÷·¢ËÍ°´Å¥ ·¢ËÍµÄÊý¾ÝµÄÐòºÅ0--255 Ã¿·¢ËÍÒ»´Î¼ÓÒ»£¬ Çå¿ÕÊý¾ÝÊ±Îª0
-	private static int sss = 0; // Î´Ó¦´ð¸öÊý ×î¶àÎå¸öÎ´Ó¦´ð
-	private static int nm = 0; // ·¢ËÍÊý¾Ý³É¹¦´ÎÊý
-	public static boolean senddatastate = false; // ÊÇ·ñ¿ªÊ¼·¢ËÍ×Ô¶¨ÒåÊý¾Ý false:Î´¿ªÊ¼	
+	private static int yyd = 0; // ï¿½Ñ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	private static int sendxhid = 0; // Ã¿ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½Å¥ ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½Ýµï¿½ï¿½ï¿½ï¿½0--255 Ã¿ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Î¼ï¿½Ò»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±Îª0
+	private static int sss = 0; // Î´Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î´Ó¦ï¿½ï¿½
+	private static int nm = 0; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý³É¹ï¿½ï¿½ï¿½ï¿½ï¿½
+	public static boolean senddatastate = false; // ï¿½Ç·ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ false:Î´ï¿½ï¿½Ê¼	
 	
 	private BleTool m_bleTool;
 	public BluetoothAdapter bluetoothAdapter;
 	public BluetoothService mbluetoothService;
-	private static final String lvConnectStaSuc = "ÒÑÁ¬½Ó";
-	private static final String lvConnectStaNot = "Î´Á¬½Ó";
-	private static final String lvConnectStaDoing = "Á¬½Ó...";
+	private static final String lvConnectStaSuc = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+	private static final String lvConnectStaNot = "Î´ï¿½ï¿½ï¿½ï¿½";
+	private static final String lvConnectStaDoing = "ï¿½ï¿½ï¿½ï¿½...";
 	
 	private boolean unregisterReceiverFlag = true;
 	
@@ -184,6 +184,21 @@ public class DeviceListActivity extends Activity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) 
 	{		
+		if ((keyCode == KeyEvent.KEYCODE_BACK) && (0 == event.getRepeatCount())) 
+		{
+			Bundle bundle = new Bundle();
+			if (macBleModule != null) {
+				bundle.putString("mac", macBleModule);
+			}
+			
+			Intent intent = new Intent();
+			intent.putExtras(bundle);
+			intent.setClass(DeviceListActivity.this, OperationCenterActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+			Log.i(LOGTAG, "start intent");
+			startActivity(intent);	
+		}
+
 		return super.onKeyDown(keyCode, event);
 	}
 
@@ -213,27 +228,8 @@ public class DeviceListActivity extends Activity {
 		m_btnBack.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) 
-			{
-//				unregisterReceiverFlag = false;
-//				if(mbluetoothService != null){
-//					Log.i("===", "unregisterReceiver");
-//					m_bleTool.unregisterReceiver();
-//				}else{
-//					Log.i("===", "no unregisterReceiver");
-//				}
-				//finish();
-				/*
-				Intent intent = new Intent();
-				intent.setClass(DeviceListActivity.this,
-						OperationCenterActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-						| Intent.FLAG_ACTIVITY_SINGLE_TOP);
-				startActivity(intent);
-				*/
-				
+			{				
 				Bundle bundle = new Bundle();
-				bundle.putInt("FunIdx", 0);
-				//Log.d(LOGTAG, macBleModule);
 				if (macBleModule != null) {
 					bundle.putString("mac", macBleModule);
 				}
@@ -241,10 +237,9 @@ public class DeviceListActivity extends Activity {
 				Intent intent = new Intent();
 				intent.putExtras(bundle);
 				intent.setClass(DeviceListActivity.this, OperationCenterActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+				intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 				Log.i(LOGTAG, "start intent");
-				startActivity(intent);
-				
+				startActivity(intent);				
 			}
 		});
 

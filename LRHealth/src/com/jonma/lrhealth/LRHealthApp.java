@@ -29,8 +29,7 @@ public class LRHealthApp extends Application{
     public void addActivity(Activity activity) {   
         mList.add(activity);   
     }   
-    
-    //关闭每一个list内的activity  
+     
     public void exit() {   
         try {   
             for (Activity activity:mList) {   
@@ -44,7 +43,6 @@ public class LRHealthApp extends Application{
         }   
     }   
 
-    //杀进程  
     public void onLowMemory() {   
         super.onLowMemory();       
         System.gc();   
