@@ -118,7 +118,9 @@ public class BleTool {
 			Log.i(LOGTAG, "°ó¶¨·þÎñgattServiceIntentÊ§°Ü");
 		}
 		//context.registerReceiver(mGattUpdateReceiver,	makeGattUpdateIntentFilter());
-		registerReceiver();
+		if(m_bluetoothService == null){
+			registerReceiver();
+		}
 
 		m_bleServiceCallBack = bleServiceCallBack;
 	}
