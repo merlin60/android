@@ -95,7 +95,7 @@
                 android:id="@+id/button_refri"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:background="@drawable/icon_funrefri01"
+                android:background="@drawable/icon_funrefri03"
                 android:textColor="@color/snow" />
 
             <Button
@@ -146,7 +146,7 @@
                 android:id="@+id/button_heat"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:background="@drawable/icon_funheat01"
+                android:background="@drawable/icon_funheat03"
                 android:textColor="@color/snow" />
 
             <Button

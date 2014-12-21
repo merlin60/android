@@ -62,20 +62,20 @@ public class DeviceListActivity extends Activity {
 	private String address;
 	private String macBleModule;// 00:1B:35:0B:5E:42
 	private final static String nameBleModule = "BLE0102C2P";
-	public static boolean connectstate = false; // ����ƥ��״̬��false:δ��ʼ���ӣ�
+	public static boolean connectstate = false; // 锟斤拷锟斤拷匹锟斤拷状态锟斤拷false:未锟斤拷始锟斤拷锟接ｏ拷
 
-	private static int yyd = 0; // �ѷ������
-	private static int sendxhid = 0; // ÿ�ε�����Ͱ�ť ���͵����ݵ����0--255 ÿ����һ�μ�һ�� �������ʱΪ0
-	private static int sss = 0; // δӦ����� ������δӦ��
-	private static int nm = 0; // �������ݳɹ�����
-	public static boolean senddatastate = false; // �Ƿ�ʼ�����Զ������� false:δ��ʼ	
+	private static int yyd = 0; // 锟窖凤拷锟斤拷锟斤拷锟�
+	private static int sendxhid = 0; // 每锟轿碉拷锟斤拷锟斤拷桶锟脚� 锟斤拷锟酵碉拷锟斤拷锟捷碉拷锟斤拷锟�0--255 每锟斤拷锟斤拷一锟轿硷拷一锟斤拷 锟斤拷锟斤拷锟斤拷锟绞蔽�0
+	private static int sss = 0; // 未应锟斤拷锟斤拷锟� 锟斤拷锟斤拷锟斤拷未应锟斤拷
+	private static int nm = 0; // 锟斤拷锟斤拷锟斤拷锟捷成癸拷锟斤拷锟斤拷
+	public static boolean senddatastate = false; // 锟角凤拷始锟斤拷锟斤拷锟皆讹拷锟斤拷锟斤拷锟斤拷 false:未锟斤拷始	
 	
 	private BleTool m_bleTool;
 	public BluetoothAdapter bluetoothAdapter;
 	public BluetoothService mbluetoothService;
-	private static final String lvConnectStaSuc = "������";
-	private static final String lvConnectStaNot = "δ����";
-	private static final String lvConnectStaDoing = "����...";
+	private static final String lvConnectStaSuc = "已连接";
+	private static final String lvConnectStaNot = "未连接";
+	private static final String lvConnectStaDoing = "连接...";
 	
 	private boolean unregisterReceiverFlag = true;
 	
@@ -174,6 +174,7 @@ public class DeviceListActivity extends Activity {
 	@Override
 	public void onDestroy() {		
 		super.onDestroy();
+		Log.i(LOGTAG, "destroy");
 		if(mbluetoothService != null){
 			Log.i(LOGTAG, "unbind");
 			m_bleTool.disconnect();
