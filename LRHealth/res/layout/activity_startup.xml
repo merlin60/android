@@ -8,7 +8,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:scaleType="fitXY"
-        android:src="@drawable/icon_bgstyle000" >
+        android:src="@drawable/icon_bgstyle01" >
     </ImageView>
 
 </LinearLayout>
