@@ -2,7 +2,7 @@
     android:id="@+id/linelayout_selfview"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/icon_bgstyle00"
+    android:background="@drawable/icon_bgstyle11"
     android:gravity="center"
     android:orientation="vertical" >
 
