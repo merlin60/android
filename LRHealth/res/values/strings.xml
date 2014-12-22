@@ -19,6 +19,6 @@
      <string name="text_scan">扫描</string>
      <string name="text_back">返回</string>
       <string name="text_pressbackforexit">继续按返回键将退出程序...</string>
-
+     <string name="operation_unconnect_prompt">没有已连接的设备</string>
 
 </resources>
