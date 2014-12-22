@@ -13,6 +13,7 @@ import android.os.Message;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -39,6 +40,8 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 public class DeviceListActivity extends Activity {
+	LRHealthApp application;
+	
 	private static final int REQUEST_OPEN_BT_CODE = 0x01;
 
 	private static final int MESSAGE_UPDATELIST = 0x1000;
@@ -92,6 +95,7 @@ public class DeviceListActivity extends Activity {
 				break;
 			case MESSAGE_CONNECTED:
 				Log.d(LOGTAG, "connected");
+				application.connectStatus = true; 
 				mbluetoothService = m_bleTool.getBleService();
 				m_listInfo.get(curListviewId).put(ObjectStatus, lvConnectStaSuc);
 				Message message = Message.obtain();
@@ -117,7 +121,7 @@ public class DeviceListActivity extends Activity {
 
 		setContentView(R.layout.activity_devicelist);
 		
-		LRHealthApp application = LRHealthApp.getInstance();
+		application = LRHealthApp.getInstance();
 		mbluetoothService = application.getBluetoothService();
 		application.addActivity(this);
 		
@@ -164,6 +168,7 @@ public class DeviceListActivity extends Activity {
 			if(mbluetoothService != null){
 				Log.i("===", "unregisterReceiver");
 				m_bleTool.unregisterReceiver();
+				unregisterReceiverFlag = false;
 			}else{
 				Log.i("===", "no unregisterReceiver");
 			}
@@ -175,6 +180,17 @@ public class DeviceListActivity extends Activity {
 	public void onDestroy() {		
 		super.onDestroy();
 		Log.i(LOGTAG, "destroy");
+		
+//		if(unregisterReceiverFlag){
+//			if(mbluetoothService != null){
+//				Log.i("===", "unregisterReceiver");
+//				m_bleTool.unregisterReceiver();
+//				unregisterReceiverFlag = false;
+//			}else{
+//				Log.i("===", "no unregisterReceiver");
+//			}
+//		}
+		
 		if(mbluetoothService != null){
 			Log.i(LOGTAG, "unbind");
 			m_bleTool.disconnect();
@@ -369,6 +385,7 @@ public class DeviceListActivity extends Activity {
 			Message message = Message.obtain();
 			message.what = MESSAGE_UPDATELIST;
 			m_handler.sendMessage(message);
+			application.connectStatus = false; 
 		}
 	};
 	

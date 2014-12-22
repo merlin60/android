@@ -14,6 +14,7 @@ public class LRHealthApp extends Application{
 	
 	private List<Activity> mList = new LinkedList<Activity>();  
 	private static LRHealthApp instance; 
+	public boolean connectStatus = false; 
 	
 	public BluetoothService getBluetoothService() {
 		return mbluetoothService;
