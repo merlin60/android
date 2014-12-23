@@ -26,6 +26,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -59,26 +60,26 @@ public class DeviceListActivity extends Activity {
 	private static final String ObjectName = "Name";
 	private static final String ObjectDetail = "Detail";
 	
-	private static final String LOGTAG = "test";
+	private static final String LOGTAG = "LRHealth";
 
 	/*bluetooth*/
 	private String address;
 	private String macBleModule;// 00:1B:35:0B:5E:42
 	private final static String nameBleModule = "BLE0102C2P";
-	public static boolean connectstate = false; // 锟斤拷锟斤拷匹锟斤拷状态锟斤拷false:未锟斤拷始锟斤拷锟接ｏ拷
+	public static boolean connectstate = false; // �����ゆ�烽����ゆ�峰�归����ゆ�风�舵�������ゆ��false:��������ゆ�峰�������ゆ�烽����ワ�����
 
-	private static int yyd = 0; // 锟窖凤拷锟斤拷锟斤拷锟�
-	private static int sendxhid = 0; // 每锟轿碉拷锟斤拷锟斤拷桶锟脚� 锟斤拷锟酵碉拷锟斤拷锟捷碉拷锟斤拷锟�0--255 每锟斤拷锟斤拷一锟轿硷拷一锟斤拷 锟斤拷锟斤拷锟斤拷锟绞蔽�0
-	private static int sss = 0; // 未应锟斤拷锟斤拷锟� 锟斤拷锟斤拷锟斤拷未应锟斤拷
-	private static int nm = 0; // 锟斤拷锟斤拷锟斤拷锟捷成癸拷锟斤拷锟斤拷
-	public static boolean senddatastate = false; // 锟角凤拷始锟斤拷锟斤拷锟皆讹拷锟斤拷锟斤拷锟斤拷 false:未锟斤拷始	
+	private static int yyd = 0; // ���绐���ゆ�烽����ゆ�烽����ゆ�烽��锟�
+	private static int sendxhid = 0; // 姣����杞跨����烽����ゆ�烽����ゆ�锋《������锟� �����ゆ�烽����电����烽����ゆ�烽����风����烽����ゆ�烽��锟�0--255 姣������ゆ�烽����ゆ�蜂�����杞跨》��蜂�������ゆ�� �����ゆ�烽����ゆ�烽����ゆ�烽��缁���斤拷0
+	private static int sss = 0; // ���搴������ゆ�烽����ゆ�烽��锟� �����ゆ�烽����ゆ�烽����ゆ�锋��搴������ゆ��
+	private static int nm = 0; // �����ゆ�烽����ゆ�烽����ゆ�烽����锋����告�烽����ゆ�烽����ゆ��
+	public static boolean senddatastate = false; // ���瑙���ゆ�峰�������ゆ�烽����ゆ�烽�����璁规�烽����ゆ�烽����ゆ�烽����ゆ�� false:��������ゆ�峰��	
 	
 	private BleTool m_bleTool;
 	public BluetoothAdapter bluetoothAdapter;
 	public BluetoothService mbluetoothService;
-	private static final String lvConnectStaSuc = "已连接";
-	private static final String lvConnectStaNot = "未连接";
-	private static final String lvConnectStaDoing = "连接...";
+	private static final String lvConnectStaSuc = "宸茶�����";
+	private static final String lvConnectStaNot = "���杩����";
+	private static final String lvConnectStaDoing = "杩����...";
 	
 	private boolean unregisterReceiverFlag = true;
 	
@@ -112,7 +113,8 @@ public class DeviceListActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		Log.d(LOGTAG, "device list activity create");
+		super.onCreate(savedInstanceState);		
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -129,9 +131,10 @@ public class DeviceListActivity extends Activity {
 		initView();
 
 		//bt
-		openBluetooth();
-		Log.i(LOGTAG, "START SCAN");
+		Log.d(LOGTAG, "Open bluetooth and start scan");
+		openBluetooth();		
 		startScanBluetoothDev();
+		Log.d(LOGTAG, "open and start bluethooth done");
 	}
 
 	@Override
@@ -142,28 +145,34 @@ public class DeviceListActivity extends Activity {
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
+	public void onResume() {		
+		Log.d(LOGTAG, "device list activity resume");
 		/*
 		// register receiver
 		IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 		registerReceiver(m_bdreceiver, filter);			
 		*/
 		
-		SharedSetting mySharedSetting = new SharedSetting(DeviceListActivity.this);	
 		//if(mbluetoothService == null){
 			//m_bleTool.registerReceiver();
 		//}	
+		
+		SharedSetting mySharedSetting = new SharedSetting(DeviceListActivity.this);	
+		
+		super.onResume();
 	}
 
 	@Override
 	public void onPause() {
+		Log.d(LOGTAG, "device list activity pause");
+		
 		super.onPause();
 	}
 
 	@Override
-	public void onStop() {		
-		super.onStop();
+	public void onStop() {	
+		Log.d(LOGTAG, "device list activity stop");
+		
 		if(unregisterReceiverFlag){
 			if(mbluetoothService != null){
 				Log.i("===", "unregisterReceiver");
@@ -174,46 +183,51 @@ public class DeviceListActivity extends Activity {
 			}
 		}
 		m_bleTool.stopScan();
+		
+		super.onStop();
 	}
 
 	@Override
-	public void onDestroy() {		
-		super.onDestroy();
-		Log.i(LOGTAG, "destroy");
-		
-//		if(unregisterReceiverFlag){
-//			if(mbluetoothService != null){
-//				Log.i("===", "unregisterReceiver");
-//				m_bleTool.unregisterReceiver();
-//				unregisterReceiverFlag = false;
-//			}else{
-//				Log.i("===", "no unregisterReceiver");
-//			}
-//		}
+	public void onDestroy() {			
+		Log.d(LOGTAG, "device list activity destory");
 		
 		if(mbluetoothService != null){
 			Log.i(LOGTAG, "unbind");
 			m_bleTool.disconnect();
 			m_bleTool.unbindService();
 		}
+		
+		super.onDestroy();
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		Log.d(LOGTAG, "device list activity configuration changed"); 
+	    
+	    super.onConfigurationChanged(newConfig);
 	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) 
 	{		
-		if ((keyCode == KeyEvent.KEYCODE_BACK) && (0 == event.getRepeatCount())) 
+		if (keyCode == KeyEvent.KEYCODE_BACK) 
 		{
-			Bundle bundle = new Bundle();
-			if (macBleModule != null) {
-				bundle.putString("mac", macBleModule);
+			if (0 == event.getRepeatCount()) 
+			{
+				Bundle bundle = new Bundle();
+				if (macBleModule != null) {
+					bundle.putString("mac", macBleModule);
+				}
+				
+				Intent intent = new Intent();
+				intent.putExtras(bundle);
+				intent.setClass(DeviceListActivity.this, OperationCenterActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+				Log.d(LOGTAG, "start intent");
+				startActivity(intent);	
 			}
 			
-			Intent intent = new Intent();
-			intent.putExtras(bundle);
-			intent.setClass(DeviceListActivity.this, OperationCenterActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-			Log.i(LOGTAG, "start intent");
-			startActivity(intent);	
+			return true;
 		}
 
 		return super.onKeyDown(keyCode, event);
@@ -255,7 +269,7 @@ public class DeviceListActivity extends Activity {
 				intent.putExtras(bundle);
 				intent.setClass(DeviceListActivity.this, OperationCenterActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-				Log.i(LOGTAG, "start intent");
+				Log.d(LOGTAG, "start intent");
 				startActivity(intent);				
 			}
 		});
@@ -277,16 +291,17 @@ public class DeviceListActivity extends Activity {
 
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
-			
+				long id) {			
 			//TODO: click,  then connect corresponding device
 			curListviewId = position;			m_bleTool.stopScan();
 			m_bleTool.connect(macBleModule, m_bleConnectCallBack);
 			m_listInfo.get(curListviewId).put(ObjectStatus, lvConnectStaDoing);
+			
 			// send message
 			Message message = Message.obtain();
 			message.what = MESSAGE_UPDATELIST;
 			m_handler.sendMessage(message);
+			
 //			Bundle bundle = new Bundle();
 //			bundle.putInt("FunIdx", 0);
 //			if (macBleModule != null) {

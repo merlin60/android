@@ -588,6 +588,7 @@ public final class R {
         public static final int functiontitle_setting=0x7f07000a;
         public static final int functiontitle_vent=0x7f070007;
         public static final int hello_world=0x7f070002;
+        public static final int operation_unconnect_prompt=0x7f070012;
         public static final int text_back=0x7f070010;
         public static final int text_cancel=0x7f070006;
         public static final int text_confirm=0x7f070005;

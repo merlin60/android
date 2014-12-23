@@ -167,7 +167,7 @@
         android:background="@drawable/icon_title00"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone" >
+        android:visibility="visible" >
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -271,7 +271,7 @@
         android:background="@drawable/icon_menubg"
         android:gravity="center_vertical|center_horizontal"
         android:orientation="horizontal"
-        android:visibility="visible" >
+        android:visibility="gone" >
 
         <LinearLayout
             android:layout_width="wrap_content"
