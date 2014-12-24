@@ -40,19 +40,23 @@
             android:gravity="center"
             android:orientation="horizontal" >
 
-            <Button
+            <ImageButton
                 android:id="@+id/button_vent"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:background="@drawable/icon_funvent00"
+                android:src="@drawable/icon_funvent00"
+                android:scaleType="fitXY"
+                android:background="@drawable/icon_btnbg00"
                 android:textColor="@color/snow" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/button_ventback"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginLeft="80dp"
-                android:background="@drawable/icon_btback00"
+                android:src="@drawable/icon_btback00"
+                android:scaleType="fitXY"
+                android:background="@drawable/icon_btnbg00"
                 android:textColor="@color/snow" />
         </LinearLayout>
     </LinearLayout>
@@ -91,19 +95,23 @@
             android:gravity="center"
             android:orientation="horizontal" >
 
-            <Button
+            <ImageButton
                 android:id="@+id/button_refri"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:background="@drawable/icon_funrefri03"
+                android:src="@drawable/icon_funrefri03"
+                android:scaleType="fitXY"
+                android:background="@drawable/icon_btnbg00"
                 android:textColor="@color/snow" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/button_refriback"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginLeft="80dp"
-                android:background="@drawable/icon_btback00"
+                android:src="@drawable/icon_btback00"
+                android:scaleType="fitXY"
+                android:background="@drawable/icon_btnbg00"
                 android:textColor="@color/snow" />
         </LinearLayout>
     </LinearLayout>
@@ -142,19 +150,23 @@
             android:gravity="center"
             android:orientation="horizontal" >
 
-            <Button
+            <ImageButton
                 android:id="@+id/button_heat"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:background="@drawable/icon_funheat03"
+                android:src="@drawable/icon_funheat03"
+                android:scaleType="fitXY"
+                android:background="@drawable/icon_btnbg00"
                 android:textColor="@color/snow" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/button_heatback"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginLeft="80dp"
-                android:background="@drawable/icon_btback00"
+                android:src="@drawable/icon_btback00"
+                android:scaleType="fitXY"
+                android:background="@drawable/icon_btnbg00"
                 android:textColor="@color/snow" />
         </LinearLayout>
     </LinearLayout>
@@ -200,7 +212,9 @@
                     android:id="@+id/imageView_uistyle"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:src="@drawable/icon_funsettingui00" />
+                    android:src="@drawable/icon_funsettingui00"
+                	android:scaleType="fitXY"
+                    android:background="@drawable/icon_btnbg00" />
             </LinearLayout>
 
             <LinearLayout
@@ -244,6 +258,8 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:src="@drawable/icon_funsettinglan00"
+                	android:scaleType="fitXY"
+                    android:background="@drawable/icon_btnbg00"
                     android:textColor="@color/snow" />
             </LinearLayout>
 
@@ -268,10 +284,11 @@
         android:id="@+id/linelayout_menu"
         android:layout_width="fill_parent"
         android:layout_height="115dp"
-        android:background="@drawable/icon_menubg"
         android:gravity="center_vertical|center_horizontal"
         android:orientation="horizontal"
-        android:visibility="gone" >
+        android:background="@drawable/icon_menubg00"
+        android:layout_marginTop="10dp"
+        android:visibility="visible" >
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -286,12 +303,13 @@
                     android:visibility="gone"
                     android:src="@drawable/icon_selectstatus" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/button_menuvent"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
-                
-                android:background="@drawable/icon_btvent00"
+                android:src="@drawable/icon_btvent00"
+                android:scaleType="fitXY"
+                android:background="@drawable/icon_btnbg00"                
                 android:textColor="@color/snow" />
         </LinearLayout>
 
@@ -309,12 +327,13 @@
                     android:visibility="gone"
                     android:src="@drawable/icon_selectstatus" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/button_menurefri"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
-                
-                android:background="@drawable/icon_btrefri00"
+                android:src="@drawable/icon_btrefri00"
+                android:scaleType="fitXY"
+                android:background="@drawable/icon_btnbg00"
                 android:textColor="@color/snow" />
         </LinearLayout>
 
@@ -332,12 +351,13 @@
                     android:visibility="gone"
                     android:src="@drawable/icon_selectstatus" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/button_menuheat"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
-                
-                android:background="@drawable/icon_btheat00"
+                android:src="@drawable/icon_btheat00"
+                android:scaleType="fitXY"
+                android:background="@drawable/icon_btnbg00"
                 android:textColor="@color/snow" />
         </LinearLayout>
 
@@ -355,11 +375,13 @@
                     android:visibility="gone"
                     android:src="@drawable/icon_selectstatus" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/button_menusetting"
                 android:layout_width="90dp"
-                android:layout_height="90dp"                
-                android:background="@drawable/icon_btsetting00"
+                android:layout_height="90dp"   
+                android:src="@drawable/icon_btsetting00"
+                android:scaleType="fitXY"             
+                android:background="@drawable/icon_btnbg00"
                 android:textColor="@color/snow" />
         </LinearLayout>
 
@@ -377,11 +399,13 @@
                     android:visibility="gone"
                     android:src="@drawable/icon_selectstatus" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/button_menuback"
                 android:layout_width="90dp"
-                android:layout_height="90dp"                
-                android:background="@drawable/icon_btback00"
+                android:layout_height="90dp"   
+                android:src="@drawable/icon_btback00"
+                android:scaleType="fitXY"             
+                android:background="@drawable/icon_btnbg00"
                 android:textColor="@color/snow" />
         </LinearLayout>
     </LinearLayout>
