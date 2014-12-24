@@ -77,9 +77,9 @@ public class DeviceListActivity extends Activity {
 	private BleTool m_bleTool;
 	public BluetoothAdapter bluetoothAdapter;
 	public BluetoothService mbluetoothService;
-	private static final String lvConnectStaSuc = "宸茶�����";
-	private static final String lvConnectStaNot = "���杩����";
-	private static final String lvConnectStaDoing = "杩����...";
+	private static final int lvConnectStaSuc = R.string.lvConnectStaSuc;
+	private static final int lvConnectStaNot = R.string.lvConnectStaNot;
+	private static final int lvConnectStaDoing = R.string.lvConnectStaDoing;
 	
 	private boolean unregisterReceiverFlag = true;
 	
@@ -98,7 +98,7 @@ public class DeviceListActivity extends Activity {
 				Log.d(LOGTAG, "connected");
 				application.connectStatus = true; 
 				mbluetoothService = m_bleTool.getBleService();
-				m_listInfo.get(curListviewId).put(ObjectStatus, lvConnectStaSuc);
+				m_listInfo.get(curListviewId).put(ObjectStatus, getResources().getString(lvConnectStaSuc));
 				Message message = Message.obtain();
 				message.what = MESSAGE_UPDATELIST;
 				m_handler.sendMessage(message);
@@ -241,6 +241,7 @@ public class DeviceListActivity extends Activity {
 			public void onClick(View v) {
 				// clear
 				 m_listInfo.clear();
+				 application.scanIsDevice = 0;
 				 updateBluetoothDevList();
 
 				// scan bt
@@ -293,9 +294,13 @@ public class DeviceListActivity extends Activity {
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {			
 			//TODO: click,  then connect corresponding device
-			curListviewId = position;			m_bleTool.stopScan();
+			curListviewId = position;			
+			m_bleTool.stopScan();
+			macBleModule = m_listInfo.get(curListviewId).get(ObjectDetail).toString();
+			Log.i("===", "current listview mac:" + macBleModule);
+			if(m_bleTool.getBleService() != null) m_bleTool.disconnect();
 			m_bleTool.connect(macBleModule, m_bleConnectCallBack);
-			m_listInfo.get(curListviewId).put(ObjectStatus, lvConnectStaDoing);
+			m_listInfo.get(curListviewId).put(ObjectStatus, getResources().getString(lvConnectStaDoing));
 			
 			// send message
 			Message message = Message.obtain();
@@ -341,7 +346,7 @@ public class DeviceListActivity extends Activity {
 		}else{
 			Log.i(LOGTAG, "mbluetoothService is null .no disconnect");			
 		}
-		m_bleTool.startScan(m_BleScanCallback, 1000);
+		m_bleTool.startScan(m_BleScanCallback, 10000);
 		return 0;
 	}
 	
@@ -351,23 +356,24 @@ public class DeviceListActivity extends Activity {
 		@Override
 		public void scanListening(BluetoothDevice device) {
 			// TODO Auto-generated method stub
+			application.scanIsDevice = 1;
 			android.util.Log.d(LOGTAG, device.getAddress());
 			HashMap<String, Object> map;
 			map = new HashMap<String, Object>();
 			map.put(ObjectName, device.getName());
 			map.put(ObjectDetail, device.getAddress());
-			map.put(ObjectStatus, lvConnectStaNot);
+			map.put(ObjectStatus, getResources().getString(lvConnectStaNot));
 			m_listInfo.add(map);
 			// send message
 			Message message = Message.obtain();
 			message.what = MESSAGE_UPDATELIST;
 			m_handler.sendMessage(message);
 
-			if (device.getName().equalsIgnoreCase(nameBleModule)) {
+			//if (device.getName().equalsIgnoreCase(nameBleModule)) {
 				macBleModule = device.getAddress();
 				android.util.Log.d(LOGTAG, "finded " + macBleModule);
 				m_bleTool.service_init(m_bleServiceCallBack);
-			}			
+			//}			
 		}		
 	};
 	
@@ -395,7 +401,7 @@ public class DeviceListActivity extends Activity {
 		public void onConnectFailed() {
 			//TODO: add code for failing to connect
 			//re-connect some times or do nothing			
-			m_listInfo.get(curListviewId).put(ObjectStatus, lvConnectStaNot);
+			m_listInfo.get(curListviewId).put(ObjectStatus, getResources().getString(lvConnectStaNot));
 			// send message
 			Message message = Message.obtain();
 			message.what = MESSAGE_UPDATELIST;

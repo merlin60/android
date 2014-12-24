@@ -5,12 +5,14 @@ import java.util.HashMap;
 import com.jinoux.android.bledatawarehouse.BluetoothService;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -18,6 +20,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.Window;
+import android.widget.Toast;
 
 public class BleTool {
 	private BluetoothAdapter bluetoothAdapter;
@@ -27,7 +32,7 @@ public class BleTool {
 	private BluetoothService m_bluetoothService;
 	private BleConnectCallBack m_bleConnectCallBack;
 	private static boolean connectstate = false; // 连接匹配状态（false:未开始连接）
-	private Handler mHandler;	
+	private Handler mHandler = new Handler();	
 	private static final String LOGTAG = "test";
 
 	public BleTool(Context context) {
@@ -67,12 +72,30 @@ public class BleTool {
 			return -1;
 		}
 		
-//		mHandler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//            	bluetoothAdapter.stopLeScan(mLeScanCallback);
-//            }
-//        }, period);
+		
+		mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+            	//bluetoothAdapter.stopLeScan(mLeScanCallback);
+            	if(LRHealthApp.getInstance().scanIsDevice == 0){
+            		AlertDialog dialog = new AlertDialog.Builder(context)
+					.setMessage(context.getResources().getString(R.string.scanNoDevice))
+					.setNegativeButton(context.getResources().getString(R.string.text_cancel),
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+
+								}
+							}).show();
+//            		Window window = dialog.getWindow();
+//            		window.setGravity(Gravity.CENTER);
+//            		window.requestFeature(Window.FEATURE_CUSTOM_TITLE);
+//            		window.setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title);
+//            		dialog.show();
+            	}
+            }
+        }, period);
 		
 		bluetoothAdapter.startLeScan(mLeScanCallback);
 		m_bleScanCallBack = bleScanCallBack;

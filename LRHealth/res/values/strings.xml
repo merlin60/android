@@ -10,15 +10,19 @@
     <string name="text_cancel">取消</string>
     <string name="functiontitle_vent">座椅通风</string>
     <string name="functiontitle_refrigeration">制冷设置</string>
-     <string name="functiontitle_heat">加热设置</string>
-     <string name="functiontitle_setting">系统设置</string>
-     <string name="text_stylerain">雨露</string>
-     <string name="text_styleblue">幻蓝</string>
-     <string name="text_styleshadow">黎影</string>
-     <string name="text_styledevmanage">设备管理</string>
-     <string name="text_scan">扫描</string>
-     <string name="text_back">返回</string>
-      <string name="text_pressbackforexit">继续按返回键将退出程序...</string>
-     <string name="operation_unconnect_prompt">没有已连接的设备</string>
+    <string name="functiontitle_heat">加热设置</string>
+    <string name="functiontitle_setting">系统设置</string>
+    <string name="text_stylerain">雨露</string>
+    <string name="text_styleblue">幻蓝</string>
+    <string name="text_styleshadow">黎影</string>
+    <string name="text_styledevmanage">设备管理</string>
+    <string name="text_scan">扫描</string>
+    <string name="text_back">返回</string>
+    <string name="text_pressbackforexit">继续按返回键将退出程序...</string>
+    <string name="operation_unconnect_prompt">没有已连接的设备</string>
+    <string name="lvConnectStaSuc">已连接</string>
+    <string name="lvConnectStaNot">未连接</string>
+    <string name="lvConnectStaDoing">连接...</string>
+    <string name="scanNoDevice">没有发现任何设备</string>
 
 </resources>
