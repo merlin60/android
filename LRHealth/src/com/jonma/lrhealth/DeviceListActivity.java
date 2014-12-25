@@ -354,7 +354,7 @@ public class DeviceListActivity extends Activity {
 		}else{
 			Log.i(LOGTAG, "mbluetoothService is null .no disconnect");			
 		}
-		m_bleTool.startScan(m_BleScanCallback, 10000);
+		m_bleTool.startScan(m_BleScanCallback, 15000);
 		return 0;
 	}
 	
