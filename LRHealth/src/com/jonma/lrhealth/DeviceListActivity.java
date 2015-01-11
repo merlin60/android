@@ -299,21 +299,33 @@ public class DeviceListActivity extends Activity {
 			m_bleTool.stopScan();
 			macBleModule = m_listInfo.get(curListviewId).get(ObjectDetail).toString();
 			Log.i("===", "current listview mac:" + macBleModule);
-			if(m_bleTool.getBleService() != null) m_bleTool.disconnect(); //disconnect
-			/*clear all listview status*/
-			int cnt = m_listInfo.size();
-			if(cnt != 0){
-				for(int i=0; i<cnt; i++){
-					m_listInfo.get(i).put(ObjectStatus, getResources().getString(lvConnectStaNot));
-				}
-			}
-			m_bleTool.connect(macBleModule, m_bleConnectCallBack);
-			m_listInfo.get(curListviewId).put(ObjectStatus, getResources().getString(lvConnectStaDoing));
 			
-			// send message
-			Message message = Message.obtain();
-			message.what = MESSAGE_UPDATELIST;
-			m_handler.sendMessage(message);
+			if(application.connectStatus ==true){
+				application.connectStatus = false;
+				if(m_bleTool.getBleService() != null) m_bleTool.disconnect(); //disconnect
+				m_listInfo.get(curListviewId).put(ObjectStatus, getResources().getString(lvConnectStaNot));
+				// send message
+				Message message = Message.obtain();
+				message.what = MESSAGE_UPDATELIST;
+				m_handler.sendMessage(message);
+			}else{
+				//application.connectStatus = true;
+				//if(m_bleTool.getBleService() != null) m_bleTool.disconnect(); //disconnect
+				/*clear all listview status*/
+				int cnt = m_listInfo.size();
+				if(cnt != 0){
+					for(int i=0; i<cnt; i++){
+						m_listInfo.get(i).put(ObjectStatus, getResources().getString(lvConnectStaNot));
+					}
+				}
+				m_bleTool.connect(macBleModule, m_bleConnectCallBack);
+				m_listInfo.get(curListviewId).put(ObjectStatus, getResources().getString(lvConnectStaDoing));
+				
+				// send message
+				Message message = Message.obtain();
+				message.what = MESSAGE_UPDATELIST;
+				m_handler.sendMessage(message);
+			}
 			
 //			Bundle bundle = new Bundle();
 //			bundle.putInt("FunIdx", 0);
