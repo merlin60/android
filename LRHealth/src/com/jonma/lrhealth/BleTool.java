@@ -226,7 +226,7 @@ public class BleTool {
 					}
             	}
             }
-        }, 10000);
+        }, 15000);
 	}
 	
 	public void disconnect() {
