@@ -67,13 +67,13 @@ public class DeviceListActivity extends Activity {
 	private String address;
 	private String macBleModule;// 00:1B:35:0B:5E:42
 	private final static String nameBleModule = "BLE0102C2P";
-	public static boolean connectstate = false; // �����ゆ�烽����ゆ�峰�归����ゆ�风�舵�������ゆ��false:��������ゆ�峰�������ゆ�烽����ワ�����
+	public static boolean connectstate = false; // 锟斤拷锟斤拷锟姐倖锟界兘锟斤拷锟斤拷銈嗭拷宄帮拷褰掞拷锟斤拷锟姐倖锟介锟借埖锟斤拷锟斤拷锟斤拷锟姐倖锟斤拷false:锟斤拷锟斤拷锟斤拷锟斤拷銈嗭拷宄帮拷锟斤拷锟斤拷锟斤拷銈嗭拷鐑斤拷锟斤拷锟姐儻锟斤拷锟斤拷锟�
 
-	private static int yyd = 0; // ���绐���ゆ�烽����ゆ�烽����ゆ�烽��锟�
-	private static int sendxhid = 0; // 姣����杞跨����烽����ゆ�烽����ゆ�锋《������锟� �����ゆ�烽����电����烽����ゆ�烽����风����烽����ゆ�烽��锟�0--255 姣������ゆ�烽����ゆ�蜂�����杞跨》��蜂�������ゆ�� �����ゆ�烽����ゆ�烽����ゆ�烽��缁���斤拷0
-	private static int sss = 0; // ���搴������ゆ�烽����ゆ�烽��锟� �����ゆ�烽����ゆ�烽����ゆ�锋��搴������ゆ��
-	private static int nm = 0; // �����ゆ�烽����ゆ�烽����ゆ�烽����锋����告�烽����ゆ�烽����ゆ��
-	public static boolean senddatastate = false; // ���瑙���ゆ�峰�������ゆ�烽����ゆ�烽�����璁规�烽����ゆ�烽����ゆ�烽����ゆ�� false:��������ゆ�峰��	
+	private static int yyd = 0; // 锟斤拷锟界粣锟斤拷锟姐倖锟界兘锟斤拷锟斤拷銈嗭拷鐑斤拷锟斤拷锟姐倖锟界兘锟斤拷閿燂拷
+	private static int sendxhid = 0; // 濮ｏ拷锟斤拷锟芥潪璺拷锟斤拷锟界兘锟斤拷锟斤拷銈嗭拷鐑斤拷锟斤拷锟姐倖锟介攱銆婏拷锟斤拷锟斤拷锟介敓锟� 锟斤拷锟斤拷锟姐倖锟界兘锟斤拷锟斤拷鐢碉拷锟斤拷锟界兘锟斤拷锟斤拷銈嗭拷鐑斤拷锟斤拷锟介锟斤拷锟斤拷鐑斤拷锟斤拷锟姐倖锟界兘锟斤拷閿燂拷0--255 濮ｏ拷锟斤拷锟斤拷锟姐倖锟界兘锟斤拷锟斤拷銈嗭拷铚傦拷锟斤拷锟斤拷鏉炶法銆嬶拷锟借渹锟斤拷锟斤拷锟斤拷锟姐倖锟斤拷 锟斤拷锟斤拷锟姐倖锟界兘锟斤拷锟斤拷銈嗭拷鐑斤拷锟斤拷锟姐倖锟界兘锟斤拷缂侊拷锟斤拷鏂ゆ嫹0
+	private static int sss = 0; // 锟斤拷锟芥惔锟斤拷锟斤拷锟斤拷銈嗭拷鐑斤拷锟斤拷锟姐倖锟界兘锟斤拷閿燂拷 锟斤拷锟斤拷锟姐倖锟界兘锟斤拷锟斤拷銈嗭拷鐑斤拷锟斤拷锟姐倖锟介攱锟斤拷鎼达拷锟斤拷锟斤拷锟姐倖锟斤拷
+	private static int nm = 0; // 锟斤拷锟斤拷锟姐倖锟界兘锟斤拷锟斤拷銈嗭拷鐑斤拷锟斤拷锟姐倖锟界兘锟斤拷锟斤拷閿嬶拷锟斤拷锟藉憡锟界兘锟斤拷锟斤拷銈嗭拷鐑斤拷锟斤拷锟姐倖锟斤拷
+	public static boolean senddatastate = false; // 锟斤拷锟界憴锟斤拷锟姐倖锟藉嘲锟斤拷锟斤拷锟斤拷锟姐倖锟界兘锟斤拷锟斤拷銈嗭拷鐑斤拷锟斤拷锟斤拷鐠佽锟界兘锟斤拷锟斤拷銈嗭拷鐑斤拷锟斤拷锟姐倖锟界兘锟斤拷锟斤拷銈嗭拷锟� false:锟斤拷锟斤拷锟斤拷锟斤拷銈嗭拷宄帮拷锟�	
 	
 	private BleTool m_bleTool;
 	public BluetoothAdapter bluetoothAdapter;
@@ -158,7 +158,11 @@ public class DeviceListActivity extends Activity {
 			//m_bleTool.registerReceiver();
 		//}	
 		
-		SharedSetting mySharedSetting = new SharedSetting(DeviceListActivity.this);	
+		SharedSetting mySharedSetting = new SharedSetting(DeviceListActivity.this);
+		if(unregisterReceiverFlag == false){
+			unregisterReceiverFlag = true;
+			m_bleTool.registerReceiver();
+		}
 		
 		super.onResume();
 	}
@@ -177,13 +181,13 @@ public class DeviceListActivity extends Activity {
 		if(unregisterReceiverFlag){
 			if(mbluetoothService != null){
 				Log.i("===", "unregisterReceiver");
-				m_bleTool.unregisterReceiver();
+			 	m_bleTool.unregisterReceiver();
 				unregisterReceiverFlag = false;
 			}else{
 				Log.i("===", "no unregisterReceiver");
 			}
 		}
-		m_bleTool.stopScan();
+		//m_bleTool.stopScan();
 		
 		super.onStop();
 	}
@@ -299,21 +303,33 @@ public class DeviceListActivity extends Activity {
 			m_bleTool.stopScan();
 			macBleModule = m_listInfo.get(curListviewId).get(ObjectDetail).toString();
 			Log.i("===", "current listview mac:" + macBleModule);
-			if(m_bleTool.getBleService() != null) m_bleTool.disconnect(); //disconnect
-			/*clear all listview status*/
-			int cnt = m_listInfo.size();
-			if(cnt != 0){
-				for(int i=0; i<cnt; i++){
-					m_listInfo.get(i).put(ObjectStatus, getResources().getString(lvConnectStaNot));
-				}
-			}
-			m_bleTool.connect(macBleModule, m_bleConnectCallBack);
-			m_listInfo.get(curListviewId).put(ObjectStatus, getResources().getString(lvConnectStaDoing));
 			
-			// send message
-			Message message = Message.obtain();
-			message.what = MESSAGE_UPDATELIST;
-			m_handler.sendMessage(message);
+			if(application.connectStatus ==true){
+				application.connectStatus = false;
+				if(m_bleTool.getBleService() != null) m_bleTool.disconnect(); //disconnect
+				m_listInfo.get(curListviewId).put(ObjectStatus, getResources().getString(lvConnectStaNot));
+				// send message
+				Message message = Message.obtain();
+				message.what = MESSAGE_UPDATELIST;
+				m_handler.sendMessage(message);
+			}else{
+				//application.connectStatus = true;
+				//if(m_bleTool.getBleService() != null) m_bleTool.disconnect(); //disconnect
+				/*clear all listview status*/
+				int cnt = m_listInfo.size();
+				if(cnt != 0){
+					for(int i=0; i<cnt; i++){
+						m_listInfo.get(i).put(ObjectStatus, getResources().getString(lvConnectStaNot));
+					}
+				}
+				m_bleTool.connect(macBleModule, m_bleConnectCallBack);
+				m_listInfo.get(curListviewId).put(ObjectStatus, getResources().getString(lvConnectStaDoing));
+				
+				// send message
+				Message message = Message.obtain();
+				message.what = MESSAGE_UPDATELIST;
+				m_handler.sendMessage(message);
+			}
 			
 //			Bundle bundle = new Bundle();
 //			bundle.putInt("FunIdx", 0);
