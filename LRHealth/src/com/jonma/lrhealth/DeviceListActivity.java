@@ -382,6 +382,11 @@ public class DeviceListActivity extends Activity {
 			// TODO Auto-generated method stub
 			application.scanIsDevice = 1;
 			android.util.Log.d(LOGTAG, device.getAddress());
+			
+			if(checkIsExit(device) == true){
+				return;
+			}
+			
 			HashMap<String, Object> map;
 			map = new HashMap<String, Object>();
 			map.put(ObjectName, device.getName());
@@ -398,6 +403,15 @@ public class DeviceListActivity extends Activity {
 				android.util.Log.d(LOGTAG, "finded " + macBleModule);
 				m_bleTool.service_init(m_bleServiceCallBack);
 			//}			
+		}
+
+		private boolean checkIsExit(BluetoothDevice device) {
+			for( HashMap<String, Object> tmp:m_listInfo){
+				if(tmp.get(ObjectDetail) == device.getAddress()){
+					return true;
+				}
+			}
+			return false;
 		}		
 	};
 	
