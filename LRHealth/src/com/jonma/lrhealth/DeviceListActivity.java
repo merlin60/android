@@ -3,6 +3,8 @@ package com.jonma.lrhealth;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.security.auth.PrivateCredentialPermission;
+
 import com.jinoux.android.bledatawarehouse.BluetoothService;
 import com.jonma.tool.CustomProgressDialog;
 
@@ -39,6 +41,7 @@ import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
@@ -194,6 +197,8 @@ public class DeviceListActivity extends Activity {
 		}
 		
 		application.scanButtionClickTimes = 0;
+		
+		goneProShowbtn();
 
 		super.onResume();
 	}
@@ -273,7 +278,7 @@ public class DeviceListActivity extends Activity {
 		m_btnScan.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				application.scanButtionClickTimes++;
+				
 				// clear
 				m_listInfo.clear();
 				application.scanIsDevice = 0;
@@ -288,64 +293,16 @@ public class DeviceListActivity extends Activity {
 				// m_bleTool.unbindService();
 				// }
 				startScanBluetoothDev();
-				
-				//startCustomerProgress();
 
-				pro = (ProgressBar) findViewById(R.id.progress_scan);
-				// 设置ProgressBar为可见状态
-				pro.setVisibility(View.VISIBLE);
-				m_btnScan.setVisibility(View.INVISIBLE);
-				// 设置ProgressBar的最大值
-				pro.setMax(100);
-				// 设置ProgressBar当前值
-				pro.setProgress(0);
-
-				// 通过线程来改变ProgressBar的值
-				new Thread(new Runnable() {
-					public void run() {
-						for (int i = 0; i < SCANTIME; i++) {
-							try {
-								intCounter = (i) * (100/15);
-								Thread.sleep(1000);
-
-								if (i == 4) {
-//									Message m = new Message();
-//
-//									m.what = STOP_NOTIFIER;
-//									myMessageHandler.sendMessage(m);
-									break;
-								} else {
-//									Message m = new Message();
-//									m.what = THREADING_NOTIFIER;
-//									myMessageHandler.sendMessage(m);
-								}
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-						}
-					}
-				}).start();
 			}
 		});
-
+		
+		ImageButton backImageButton = (ImageButton) findViewById(R.id.imagebutton_back);
+		backImageButton.getBackground().setAlpha(0);
+		backImageButton.setOnClickListener(new BtnBackOnClick());
+		
 		m_btnBack = (Button) findViewById(R.id.button_back);
-		m_btnBack.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Bundle bundle = new Bundle();
-				if (macBleModule != null) {
-					bundle.putString("mac", macBleModule);
-				}
-
-				Intent intent = new Intent();
-				intent.putExtras(bundle);
-				intent.setClass(DeviceListActivity.this,
-						OperationCenterActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-				Log.d(LOGTAG, "start intent");
-				startActivity(intent);
-			}
-		});
+		m_btnBack.setOnClickListener(new BtnBackOnClick());
 
 		m_listInfo = new ArrayList<HashMap<String, Object>>();
 		m_listviewDev = (ListView) findViewById(R.id.listView_dev);
@@ -357,6 +314,25 @@ public class DeviceListActivity extends Activity {
 
 		m_listviewDev.setAdapter(m_itemSimAdapter);
 		m_listviewDev.setOnItemClickListener(new ListOnItemClickListener());
+	}
+	
+	private class BtnBackOnClick implements View.OnClickListener{
+		@Override
+		public void onClick(View v) {
+			Bundle bundle = new Bundle();
+			if (macBleModule != null) {
+				bundle.putString("mac", macBleModule);
+			}
+
+			Intent intent = new Intent();
+			intent.putExtras(bundle);
+			intent.setClass(DeviceListActivity.this,
+					OperationCenterActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+			Log.d(LOGTAG, "start intent");
+			startActivity(intent);
+		}
+		
 	}
 
 	private final class ListOnItemClickListener implements
@@ -434,6 +410,7 @@ public class DeviceListActivity extends Activity {
 	}
 
 	private int startScanBluetoothDev() {
+		application.scanButtionClickTimes++;
 		if (mbluetoothService != null) {
 			Log.i(LOGTAG, "disconnect");
 			m_bleTool.disconnect();
@@ -442,7 +419,11 @@ public class DeviceListActivity extends Activity {
 		} else {
 			Log.i(LOGTAG, "mbluetoothService is null .no disconnect");
 		}
-		m_bleTool.startScan(m_BleScanCallback, SCANTIME*1000);
+		m_bleTool.startScan(m_BleScanCallback, SCANTIME*1000);		
+		
+		Log.i("===", "startCustomerProgress");
+		startCustomerProgress();
+		m_btnScan.setVisibility(View.INVISIBLE);
 		return 0;
 	}
 
@@ -461,7 +442,11 @@ public class DeviceListActivity extends Activity {
 
 			HashMap<String, Object> map;
 			map = new HashMap<String, Object>();
-			map.put(ObjectName, device.getName());
+			if(device.getName().substring(0, 3).equals("BLE") ){
+				map.put(ObjectName, getResources().getString(R.string.devicename));
+			}else{
+				map.put(ObjectName, device.getName());
+			}
 			map.put(ObjectDetail, device.getAddress());
 			map.put(ObjectStatus, getResources().getString(lvConnectStaNot));
 			m_listInfo.add(map);
@@ -484,7 +469,7 @@ public class DeviceListActivity extends Activity {
 
 		private boolean checkIsExit(BluetoothDevice device) {
 			for (HashMap<String, Object> tmp : m_listInfo) {
-				if (tmp.get(ObjectDetail) == device.getAddress()) {
+				if (tmp.get(ObjectDetail).toString() == device.getAddress()) {
 					return true;
 				}
 			}
@@ -536,43 +521,10 @@ public class DeviceListActivity extends Activity {
 	
 	/*progress*/
 	
-	Handler myMessageHandler = new Handler()
-    {
-      // @Override 
-            public void handleMessage(Message msg)
-            {
-                    switch (msg.what)
-                    {
-                    //ProgressBar已经是对大值
-                    case STOP_NOTIFIER:
-                    		//goneProShowbtn();
-                            Thread.currentThread().interrupt();
-                            break;
-                    case THREADING_NOTIFIER:
-                            if (!Thread.currentThread().isInterrupted())
-                            {
-                                    // 改变ProgressBar的当前值
-                                    pro.setProgress(intCounter);
-                                    
-                                    // 设置标题栏中前景的一个进度条进度值
-                                    setProgress(intCounter*100);
-                                    // 设置标题栏中后面的一个进度条进度值
-                                    setSecondaryProgress(intCounter*100);//
-                            }
-                            break;
-                    }
-                    super.handleMessage(msg);
-           }
-    };
-    
     private void goneProShowbtn() {
-    	pro.setVisibility(View.GONE);
+    	//pro.setVisibility(View.GONE);
+    	stopProgressDialog();
 		m_btnScan.setVisibility(View.VISIBLE);
-		
-//		Message m = new Message();
-//
-//		m.what = STOP_NOTIFIER;
-//		myMessageHandler.sendMessage(m);
 	}
     
     
@@ -603,7 +555,7 @@ public class DeviceListActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(String result) {
-			stopProgressDialog();
+			//stopProgressDialog();
 		}
 		
 		@Override
@@ -620,7 +572,7 @@ public class DeviceListActivity extends Activity {
 	private void startProgressDialog(){
 		if (progressDialog == null){
 			progressDialog = CustomProgressDialog.createDialog(this);
-			progressDialog.setMessage("Refresh...");
+			//progressDialog.setMessage("Refresh...");
 		}
 		
     	progressDialog.show();

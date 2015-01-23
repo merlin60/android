@@ -157,5 +157,8 @@
     <color name="plum">#dda0dd</color> <!-- 洋李色 -->
     <color name="gainsboro">#dcdcdc</color> <!-- 淡灰色 -->
     <color name="whitegray">#f0f0f0</color> <!-- white gray -->
+    <color name="whiteblue">#11abec</color> <!-- white blue -->
+    
+    
 
 </resources>

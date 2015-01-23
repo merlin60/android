@@ -25,5 +25,7 @@
     <string name="lvConnectStaDoing">连接...</string>
     <string name="scanNoDevice">没有发现任何设备!</string>
 	<string name="cancel">取消</string>
+	<string name="devicename">左右沙发</string>
+	
 
 </resources>
