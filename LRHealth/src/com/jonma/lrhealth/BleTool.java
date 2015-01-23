@@ -78,15 +78,17 @@ public class BleTool {
 			return -1;
 		}
 		
+		m_bleScanCallBack = bleScanCallBack;		
 		
 		mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
             	//bluetoothAdapter.stopLeScan(mLeScanCallback);
-            	if(LRHealthApp.getInstance().scanIsDevice == 0){
-            		LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);    
-            		final View loginLayout = inflater.inflate(R.layout.dialoggeneral, null);
+            	if(LRHealthApp.getInstance().scanIsDevice == 0 && LRHealthApp.getInstance().scanButtionClickTimes <= 1){
+            		m_bleScanCallBack.scanNoDevice();
             		
+            		LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);    
+            		final View loginLayout = inflater.inflate(R.layout.dialoggeneral, null);            		
             		CustomDialog.Builder customBuilder = new CustomDialog.Builder(context);
             		customBuilder.setView(loginLayout)
             			.setMessage(context.getResources().getString(R.string.scanNoDevice))
@@ -99,11 +101,13 @@ public class BleTool {
             		Dialog scanDialog = customBuilder.create();
             		scanDialog.show();
             	}
+            	
+            	LRHealthApp.getInstance().scanButtionClickTimes--;
             }
         }, period);
 		
 		bluetoothAdapter.startLeScan(mLeScanCallback);
-		m_bleScanCallBack = bleScanCallBack;
+		
 		return 0;
 	}
 
@@ -126,6 +130,8 @@ public class BleTool {
 		 *            the devie that have been founded.
 		 */
 		public void scanListening(BluetoothDevice device);
+		
+		public void scanNoDevice();
 
 	}
 
@@ -233,8 +239,7 @@ public class BleTool {
 		Log.i(LOGTAG, "disconnect");
 		connectIsUncon = true;
 		m_bluetoothService.disconnect();
-	}
-	
+	}	
 
 	// 接收广播 sevice 通过接收广播来知道是否连接成功，handler还可以根据连接是否成功做出相应动作
 	private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
@@ -277,7 +282,7 @@ public class BleTool {
 		public void onConnectFailed();
 	}
 
-	/* handler of service */
+	/* handler of ble service */
 	@SuppressLint("HandlerLeak")
 	public Handler deviceHandler = new Handler() {
 		@Override

@@ -16,6 +16,7 @@ public class LRHealthApp extends Application{
 	private static LRHealthApp instance; 
 	public boolean connectStatus = false; 
 	public int scanIsDevice = 0;
+	public int scanButtionClickTimes = 0;
 	
 	public BluetoothService getBluetoothService() {
 		return mbluetoothService;
