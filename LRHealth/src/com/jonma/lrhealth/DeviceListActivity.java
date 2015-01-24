@@ -196,11 +196,10 @@ public class DeviceListActivity extends Activity {
 			unregisterReceiverFlag = true;
 			m_bleTool.registerReceiver();
 		}
-		
-		application.scanButtionClickTimes = 0;
-		
+				
 		if(isFirstStart == false){
 			goneProShowbtn();
+			application.scanButtionClickTimes = 0;
 		}
 		isFirstStart = false;
 		super.onResume();
