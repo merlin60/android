@@ -86,18 +86,18 @@ public class DeviceListActivity extends Activity {
 	private String address;
 	private String macBleModule;// 00:1B:35:0B:5E:42
 	private final static String nameBleModule = "BLE0102C2P";
-	public static boolean connectstate = false; // 锟斤拷锟斤拷锟姐倖锟界兘锟斤拷锟斤拷銈嗭拷宄帮拷褰掞拷锟斤拷锟姐倖锟介锟借埖锟斤拷锟斤拷锟斤拷锟姐倖锟斤拷false:锟斤拷锟斤拷锟斤拷锟斤拷銈嗭拷宄帮拷锟斤拷锟斤拷锟斤拷銈嗭拷鐑斤拷锟斤拷锟姐儻锟斤拷锟斤拷锟�
+	public static boolean connectstate = false; // 閿熸枻鎷烽敓鏂ゆ嫹閿熷鍊栭敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷峰畡甯嫹瑜版帪鎷烽敓鏂ゆ嫹閿熷鍊栭敓浠嬵棑閿熷�熷煐閿熸枻鎷烽敓鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓鏂ゆ嫹false:閿熸枻鎷烽敓鏂ゆ嫹閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷峰畡甯嫹閿熸枻鎷烽敓鏂ゆ嫹閿熸枻鎷烽妶鍡嫹閻戞枻鎷烽敓鏂ゆ嫹閿熷鍎婚敓鏂ゆ嫹閿熸枻鎷烽敓锟�
 
-	private static int yyd = 0; // 锟斤拷锟界粣锟斤拷锟姐倖锟界兘锟斤拷锟斤拷銈嗭拷鐑斤拷锟斤拷锟姐倖锟界兘锟斤拷閿燂拷
-	private static int sendxhid = 0; // 濮ｏ拷锟斤拷锟芥潪璺拷锟斤拷锟界兘锟斤拷锟斤拷銈嗭拷鐑斤拷锟斤拷锟姐倖锟介攱銆婏拷锟斤拷锟斤拷锟介敓锟�
-										// 锟斤拷锟斤拷锟姐倖锟界兘锟斤拷锟斤拷鐢碉拷锟斤拷锟界兘锟斤拷锟斤拷銈嗭拷鐑斤拷锟斤拷锟介锟斤拷锟斤拷鐑斤拷锟斤拷锟姐倖锟界兘锟斤拷閿燂拷0--255
-										// 濮ｏ拷锟斤拷锟斤拷锟姐倖锟界兘锟斤拷锟斤拷銈嗭拷铚傦拷锟斤拷锟斤拷鏉炶法銆嬶拷锟借渹锟斤拷锟斤拷锟斤拷锟姐倖锟斤拷
-										// 锟斤拷锟斤拷锟姐倖锟界兘锟斤拷锟斤拷銈嗭拷鐑斤拷锟斤拷锟姐倖锟界兘锟斤拷缂侊拷锟斤拷鏂ゆ嫹0
-	private static int sss = 0; // 锟斤拷锟芥惔锟斤拷锟斤拷锟斤拷銈嗭拷鐑斤拷锟斤拷锟姐倖锟界兘锟斤拷閿燂拷
-								// 锟斤拷锟斤拷锟姐倖锟界兘锟斤拷锟斤拷銈嗭拷鐑斤拷锟斤拷锟姐倖锟介攱锟斤拷鎼达拷锟斤拷锟斤拷锟姐倖锟斤拷
-	private static int nm = 0; // 锟斤拷锟斤拷锟姐倖锟界兘锟斤拷锟斤拷銈嗭拷鐑斤拷锟斤拷锟姐倖锟界兘锟斤拷锟斤拷閿嬶拷锟斤拷锟藉憡锟界兘锟斤拷锟斤拷銈嗭拷鐑斤拷锟斤拷锟姐倖锟斤拷
-	public static boolean senddatastate = false; // 锟斤拷锟界憴锟斤拷锟姐倖锟藉嘲锟斤拷锟斤拷锟斤拷锟姐倖锟界兘锟斤拷锟斤拷銈嗭拷鐑斤拷锟斤拷锟斤拷鐠佽锟界兘锟斤拷锟斤拷銈嗭拷鐑斤拷锟斤拷锟姐倖锟界兘锟斤拷锟斤拷銈嗭拷锟�
-													// false:锟斤拷锟斤拷锟斤拷锟斤拷銈嗭拷宄帮拷锟�
+	private static int yyd = 0; // 閿熸枻鎷烽敓鐣岀玻閿熸枻鎷烽敓濮愬�栭敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷烽悜鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓鐣屽厴閿熸枻鎷烽柨鐕傛嫹
+	private static int sendxhid = 0; // 婵綇鎷烽敓鏂ゆ嫹閿熻姤娼捄顭掓嫹閿熸枻鎷烽敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷烽悜鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓浠嬫敱閵嗗鎷烽敓鏂ゆ嫹閿熸枻鎷烽敓浠嬫晸閿燂拷
+										// 閿熸枻鎷烽敓鏂ゆ嫹閿熷鍊栭敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閻㈢鎷烽敓鏂ゆ嫹閿熺晫鍏橀敓鏂ゆ嫹閿熸枻鎷烽妶鍡嫹閻戞枻鎷烽敓鏂ゆ嫹閿熶粙顥撻敓鏂ゆ嫹閿熸枻鎷烽悜鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓鐣屽厴閿熸枻鎷烽柨鐕傛嫹0--255
+										// 婵綇鎷烽敓鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷烽摎鍌︽嫹閿熸枻鎷烽敓鏂ゆ嫹閺夌偠娉曢妴瀣舵嫹閿熷�熸腹閿熸枻鎷烽敓鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓鏂ゆ嫹
+										// 閿熸枻鎷烽敓鏂ゆ嫹閿熷鍊栭敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷烽悜鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓鐣屽厴閿熸枻鎷风紓渚婃嫹閿熸枻鎷烽弬銈嗗0
+	private static int sss = 0; // 閿熸枻鎷烽敓鑺ユ償閿熸枻鎷烽敓鏂ゆ嫹閿熸枻鎷烽妶鍡嫹閻戞枻鎷烽敓鏂ゆ嫹閿熷鍊栭敓鐣屽厴閿熸枻鎷烽柨鐕傛嫹
+								// 閿熸枻鎷烽敓鏂ゆ嫹閿熷鍊栭敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷烽悜鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓浠嬫敱閿熸枻鎷烽幖杈炬嫹閿熸枻鎷烽敓鏂ゆ嫹閿熷鍊栭敓鏂ゆ嫹
+	private static int nm = 0; // 閿熸枻鎷烽敓鏂ゆ嫹閿熷鍊栭敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷烽悜鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹闁垮鎷烽敓鏂ゆ嫹閿熻棄鎲￠敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷烽悜鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓鏂ゆ嫹
+	public static boolean senddatastate = false; // 閿熸枻鎷烽敓鐣屾喆閿熸枻鎷烽敓濮愬�栭敓钘夊槻閿熸枻鎷烽敓鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷烽悜鏂ゆ嫹閿熸枻鎷烽敓鏂ゆ嫹閻犱浇顫夐敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷烽悜鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷烽敓锟�
+													// false:閿熸枻鎷烽敓鏂ゆ嫹閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷峰畡甯嫹閿燂拷
 
 	private BleTool m_bleTool;
 	public BluetoothAdapter bluetoothAdapter;
@@ -107,6 +107,7 @@ public class DeviceListActivity extends Activity {
 	private static final int lvConnectStaDoing = R.string.lvConnectStaDoing;
 
 	private boolean unregisterReceiverFlag = true;
+	private boolean isFirstStart = true;
 	
 	private Handler m_handler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -198,8 +199,10 @@ public class DeviceListActivity extends Activity {
 		
 		application.scanButtionClickTimes = 0;
 		
-		goneProShowbtn();
-
+		if(isFirstStart == false){
+			goneProShowbtn();
+		}
+		isFirstStart = false;
 		super.onResume();
 	}
 
