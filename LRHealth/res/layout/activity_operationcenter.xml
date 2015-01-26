@@ -1,25 +1,28 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linelayout_selfview"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_selfview"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/icon_bgstyle11"
-    android:gravity="center"
-    android:orientation="vertical" >
-
+    android:background="@drawable/icon_bgstyle10"
+    android:orientation="vertical"
+     >
+     
+    
     <LinearLayout
         android:id="@+id/linelayout_vent"
         android:layout_width="fill_parent"
         android:layout_height="150dp"
-        android:layout_marginTop="35dp"
         android:background="@drawable/icon_title00"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone" >
+        android:layout_above="@+id/linelayout_menu"
+        android:layout_marginBottom="20dp"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="30dp"
+            android:layout_height="25dp"
             android:gravity="center"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal" >
 
             <TextView
@@ -33,31 +36,59 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="80dp"
+            android:layout_height="105dp"
             android:layout_marginLeft="135dp"
             android:layout_marginRight="135dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:orientation="horizontal" >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center" >
 
-            <ImageButton
-                android:id="@+id/button_vent"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/icon_funvent00"
-                android:scaleType="fitXY"
-                android:background="@drawable/icon_btnbg00"
-                android:textColor="@color/snow" />
+                <ImageButton
+                    android:id="@+id/button_vent"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/icon_btnbg00"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/icon_funvent00"
+                    android:textColor="@color/snow" />
 
-            <ImageButton
+                <TextView
+                    android:id="@+id/textView_ventstatus"
+                    style="@style/Text.primaryTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_ventrunstatus"
+                    android:textColor="@color/snow" />
+            </LinearLayout>
+            
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="100dp"
+                android:gravity="center"  >
+                
+			<ImageButton
                 android:id="@+id/button_ventback"
                 android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginLeft="80dp"
+                android:layout_height="80dp"                
                 android:src="@drawable/icon_btback00"
                 android:scaleType="fitXY"
                 android:background="@drawable/icon_btnbg00"
                 android:textColor="@color/snow" />
+			
+			<TextView
+                    style="@style/Text.primaryTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_ventviewexit"
+                    android:textColor="@color/snow" />
+			</LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -65,15 +96,17 @@
         android:id="@+id/linelayout_refri"
         android:layout_width="fill_parent"
         android:layout_height="150dp"
-        android:layout_marginTop="35dp"
         android:background="@drawable/icon_title00"
         android:gravity="center"
         android:orientation="vertical"
+        android:layout_above="@+id/linelayout_menu"
+        android:layout_marginBottom="20dp"
         android:visibility="gone" >
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="30dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:orientation="horizontal" >
 
@@ -88,13 +121,18 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="80dp"
+            android:layout_height="105dp"
             android:layout_marginLeft="135dp"
             android:layout_marginRight="135dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:orientation="horizontal" >
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center" >
             <ImageButton
                 android:id="@+id/button_refri"
                 android:layout_width="80dp"
@@ -103,16 +141,39 @@
                 android:scaleType="fitXY"
                 android:background="@drawable/icon_btnbg00"
                 android:textColor="@color/snow" />
+            
+            <TextView
+                    android:id="@+id/textView_refristatus"
+                    style="@style/Text.primaryTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_refrilevelsetting"
+                    android:textColor="@color/snow" />
+            
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="100dp"
+                android:gravity="center" >
             <ImageButton
                 android:id="@+id/button_refriback"
                 android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginLeft="80dp"
+                android:layout_height="80dp"                
                 android:src="@drawable/icon_btback00"
                 android:scaleType="fitXY"
                 android:background="@drawable/icon_btnbg00"
                 android:textColor="@color/snow" />
+            
+            <TextView
+                    style="@style/Text.primaryTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_refriviewexit"
+                    android:textColor="@color/snow" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -120,15 +181,17 @@
         android:id="@+id/linelayout_heat"
         android:layout_width="fill_parent"
         android:layout_height="150dp"
-        android:layout_marginTop="35dp"
         android:background="@drawable/icon_title00"
         android:gravity="center"
         android:orientation="vertical"
+        android:layout_above="@+id/linelayout_menu"
+        android:layout_marginBottom="20dp"
         android:visibility="gone" >
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="30dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:orientation="horizontal" >
 
@@ -143,13 +206,18 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="80dp"
+            android:layout_height="105dp"
             android:layout_marginLeft="135dp"
             android:layout_marginRight="135dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:orientation="horizontal" >
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center" >
             <ImageButton
                 android:id="@+id/button_heat"
                 android:layout_width="80dp"
@@ -158,16 +226,38 @@
                 android:scaleType="fitXY"
                 android:background="@drawable/icon_btnbg00"
                 android:textColor="@color/snow" />
+            
+            <TextView
+                    android:id="@+id/textView_heatstatus"
+                    style="@style/Text.primaryTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_heatlevelsetting"
+                    android:textColor="@color/snow" />
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="100dp"
+                android:gravity="center" >
             <ImageButton
                 android:id="@+id/button_heatback"
                 android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginLeft="80dp"
+                android:layout_height="80dp"                
                 android:src="@drawable/icon_btback00"
                 android:scaleType="fitXY"
                 android:background="@drawable/icon_btnbg00"
                 android:textColor="@color/snow" />
+            
+            <TextView
+                    style="@style/Text.primaryTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_heatviewexit"
+                    android:textColor="@color/snow" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -175,16 +265,18 @@
         android:id="@+id/linelayout_setting"
         android:layout_width="fill_parent"
         android:layout_height="150dp"
-        android:layout_marginTop="35dp"
         android:background="@drawable/icon_title00"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="visible" >
+        android:layout_above="@+id/linelayout_menu"
+        android:layout_marginBottom="20dp"
+        android:visibility="gone" >
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="30dp"
             android:gravity="center"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal" >
 
             <TextView
@@ -198,8 +290,8 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="80dp"
-            android:layout_marginTop="15dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:orientation="horizontal" >
 
@@ -282,12 +374,12 @@
 
     <LinearLayout
         android:id="@+id/linelayout_menu"
-        android:layout_width="fill_parent"
-        android:layout_height="115dp"
-        android:gravity="center_vertical|center_horizontal"
-        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"        
         android:background="@drawable/icon_menubg00"
-        android:layout_marginTop="10dp"
+        android:gravity="bottom|center_horizontal"
+        android:orientation="horizontal"
+        android:layout_centerInParent="true"
         android:visibility="visible" >
 
         <LinearLayout
@@ -305,8 +397,8 @@
 
             <ImageButton
                 android:id="@+id/button_menuvent"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:src="@drawable/icon_btvent00"
                 android:scaleType="fitXY"
                 android:background="@drawable/icon_btnbg00"                
@@ -329,8 +421,8 @@
 
             <ImageButton
                 android:id="@+id/button_menurefri"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:src="@drawable/icon_btrefri00"
                 android:scaleType="fitXY"
                 android:background="@drawable/icon_btnbg00"
@@ -353,8 +445,8 @@
 
             <ImageButton
                 android:id="@+id/button_menuheat"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:src="@drawable/icon_btheat00"
                 android:scaleType="fitXY"
                 android:background="@drawable/icon_btnbg00"
@@ -372,13 +464,13 @@
                     android:id="@+id/imageview_settingselectst"
                     android:layout_width="90dp"
                     android:layout_height="20dp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:src="@drawable/icon_selectstatus" />
 
             <ImageButton
                 android:id="@+id/button_menusetting"
-                android:layout_width="90dp"
-                android:layout_height="90dp"   
+                android:layout_width="80dp"
+                android:layout_height="80dp"   
                 android:src="@drawable/icon_btsetting00"
                 android:scaleType="fitXY"             
                 android:background="@drawable/icon_btnbg00"
@@ -401,8 +493,8 @@
 
             <ImageButton
                 android:id="@+id/button_menuback"
-                android:layout_width="90dp"
-                android:layout_height="90dp"   
+                android:layout_width="80dp"
+                android:layout_height="80dp"   
                 android:src="@drawable/icon_btback00"
                 android:scaleType="fitXY"             
                 android:background="@drawable/icon_btnbg00"
@@ -410,4 +502,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>
