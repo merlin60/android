@@ -24,6 +24,8 @@ public class CustomProgressDialog extends Dialog {
 		customProgressDialog = new CustomProgressDialog(context,R.style.CustomProgressDialog);
 		customProgressDialog.setContentView(R.layout.customprogressdialog);
 		customProgressDialog.getWindow().getAttributes().gravity = Gravity.RIGHT | Gravity.TOP;
+		//customProgressDialog.getWindow().getAttributes().verticalMargin = 90;
+
 		
 		return customProgressDialog;
 	}
@@ -44,11 +46,11 @@ public class CustomProgressDialog extends Dialog {
     }
     
     public CustomProgressDialog setMessage(String strMessage){
-    	TextView msg = (TextView)customProgressDialog.findViewById(R.id.progressmsg);
+//    	TextView msg = (TextView)customProgressDialog.findViewById(R.id.progressmsg);
     	
-    	if (msg != null){
-    		msg.setText(strMessage);
-    	}
+//    	if (msg != null){
+//    		msg.setText(strMessage);
+//    	}
     	
     	return customProgressDialog;
     }

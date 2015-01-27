@@ -6,6 +6,7 @@ import java.util.HashMap;
 import javax.security.auth.PrivateCredentialPermission;
 
 import com.jinoux.android.bledatawarehouse.BluetoothService;
+import com.jonma.tool.CustomDialog;
 import com.jonma.tool.CustomProgressDialog;
 
 import android.R.bool;
@@ -19,6 +20,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
+import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -34,6 +36,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -109,6 +112,12 @@ public class DeviceListActivity extends Activity {
 	private boolean unregisterReceiverFlag = true;
 	private boolean isFirstStart = true;
 	
+	/*scan status*/
+	private boolean rescanStatus = false;
+	private String curConnectDeviceMac = new String();
+	private boolean haveScanned = false;
+	private Handler mHandler = new Handler();
+	
 	private Handler m_handler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -165,10 +174,27 @@ public class DeviceListActivity extends Activity {
 
 		// bt
 		Log.d(LOGTAG, "Open bluetooth and start scan");
-		openBluetooth();
+		int ret = openBluetooth();
 		startScanBluetoothDev();
+//		if(ret == 1){// new open
+//			firstScan(15*1000);
+//		}else{//have opened
+//			firstScan(15*1000);
+//		}
+		
 		Log.d(LOGTAG, "open and start bluethooth done");
 	}
+
+//	private void firstScan(int period) {
+//		mHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//            	if(haveScanned == false){
+//            		startScanBluetoothDev();
+//            	}            	
+//            }
+//        }, period);
+//	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -344,6 +370,8 @@ public class DeviceListActivity extends Activity {
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
 			// TODO: click, then connect corresponding device
+			rescanStatus = false;
+			
 			curListviewId = position;
 			m_bleTool.stopScan();
 			macBleModule = m_listInfo.get(curListviewId).get(ObjectDetail)
@@ -373,6 +401,7 @@ public class DeviceListActivity extends Activity {
 					}
 				}
 				m_bleTool.connect(macBleModule, m_bleConnectCallBack);
+				curConnectDeviceMac = macBleModule;
 				m_listInfo.get(curListviewId).put(ObjectStatus,
 						getResources().getString(lvConnectStaDoing));
 
@@ -412,6 +441,7 @@ public class DeviceListActivity extends Activity {
 	}
 
 	private int startScanBluetoothDev() {
+		
 		application.scanButtionClickTimes++;
 		if (mbluetoothService != null) {
 			Log.i(LOGTAG, "disconnect");
@@ -421,12 +451,45 @@ public class DeviceListActivity extends Activity {
 		} else {
 			Log.i(LOGTAG, "mbluetoothService is null .no disconnect");
 		}
-		m_bleTool.startScan(m_BleScanCallback, SCANTIME*1000);		
-		
-		Log.i("===", "startCustomerProgress");
-		startCustomerProgress();
-		m_btnScan.setVisibility(View.INVISIBLE);
+		if(haveScanned == false){
+			firtStartScan();
+			//m_bleTool.startScan(m_BleScanCallback, 1*1000);
+		}else{
+			m_bleTool.startScan(m_BleScanCallback, SCANTIME*1000);
+			Log.i("===", "startCustomerProgress");
+			startCustomerProgress();
+			m_btnScan.setVisibility(View.INVISIBLE);
+			haveScanned = true;
+		}
+	
 		return 0;
+	}
+	
+	private void firtStartScan() {
+		Log.i("===", "first scan");
+		m_bleTool.firstStartScan();
+		
+		mHandler.postDelayed(new Runnable() {
+	      @Override
+	      public void run() {
+	    	  Log.i("===", "haveScanned:" + haveScanned);
+	      	if(haveScanned == false){
+	      		m_bleTool.stopScan();
+	      		haveScanned = true;
+	      		startScanBluetoothDev();
+	      		
+	      	}            	
+	      }
+		}, 1*1000);
+	}
+
+	private int reScanConn() {
+		Log.i("===", "rescan");
+		rescanStatus = true;
+		m_bleTool.stopScan();
+		m_bleTool.reStartScan();		
+		
+		return 0;		
 	}
 
 	/* three callback funciton of BleTool */
@@ -438,7 +501,16 @@ public class DeviceListActivity extends Activity {
 			application.scanIsDevice = 1;
 			android.util.Log.d(LOGTAG, device.getAddress());
 
-			if (checkIsExit(device) == true) {
+			/*must put this if before checkIsExit()*/
+			if(rescanStatus == true){
+				if(device.getAddress().toString().equals(curConnectDeviceMac)){
+					Log.i("===", "re-connect");
+					m_bleTool.connect(curConnectDeviceMac, m_bleConnectCallBack);
+				}
+				
+			}
+			
+			if (checkIsExist(device) == true) {
 				return;
 			}
 
@@ -467,11 +539,15 @@ public class DeviceListActivity extends Activity {
 			message1.what = MESSAGE_FINDDEVICE;
 			m_handler.sendMessage(message1);
 			
+			
+			
 		}		
 
-		private boolean checkIsExit(BluetoothDevice device) {
+		private boolean checkIsExist(BluetoothDevice device) {
 			for (HashMap<String, Object> tmp : m_listInfo) {
+				Log.i("===", "compare" + tmp.get(ObjectDetail).toString() + " | " + device.getAddress());
 				if (tmp.get(ObjectDetail).toString() == device.getAddress()) {
+					Log.i("===", "return ture checkIsExit");
 					return true;
 				}
 			}
@@ -518,6 +594,14 @@ public class DeviceListActivity extends Activity {
 			message.what = MESSAGE_UPDATELIST;
 			m_handler.sendMessage(message);
 			application.connectStatus = false;
+			
+			reScanConn();
+		}
+
+		@Override
+		public void onDisconnect() {
+			// TODO Auto-generated method stub
+			
 		}
 	};
 	

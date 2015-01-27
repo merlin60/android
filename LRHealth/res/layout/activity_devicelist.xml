@@ -43,7 +43,6 @@
  
         <Button
             android:id="@+id/button_scan"
-            style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -73,8 +72,6 @@
 		android:divider="@color/black"
 		android:dividerHeight="1px"
         android:background="@color/white" >
-        
-<!--         #8E8E8E
- -->    </ListView>
+ 	</ListView>
 
 </LinearLayout>
