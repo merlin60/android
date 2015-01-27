@@ -61,20 +61,19 @@ public class DeviceListActivity extends Activity {
 	private static final int MESSAGE_NODEVICE = 0x1003;
 	private static final int MESSAGE_FINDDEVICE = 0x1004;
 
-	
 	private static final int STOP_NOTIFIER = 0x2000;
 	private static final int THREADING_NOTIFIER = 0x2001;
-	
+
 	private static final int SCANTIME = 15;
 
-	/*view*/
+	/* view */
 	private static Button m_btnScan;
 	private static Button m_btnBack;
 	private ProgressBar pro;
-	private int intCounter=0;
+	private int intCounter = 0;
 
 	private CustomProgressDialog progressDialog = null;
-	
+
 	private static ListView m_listviewDev;
 	private SimpleAdapter m_itemSimAdapter = null;
 	private ArrayList<HashMap<String, Object>> m_listInfo = null;
@@ -111,13 +110,13 @@ public class DeviceListActivity extends Activity {
 
 	private boolean unregisterReceiverFlag = true;
 	private boolean isFirstStart = true;
-	
-	/*scan status*/
+
+	/* scan status */
 	private boolean rescanStatus = false;
 	private String curConnectDeviceMac = new String();
 	private boolean haveScanned = false;
 	private Handler mHandler = new Handler();
-	
+
 	private Handler m_handler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -176,25 +175,25 @@ public class DeviceListActivity extends Activity {
 		Log.d(LOGTAG, "Open bluetooth and start scan");
 		int ret = openBluetooth();
 		startScanBluetoothDev();
-//		if(ret == 1){// new open
-//			firstScan(15*1000);
-//		}else{//have opened
-//			firstScan(15*1000);
-//		}
-		
+		// if(ret == 1){// new open
+		// firstScan(15*1000);
+		// }else{//have opened
+		// firstScan(15*1000);
+		// }
+
 		Log.d(LOGTAG, "open and start bluethooth done");
 	}
 
-//	private void firstScan(int period) {
-//		mHandler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//            	if(haveScanned == false){
-//            		startScanBluetoothDev();
-//            	}            	
-//            }
-//        }, period);
-//	}
+	// private void firstScan(int period) {
+	// mHandler.postDelayed(new Runnable() {
+	// @Override
+	// public void run() {
+	// if(haveScanned == false){
+	// startScanBluetoothDev();
+	// }
+	// }
+	// }, period);
+	// }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -222,8 +221,8 @@ public class DeviceListActivity extends Activity {
 			unregisterReceiverFlag = true;
 			m_bleTool.registerReceiver();
 		}
-				
-		if(isFirstStart == false){
+
+		if (isFirstStart == false) {
 			goneProShowbtn();
 			application.scanButtionClickTimes = 0;
 		}
@@ -306,7 +305,7 @@ public class DeviceListActivity extends Activity {
 		m_btnScan.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+
 				// clear
 				m_listInfo.clear();
 				application.scanIsDevice = 0;
@@ -324,11 +323,11 @@ public class DeviceListActivity extends Activity {
 
 			}
 		});
-		
+
 		ImageButton backImageButton = (ImageButton) findViewById(R.id.imagebutton_back);
 		backImageButton.getBackground().setAlpha(0);
 		backImageButton.setOnClickListener(new BtnBackOnClick());
-		
+
 		m_btnBack = (Button) findViewById(R.id.button_back);
 		m_btnBack.setOnClickListener(new BtnBackOnClick());
 
@@ -343,8 +342,8 @@ public class DeviceListActivity extends Activity {
 		m_listviewDev.setAdapter(m_itemSimAdapter);
 		m_listviewDev.setOnItemClickListener(new ListOnItemClickListener());
 	}
-	
-	private class BtnBackOnClick implements View.OnClickListener{
+
+	private class BtnBackOnClick implements View.OnClickListener {
 		@Override
 		public void onClick(View v) {
 			Bundle bundle = new Bundle();
@@ -360,7 +359,7 @@ public class DeviceListActivity extends Activity {
 			Log.d(LOGTAG, "start intent");
 			startActivity(intent);
 		}
-		
+
 	}
 
 	private final class ListOnItemClickListener implements
@@ -371,7 +370,7 @@ public class DeviceListActivity extends Activity {
 				long id) {
 			// TODO: click, then connect corresponding device
 			rescanStatus = false;
-			
+
 			curListviewId = position;
 			m_bleTool.stopScan();
 			macBleModule = m_listInfo.get(curListviewId).get(ObjectDetail)
@@ -441,59 +440,59 @@ public class DeviceListActivity extends Activity {
 	}
 
 	private int startScanBluetoothDev() {
-		
+
 		application.scanButtionClickTimes++;
 		if (mbluetoothService != null) {
-			Log.i(LOGTAG, "disconnect");
-			m_bleTool.disconnect();
+			//Log.i(LOGTAG, "disconnect");
+			//m_bleTool.disconnect();
 			// m_bleTool.unregisterReceiver();
 			// m_bleTool.unbindService();
 		} else {
 			Log.i(LOGTAG, "mbluetoothService is null .no disconnect");
 		}
-		if(haveScanned == false){
+		if (haveScanned == false) {
 			firtStartScan();
-			//m_bleTool.startScan(m_BleScanCallback, 1*1000);
-		}else{
-			m_bleTool.startScan(m_BleScanCallback, SCANTIME*1000);
+			// m_bleTool.startScan(m_BleScanCallback, 1*1000);
+		} else {
+			m_bleTool.startScan(m_BleScanCallback, SCANTIME * 1000);
 			Log.i("===", "startCustomerProgress");
 			startCustomerProgress();
 			m_btnScan.setVisibility(View.INVISIBLE);
 			haveScanned = true;
 		}
-	
+
 		return 0;
 	}
-	
+
 	private void firtStartScan() {
 		Log.i("===", "first scan");
 		m_bleTool.firstStartScan();
-		
+
 		mHandler.postDelayed(new Runnable() {
-	      @Override
-	      public void run() {
-	    	  Log.i("===", "haveScanned:" + haveScanned);
-	      	if(haveScanned == false){
-	      		m_bleTool.stopScan();
-	      		haveScanned = true;
-	      		startScanBluetoothDev();
-	      		
-	      	}            	
-	      }
-		}, 1*1000);
+			@Override
+			public void run() {
+				Log.i("===", "haveScanned:" + haveScanned);
+				if (haveScanned == false) {
+					m_bleTool.stopScan();
+					haveScanned = true;
+					startScanBluetoothDev();
+
+				}
+			}
+		}, 1 * 1000);
 	}
 
 	private int reScanConn() {
 		Log.i("===", "rescan");
 		rescanStatus = true;
 		m_bleTool.stopScan();
-		m_bleTool.reStartScan();		
-		
-		return 0;		
+		m_bleTool.reStartScan();
+
+		return 0;
 	}
 
 	/* three callback funciton of BleTool */
-	
+
 	private BleTool.BleScanCallBack m_BleScanCallback = new BleTool.BleScanCallBack() {
 		@Override
 		public void scanListening(BluetoothDevice device) {
@@ -501,24 +500,27 @@ public class DeviceListActivity extends Activity {
 			application.scanIsDevice = 1;
 			android.util.Log.d(LOGTAG, device.getAddress());
 
-			/*must put this if before checkIsExit()*/
-			if(rescanStatus == true){
-				if(device.getAddress().toString().equals(curConnectDeviceMac)){
+			/* must put this if before checkIsExit() */
+			if (rescanStatus == true) {
+				if (device.getAddress().toString().equals(curConnectDeviceMac)) {
 					Log.i("===", "re-connect");
-					m_bleTool.connect(curConnectDeviceMac, m_bleConnectCallBack);
+					m_bleTool.stopScan();
+					m_bleTool
+							.connect(curConnectDeviceMac, m_bleConnectCallBack);
 				}
-				
+
 			}
-			
+
 			if (checkIsExist(device) == true) {
 				return;
 			}
 
 			HashMap<String, Object> map;
 			map = new HashMap<String, Object>();
-			if(device.getName().substring(0, 3).equals("BLE") ){
-				map.put(ObjectName, getResources().getString(R.string.devicename));
-			}else{
+			if (device.getName().substring(0, 3).equals("BLE")) {
+				map.put(ObjectName,
+						getResources().getString(R.string.devicename));
+			} else {
 				map.put(ObjectName, device.getName());
 			}
 			map.put(ObjectDetail, device.getAddress());
@@ -534,18 +536,17 @@ public class DeviceListActivity extends Activity {
 			android.util.Log.d(LOGTAG, "finded " + macBleModule);
 			m_bleTool.service_init(m_bleServiceCallBack);
 			// }
-			
+
 			Message message1 = Message.obtain();
 			message1.what = MESSAGE_FINDDEVICE;
 			m_handler.sendMessage(message1);
-			
-			
-			
-		}		
+
+		}
 
 		private boolean checkIsExist(BluetoothDevice device) {
 			for (HashMap<String, Object> tmp : m_listInfo) {
-				Log.i("===", "compare" + tmp.get(ObjectDetail).toString() + " | " + device.getAddress());
+				Log.i("===", "compare" + tmp.get(ObjectDetail).toString()
+						+ " | " + device.getAddress());
 				if (tmp.get(ObjectDetail).toString() == device.getAddress()) {
 					Log.i("===", "return ture checkIsExit");
 					return true;
@@ -585,87 +586,100 @@ public class DeviceListActivity extends Activity {
 
 		@Override
 		public void onConnectFailed() {
-			// TODO: add code for failing to connect
+			Log.i("===", "onConnectFailed");
 			// re-connect some times or do nothing
 			m_listInfo.get(curListviewId).put(ObjectStatus,
 					getResources().getString(lvConnectStaNot));
-			// send message
-			Message message = Message.obtain();
-			message.what = MESSAGE_UPDATELIST;
-			m_handler.sendMessage(message);
+			if (rescanStatus == false) {
+				reScanConn();
+			} else {
+				// send message
+				Message message = Message.obtain();
+				message.what = MESSAGE_UPDATELIST;
+				m_handler.sendMessage(message);
+			}
 			application.connectStatus = false;
-			
-			reScanConn();
+
 		}
 
 		@Override
 		public void onDisconnect() {
 			// TODO Auto-generated method stub
-			
+			Log.i("===", "onDisconnect");
+			// re-connect some times or do nothing
+			m_listInfo.get(curListviewId).put(ObjectStatus,
+					getResources().getString(lvConnectStaNot));
+
+			// send message
+			Message message = Message.obtain();
+			message.what = MESSAGE_UPDATELIST;
+			m_handler.sendMessage(message);
+
+			application.connectStatus = false;
+
 		}
 	};
-	
-	/*progress*/
-	
-    private void goneProShowbtn() {
-    	//pro.setVisibility(View.GONE);
-    	stopProgressDialog();
+
+	/* progress */
+
+	private void goneProShowbtn() {
+		// pro.setVisibility(View.GONE);
+		stopProgressDialog();
 		m_btnScan.setVisibility(View.VISIBLE);
 	}
-    
-    
-    /*customer progress*/
-    void startCustomerProgress(){
-    	RefreshTask task = new RefreshTask(this);
-    	task.execute("");
-    }
-    
-    class RefreshTask extends AsyncTask<String, Integer, String> {
-		public RefreshTask(Context context){
+
+	/* customer progress */
+	void startCustomerProgress() {
+		RefreshTask task = new RefreshTask(this);
+		task.execute("");
+	}
+
+	class RefreshTask extends AsyncTask<String, Integer, String> {
+		public RefreshTask(Context context) {
 
 		}
-        
-        @Override
-        protected String doInBackground(String... params) {
-        	//en_manual_update = 6;
-        	//startUpdateTimer();//TODO: need test
-        	//while(en_manual_update > 0);
-        	return null;
-        }
 
-        @Override
+		@Override
+		protected String doInBackground(String... params) {
+			// en_manual_update = 6;
+			// startUpdateTimer();//TODO: need test
+			// while(en_manual_update > 0);
+			return null;
+		}
+
+		@Override
 		protected void onCancelled() {
 			stopProgressDialog();
 			super.onCancelled();
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
-			//stopProgressDialog();
+			// stopProgressDialog();
 		}
-		
+
 		@Override
 		protected void onPreExecute() {
 			startProgressDialog();
 		}
-		
+
 		@Override
 		protected void onProgressUpdate(Integer... values) {
 
 		}
 	}
-	
-	private void startProgressDialog(){
-		if (progressDialog == null){
+
+	private void startProgressDialog() {
+		if (progressDialog == null) {
 			progressDialog = CustomProgressDialog.createDialog(this);
-			//progressDialog.setMessage("Refresh...");
+			// progressDialog.setMessage("Refresh...");
 		}
-		
-    	progressDialog.show();
+
+		progressDialog.show();
 	}
-	
-	private void stopProgressDialog(){
-		if (progressDialog != null){
+
+	private void stopProgressDialog() {
+		if (progressDialog != null) {
 			progressDialog.dismiss();
 			progressDialog = null;
 		}
