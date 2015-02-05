@@ -87,6 +87,7 @@ public class BleTool {
             @Override
             public void run() {
             	//bluetoothAdapter.stopLeScan(mLeScanCallback);
+            	//Log.i("===", "scanButtionClickTimes:" + LRHealthApp.getInstance().scanButtionClickTimes + "scanIsDevice:" + LRHealthApp.getInstance().scanIsDevice);
             	if(LRHealthApp.getInstance().scanIsDevice == 0 && LRHealthApp.getInstance().scanButtionClickTimes <= 1){
             		m_bleScanCallBack.scanNoDevice();
             		

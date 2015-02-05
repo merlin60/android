@@ -173,27 +173,12 @@ public class DeviceListActivity extends Activity {
 
 		// bt
 		Log.d(LOGTAG, "Open bluetooth and start scan");
+		application.scanIsDevice = 0;
 		int ret = openBluetooth();
 		startScanBluetoothDev();
-		// if(ret == 1){// new open
-		// firstScan(15*1000);
-		// }else{//have opened
-		// firstScan(15*1000);
-		// }
 
 		Log.d(LOGTAG, "open and start bluethooth done");
 	}
-
-	// private void firstScan(int period) {
-	// mHandler.postDelayed(new Runnable() {
-	// @Override
-	// public void run() {
-	// if(haveScanned == false){
-	// startScanBluetoothDev();
-	// }
-	// }
-	// }, period);
-	// }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -440,8 +425,9 @@ public class DeviceListActivity extends Activity {
 	}
 
 	private int startScanBluetoothDev() {
-
-		application.scanButtionClickTimes++;
+		if (haveScanned == false) {
+			application.scanButtionClickTimes++;
+		}
 		if (mbluetoothService != null) {
 			//Log.i(LOGTAG, "disconnect");
 			//m_bleTool.disconnect();
@@ -514,15 +500,15 @@ public class DeviceListActivity extends Activity {
 			if (checkIsExist(device) == true) {
 				return;
 			}
-
 			HashMap<String, Object> map;
 			map = new HashMap<String, Object>();
-			if (device.getName().substring(0, 3).equals("BLE")) {
+			if (device.getName().length() >= 3 && device.getName().substring(0, 3).equals("BLE")) {
 				map.put(ObjectName,
 						getResources().getString(R.string.devicename));
 			} else {
 				map.put(ObjectName, device.getName());
 			}
+			Log.i("===", "2" + device.getName());
 			map.put(ObjectDetail, device.getAddress());
 			map.put(ObjectStatus, getResources().getString(lvConnectStaNot));
 			m_listInfo.add(map);
@@ -557,6 +543,7 @@ public class DeviceListActivity extends Activity {
 
 		@Override
 		public void scanNoDevice() {
+			Log.i("===", "no device message");
 			Message message = Message.obtain();
 			message.what = MESSAGE_NODEVICE;
 			m_handler.sendMessage(message);
