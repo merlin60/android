@@ -3,9 +3,16 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/icon_bgstyle10"
-    android:orientation="vertical"
-     >
-     
+    android:orientation="vertical">
+    
+    <FrameLayout
+        android:id="@+id/layout_bgstring"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:foreground="@drawable/icon_bgstring" >
+        
+    </FrameLayout>
     
     <LinearLayout
         android:id="@+id/linelayout_vent"
