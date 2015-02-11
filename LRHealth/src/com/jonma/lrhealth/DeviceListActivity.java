@@ -7,7 +7,6 @@ import javax.security.auth.PrivateCredentialPermission;
 
 import com.jinoux.android.bledatawarehouse.BluetoothService;
 import com.jonma.tool.CustomDialog;
-import com.jonma.tool.CustomProgressDialog;
 
 import android.R.bool;
 import android.R.integer;
@@ -35,6 +34,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -72,8 +72,6 @@ public class DeviceListActivity extends Activity {
 	private ProgressBar pro;
 	private int intCounter = 0;
 
-	private CustomProgressDialog progressDialog = null;
-
 	private static ListView m_listviewDev;
 	private SimpleAdapter m_itemSimAdapter = null;
 	private ArrayList<HashMap<String, Object>> m_listInfo = null;
@@ -83,6 +81,8 @@ public class DeviceListActivity extends Activity {
 	private static final String ObjectDetail = "Detail";
 
 	private static final String LOGTAG = "LRHealth";
+	
+	private ProgressBar mProgress;
 
 	/* bluetooth */
 	private String address;
@@ -286,6 +286,9 @@ public class DeviceListActivity extends Activity {
 
 	private void initView() {
 		// TODO Auto-generated method stub
+		mProgress = (ProgressBar) findViewById(R.id.myView_ProgressBar3);
+		mProgress.setVisibility(View.GONE);
+		
 		m_btnScan = (Button) findViewById(R.id.button_scan);
 		m_btnScan.setOnClickListener(new OnClickListener() {
 			@Override
@@ -611,65 +614,75 @@ public class DeviceListActivity extends Activity {
 
 	private void goneProShowbtn() {
 		// pro.setVisibility(View.GONE);
-		stopProgressDialog();
+		//stopProgressDialog();
+		mProgress.setVisibility(View.GONE);
 		m_btnScan.setVisibility(View.VISIBLE);
 	}
 
 	/* customer progress */
-	void startCustomerProgress() {
-		RefreshTask task = new RefreshTask(this);
-		task.execute("");
+	void startCustomerProgress() {				
+		//RefreshTask task = new RefreshTask(this);
+		//task.execute("");
+		
+		
+		//Drawable d = this.getResources().getDrawable(R.drawable.my_progress);
+		//mProgress.setProgressDrawable(d);
+		
+		//setContentView(R.layout.customprogressdialog);
+		//mProgress.getWindow().getAttributes().gravity = Gravity.RIGHT | Gravity.TOP;
+		
+		mProgress.setVisibility(View.VISIBLE);
 	}
 
-	class RefreshTask extends AsyncTask<String, Integer, String> {
-		public RefreshTask(Context context) {
-
-		}
-
-		@Override
-		protected String doInBackground(String... params) {
-			// en_manual_update = 6;
-			// startUpdateTimer();//TODO: need test
-			// while(en_manual_update > 0);
-			return null;
-		}
-
-		@Override
-		protected void onCancelled() {
-			stopProgressDialog();
-			super.onCancelled();
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			// stopProgressDialog();
-		}
-
-		@Override
-		protected void onPreExecute() {
-			startProgressDialog();
-		}
-
-		@Override
-		protected void onProgressUpdate(Integer... values) {
-
-		}
-	}
-
-	private void startProgressDialog() {
-		if (progressDialog == null) {
-			progressDialog = CustomProgressDialog.createDialog(this);
-			// progressDialog.setMessage("Refresh...");
-		}
-
-		progressDialog.show();
-	}
-
-	private void stopProgressDialog() {
-		if (progressDialog != null) {
-			progressDialog.dismiss();
-			progressDialog = null;
-		}
-	}
+//	class RefreshTask extends AsyncTask<String, Integer, String> {
+//		public RefreshTask(Context context) {
+//
+//		}
+//
+//		@Override
+//		protected String doInBackground(String... params) {
+//			// en_manual_update = 6;
+//			// startUpdateTimer();//TODO: need test
+//			// while(en_manual_update > 0);
+//			return null;
+//		}
+//
+//		@Override
+//		protected void onCancelled() {
+//			stopProgressDialog();
+//			super.onCancelled();
+//		}
+//
+//		@Override
+//		protected void onPostExecute(String result) {
+//			// stopProgressDialog();
+//		}
+//
+//		@Override
+//		protected void onPreExecute() {
+//			startProgressDialog();
+//		}
+//
+//		@Override
+//		protected void onProgressUpdate(Integer... values) {
+//
+//		}
+//	}
+//
+//	private void startProgressDialog() {
+//		if (progressDialog == null) {
+//			progressDialog = CustomProgressDialog.createDialog(this);
+//			// progressDialog.setMessage("Refresh...");
+//		}
+//
+//		progressDialog.show();
+//	}
+//
+//	private void stopProgressDialog() {
+//		if (progressDialog != null) {
+//			progressDialog.dismiss();
+//			progressDialog = null;
+//		}
+//	}
 
 }
