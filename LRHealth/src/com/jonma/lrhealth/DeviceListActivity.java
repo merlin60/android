@@ -81,7 +81,7 @@ public class DeviceListActivity extends Activity {
 	private static final String ObjectDetail = "Detail";
 
 	private static final String LOGTAG = "LRHealth";
-	
+
 	private ProgressBar mProgress;
 
 	/* bluetooth */
@@ -288,7 +288,7 @@ public class DeviceListActivity extends Activity {
 		// TODO Auto-generated method stub
 		mProgress = (ProgressBar) findViewById(R.id.myView_ProgressBar3);
 		mProgress.setVisibility(View.GONE);
-		
+
 		m_btnScan = (Button) findViewById(R.id.button_scan);
 		m_btnScan.setOnClickListener(new OnClickListener() {
 			@Override
@@ -302,11 +302,16 @@ public class DeviceListActivity extends Activity {
 				// scan bt
 				m_listInfo.clear();
 				m_bleTool.stopScan();
-				// if(mbluetoothService != null){
-				// m_bleTool.disconnect();
+				if (application.connectStatus == true) {
+					application.connectStatus = false;
+					if (mbluetoothService != null) {
+						m_bleTool.disconnect();
+					}
+				}
 				// //m_bleTool.unregisterReceiver();
 				// m_bleTool.unbindService();
 				// }
+				
 				startScanBluetoothDev();
 
 			}
@@ -432,8 +437,8 @@ public class DeviceListActivity extends Activity {
 			application.scanButtionClickTimes++;
 		}
 		if (mbluetoothService != null) {
-			//Log.i(LOGTAG, "disconnect");
-			//m_bleTool.disconnect();
+			// Log.i(LOGTAG, "disconnect");
+			// m_bleTool.disconnect();
 			// m_bleTool.unregisterReceiver();
 			// m_bleTool.unbindService();
 		} else {
@@ -505,16 +510,20 @@ public class DeviceListActivity extends Activity {
 			}
 			HashMap<String, Object> map;
 			map = new HashMap<String, Object>();
-			if (device.getName().length() >= 3 && device.getName().substring(0, 3).equals("BLE")) {
+			if (device.getName().length() >= 3
+					//&& device.getName().substring(0, 3).equals("BLE")) {
+					&& device.getName().contains("BLE0202") ) {
+				//Log.i("&&&", device.getName());
 				map.put(ObjectName,
 						getResources().getString(R.string.devicename));
 			} else {
 				map.put(ObjectName, device.getName());
 			}
-			Log.i("===", "2" + device.getName());
+		//	Log.i("===", "2" + device.getName());
 			map.put(ObjectDetail, device.getAddress());
 			map.put(ObjectStatus, getResources().getString(lvConnectStaNot));
 			m_listInfo.add(map);
+
 			// send message
 			Message message = Message.obtain();
 			message.what = MESSAGE_UPDATELIST;
@@ -534,13 +543,18 @@ public class DeviceListActivity extends Activity {
 
 		private boolean checkIsExist(BluetoothDevice device) {
 			for (HashMap<String, Object> tmp : m_listInfo) {
-				Log.i("===", "compare" + tmp.get(ObjectDetail).toString()
-						+ " | " + device.getAddress());
-				if (tmp.get(ObjectDetail).toString() == device.getAddress()) {
-					Log.i("===", "return ture checkIsExit");
+//				Log.i("###", "compare" + tmp.get(ObjectDetail).toString()
+//						+ " | " + device.getAddress());
+				String test = tmp.get(ObjectDetail).toString();
+				//if (tmp.get(ObjectDetail).toString() == device.getAddress()) {
+				if (test.equals(device.getAddress()) ) {
+//					Log.i("@@@",
+//							"return ture checkIsExit" + device.getAddress());
+					//Log.i("===", "true");
 					return true;
 				}
 			}
+			//Log.i("===", "false");
 			return false;
 		}
 
@@ -614,75 +628,75 @@ public class DeviceListActivity extends Activity {
 
 	private void goneProShowbtn() {
 		// pro.setVisibility(View.GONE);
-		//stopProgressDialog();
+		// stopProgressDialog();
 		mProgress.setVisibility(View.GONE);
 		m_btnScan.setVisibility(View.VISIBLE);
 	}
 
 	/* customer progress */
-	void startCustomerProgress() {				
-		//RefreshTask task = new RefreshTask(this);
-		//task.execute("");
-		
-		
-		//Drawable d = this.getResources().getDrawable(R.drawable.my_progress);
-		//mProgress.setProgressDrawable(d);
-		
-		//setContentView(R.layout.customprogressdialog);
-		//mProgress.getWindow().getAttributes().gravity = Gravity.RIGHT | Gravity.TOP;
-		
+	void startCustomerProgress() {
+		// RefreshTask task = new RefreshTask(this);
+		// task.execute("");
+
+		// Drawable d = this.getResources().getDrawable(R.drawable.my_progress);
+		// mProgress.setProgressDrawable(d);
+
+		// setContentView(R.layout.customprogressdialog);
+		// mProgress.getWindow().getAttributes().gravity = Gravity.RIGHT |
+		// Gravity.TOP;
+
 		mProgress.setVisibility(View.VISIBLE);
 	}
 
-//	class RefreshTask extends AsyncTask<String, Integer, String> {
-//		public RefreshTask(Context context) {
-//
-//		}
-//
-//		@Override
-//		protected String doInBackground(String... params) {
-//			// en_manual_update = 6;
-//			// startUpdateTimer();//TODO: need test
-//			// while(en_manual_update > 0);
-//			return null;
-//		}
-//
-//		@Override
-//		protected void onCancelled() {
-//			stopProgressDialog();
-//			super.onCancelled();
-//		}
-//
-//		@Override
-//		protected void onPostExecute(String result) {
-//			// stopProgressDialog();
-//		}
-//
-//		@Override
-//		protected void onPreExecute() {
-//			startProgressDialog();
-//		}
-//
-//		@Override
-//		protected void onProgressUpdate(Integer... values) {
-//
-//		}
-//	}
-//
-//	private void startProgressDialog() {
-//		if (progressDialog == null) {
-//			progressDialog = CustomProgressDialog.createDialog(this);
-//			// progressDialog.setMessage("Refresh...");
-//		}
-//
-//		progressDialog.show();
-//	}
-//
-//	private void stopProgressDialog() {
-//		if (progressDialog != null) {
-//			progressDialog.dismiss();
-//			progressDialog = null;
-//		}
-//	}
+	// class RefreshTask extends AsyncTask<String, Integer, String> {
+	// public RefreshTask(Context context) {
+	//
+	// }
+	//
+	// @Override
+	// protected String doInBackground(String... params) {
+	// // en_manual_update = 6;
+	// // startUpdateTimer();//TODO: need test
+	// // while(en_manual_update > 0);
+	// return null;
+	// }
+	//
+	// @Override
+	// protected void onCancelled() {
+	// stopProgressDialog();
+	// super.onCancelled();
+	// }
+	//
+	// @Override
+	// protected void onPostExecute(String result) {
+	// // stopProgressDialog();
+	// }
+	//
+	// @Override
+	// protected void onPreExecute() {
+	// startProgressDialog();
+	// }
+	//
+	// @Override
+	// protected void onProgressUpdate(Integer... values) {
+	//
+	// }
+	// }
+	//
+	// private void startProgressDialog() {
+	// if (progressDialog == null) {
+	// progressDialog = CustomProgressDialog.createDialog(this);
+	// // progressDialog.setMessage("Refresh...");
+	// }
+	//
+	// progressDialog.show();
+	// }
+	//
+	// private void stopProgressDialog() {
+	// if (progressDialog != null) {
+	// progressDialog.dismiss();
+	// progressDialog = null;
+	// }
+	// }
 
 }
