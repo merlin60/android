@@ -22,7 +22,7 @@
     <string name="operation_unconnect_prompt">没有已连接的设备</string>
     <string name="lvConnectStaSuc">已连接</string>
     <string name="lvConnectStaNot">未连接</string>
-    <string name="lvConnectStaDoing">连接...</string>
+    <string name="lvConnectStaDoing">连接中...</string>
     <string name="scanNoDevice">没有发现任何设备!</string>
     <string name="cancel">取消</string>
     <string name="devicename">左右沙发</string>
