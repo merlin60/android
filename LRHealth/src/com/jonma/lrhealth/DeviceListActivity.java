@@ -81,26 +81,19 @@ public class DeviceListActivity extends Activity {
 	private static final String ObjectDetail = "Detail";
 
 	private static final String LOGTAG = "LRHealth";
-
+	
 	private ProgressBar mProgress;
 
 	/* bluetooth */
 	private String address;
 	private String macBleModule;// 00:1B:35:0B:5E:42
 	private final static String nameBleModule = "BLE0102C2P";
-	public static boolean connectstate = false; // 閿熸枻鎷烽敓鏂ゆ嫹閿熷鍊栭敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷峰畡甯嫹瑜版帪鎷烽敓鏂ゆ嫹閿熷鍊栭敓浠嬵棑閿熷�熷煐閿熸枻鎷烽敓鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓鏂ゆ嫹false:閿熸枻鎷烽敓鏂ゆ嫹閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷峰畡甯嫹閿熸枻鎷烽敓鏂ゆ嫹閿熸枻鎷烽妶鍡嫹閻戞枻鎷烽敓鏂ゆ嫹閿熷鍎婚敓鏂ゆ嫹閿熸枻鎷烽敓锟�
-
-	private static int yyd = 0; // 閿熸枻鎷烽敓鐣岀玻閿熸枻鎷烽敓濮愬�栭敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷烽悜鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓鐣屽厴閿熸枻鎷烽柨鐕傛嫹
-	private static int sendxhid = 0; // 婵綇鎷烽敓鏂ゆ嫹閿熻姤娼捄顭掓嫹閿熸枻鎷烽敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷烽悜鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓浠嬫敱閵嗗鎷烽敓鏂ゆ嫹閿熸枻鎷烽敓浠嬫晸閿燂拷
-										// 閿熸枻鎷烽敓鏂ゆ嫹閿熷鍊栭敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閻㈢鎷烽敓鏂ゆ嫹閿熺晫鍏橀敓鏂ゆ嫹閿熸枻鎷烽妶鍡嫹閻戞枻鎷烽敓鏂ゆ嫹閿熶粙顥撻敓鏂ゆ嫹閿熸枻鎷烽悜鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓鐣屽厴閿熸枻鎷烽柨鐕傛嫹0--255
-										// 婵綇鎷烽敓鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷烽摎鍌︽嫹閿熸枻鎷烽敓鏂ゆ嫹閺夌偠娉曢妴瀣舵嫹閿熷�熸腹閿熸枻鎷烽敓鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓鏂ゆ嫹
-										// 閿熸枻鎷烽敓鏂ゆ嫹閿熷鍊栭敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷烽悜鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓鐣屽厴閿熸枻鎷风紓渚婃嫹閿熸枻鎷烽弬銈嗗0
-	private static int sss = 0; // 閿熸枻鎷烽敓鑺ユ償閿熸枻鎷烽敓鏂ゆ嫹閿熸枻鎷烽妶鍡嫹閻戞枻鎷烽敓鏂ゆ嫹閿熷鍊栭敓鐣屽厴閿熸枻鎷烽柨鐕傛嫹
-								// 閿熸枻鎷烽敓鏂ゆ嫹閿熷鍊栭敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷烽悜鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓浠嬫敱閿熸枻鎷烽幖杈炬嫹閿熸枻鎷烽敓鏂ゆ嫹閿熷鍊栭敓鏂ゆ嫹
-	private static int nm = 0; // 閿熸枻鎷烽敓鏂ゆ嫹閿熷鍊栭敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷烽悜鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹闁垮鎷烽敓鏂ゆ嫹閿熻棄鎲￠敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷烽悜鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓鏂ゆ嫹
-	public static boolean senddatastate = false; // 閿熸枻鎷烽敓鐣屾喆閿熸枻鎷烽敓濮愬�栭敓钘夊槻閿熸枻鎷烽敓鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷烽悜鏂ゆ嫹閿熸枻鎷烽敓鏂ゆ嫹閻犱浇顫夐敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷烽悜鏂ゆ嫹閿熸枻鎷烽敓濮愬�栭敓鐣屽厴閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷烽敓锟�
-													// false:閿熸枻鎷烽敓鏂ゆ嫹閿熸枻鎷烽敓鏂ゆ嫹閵堝棴鎷峰畡甯嫹閿燂拷
-
+	public static boolean connectstate = false;	
+	private static int yyd = 0;	
+	private static int sendxhid = 0; 
+	private static int sss = 0;	
+	private static int nm = 0; 	
+	public static boolean senddatastate = false;	
 	private BleTool m_bleTool;
 	public BluetoothAdapter bluetoothAdapter;
 	public BluetoothService mbluetoothService;
@@ -190,16 +183,6 @@ public class DeviceListActivity extends Activity {
 	@Override
 	public void onResume() {
 		Log.d(LOGTAG, "device list activity resume");
-		/*
-		 * // register receiver IntentFilter filter = new
-		 * IntentFilter(BluetoothDevice.ACTION_FOUND);
-		 * registerReceiver(m_bdreceiver, filter);
-		 */
-
-		// if(mbluetoothService == null){
-		// m_bleTool.registerReceiver();
-		// }
-
 		SharedSetting mySharedSetting = new SharedSetting(
 				DeviceListActivity.this);
 		if (unregisterReceiverFlag == false) {
@@ -218,6 +201,10 @@ public class DeviceListActivity extends Activity {
 	@Override
 	public void onPause() {
 		Log.d(LOGTAG, "device list activity pause");
+		if (m_bleTool != null) 
+		{
+			m_bleTool.stopScan();
+		}		
 
 		super.onPause();
 	}
@@ -288,12 +275,11 @@ public class DeviceListActivity extends Activity {
 		// TODO Auto-generated method stub
 		mProgress = (ProgressBar) findViewById(R.id.myView_ProgressBar3);
 		mProgress.setVisibility(View.GONE);
-
+		
 		m_btnScan = (Button) findViewById(R.id.button_scan);
 		m_btnScan.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
 				// clear
 				m_listInfo.clear();
 				application.scanIsDevice = 0;
@@ -301,17 +287,7 @@ public class DeviceListActivity extends Activity {
 
 				// scan bt
 				m_listInfo.clear();
-				m_bleTool.stopScan();
-				if (application.connectStatus == true) {
-					application.connectStatus = false;
-					if (mbluetoothService != null) {
-						m_bleTool.disconnect();
-					}
-				}
-				// //m_bleTool.unregisterReceiver();
-				// m_bleTool.unbindService();
-				// }
-				
+				m_bleTool.stopScan();				
 				startScanBluetoothDev();
 
 			}
@@ -380,10 +356,7 @@ public class DeviceListActivity extends Activity {
 				Message message = Message.obtain();
 				message.what = MESSAGE_UPDATELIST;
 				m_handler.sendMessage(message);
-			} else {
-				// application.connectStatus = true;
-				// if(m_bleTool.getBleService() != null) m_bleTool.disconnect();
-				// //disconnect
+			} else {				
 				/* clear all listview status */
 				int cnt = m_listInfo.size();
 				if (cnt != 0) {
@@ -401,23 +374,7 @@ public class DeviceListActivity extends Activity {
 				Message message = Message.obtain();
 				message.what = MESSAGE_UPDATELIST;
 				m_handler.sendMessage(message);
-			}
-
-			// Bundle bundle = new Bundle();
-			// bundle.putInt("FunIdx", 0);
-			// if (macBleModule != null) {
-			// bundle.putString("mac", macBleModule);
-			// }
-			//
-			// //if connectted, start activity. if not, do nothing
-			// Intent intent = new Intent();
-			// intent.putExtras(bundle);
-			// intent.setClass(DeviceListActivity.this,
-			// OperationCenterActivity.class);
-			// intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-			// | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-			// Log.i(LOGTAG, "start intent in list");
-			// startActivity(intent);
+			}			
 		}
 	}
 
@@ -437,8 +394,8 @@ public class DeviceListActivity extends Activity {
 			application.scanButtionClickTimes++;
 		}
 		if (mbluetoothService != null) {
-			// Log.i(LOGTAG, "disconnect");
-			// m_bleTool.disconnect();
+			//Log.i(LOGTAG, "disconnect");
+			//m_bleTool.disconnect();
 			// m_bleTool.unregisterReceiver();
 			// m_bleTool.unbindService();
 		} else {
@@ -492,7 +449,7 @@ public class DeviceListActivity extends Activity {
 		public void scanListening(BluetoothDevice device) {
 			// TODO Auto-generated method stub
 			application.scanIsDevice = 1;
-			android.util.Log.d(LOGTAG, device.getAddress());
+			//android.util.Log.d(LOGTAG, device.getAddress());
 
 			/* must put this if before checkIsExit() */
 			if (rescanStatus == true) {
@@ -510,20 +467,16 @@ public class DeviceListActivity extends Activity {
 			}
 			HashMap<String, Object> map;
 			map = new HashMap<String, Object>();
-			if (device.getName().length() >= 3
-					//&& device.getName().substring(0, 3).equals("BLE")) {
-					&& device.getName().contains("BLE0202") ) {
-				//Log.i("&&&", device.getName());
+			if (device.getName().length() >= 3 && device.getName().substring(0, 3).equals("BLE0202")) {
 				map.put(ObjectName,
 						getResources().getString(R.string.devicename));
 			} else {
 				map.put(ObjectName, device.getName());
 			}
-		//	Log.i("===", "2" + device.getName());
+			//Log.i("===", "2" + device.getName());
 			map.put(ObjectDetail, device.getAddress());
 			map.put(ObjectStatus, getResources().getString(lvConnectStaNot));
 			m_listInfo.add(map);
-
 			// send message
 			Message message = Message.obtain();
 			message.what = MESSAGE_UPDATELIST;
@@ -531,7 +484,7 @@ public class DeviceListActivity extends Activity {
 
 			// if (device.getName().equalsIgnoreCase(nameBleModule)) {
 			macBleModule = device.getAddress();
-			android.util.Log.d(LOGTAG, "finded " + macBleModule);
+			//android.util.Log.d(LOGTAG, "finded " + macBleModule);
 			m_bleTool.service_init(m_bleServiceCallBack);
 			// }
 
@@ -543,18 +496,12 @@ public class DeviceListActivity extends Activity {
 
 		private boolean checkIsExist(BluetoothDevice device) {
 			for (HashMap<String, Object> tmp : m_listInfo) {
-//				Log.i("###", "compare" + tmp.get(ObjectDetail).toString()
-//						+ " | " + device.getAddress());
-				String test = tmp.get(ObjectDetail).toString();
-				//if (tmp.get(ObjectDetail).toString() == device.getAddress()) {
-				if (test.equals(device.getAddress()) ) {
-//					Log.i("@@@",
-//							"return ture checkIsExit" + device.getAddress());
-					//Log.i("===", "true");
+				//Log.i("===", "compare" + tmp.get(ObjectDetail).toString() + " | " + device.getAddress());
+				if (tmp.get(ObjectDetail).toString() == device.getAddress()) {
+					Log.i("===", "return ture checkIsExit");
 					return true;
 				}
 			}
-			//Log.i("===", "false");
 			return false;
 		}
 
@@ -570,13 +517,7 @@ public class DeviceListActivity extends Activity {
 
 	private BleTool.BleServiceCallBack m_bleServiceCallBack = new BleTool.BleServiceCallBack() {
 		@Override
-		public void onBuild() {
-			// when in this funciton, it indicate service has been created
-			// successfully, then can connect ble device
-
-			// Message message = Message.obtain();
-			// message.what = MESSAGE_CONNECT;
-			// m_handler.sendMessage(message);
+		public void onBuild() {			
 		}
 	};
 
@@ -625,78 +566,13 @@ public class DeviceListActivity extends Activity {
 	};
 
 	/* progress */
-
-	private void goneProShowbtn() {
-		// pro.setVisibility(View.GONE);
-		// stopProgressDialog();
+	private void goneProShowbtn() {		
 		mProgress.setVisibility(View.GONE);
 		m_btnScan.setVisibility(View.VISIBLE);
 	}
 
 	/* customer progress */
-	void startCustomerProgress() {
-		// RefreshTask task = new RefreshTask(this);
-		// task.execute("");
-
-		// Drawable d = this.getResources().getDrawable(R.drawable.my_progress);
-		// mProgress.setProgressDrawable(d);
-
-		// setContentView(R.layout.customprogressdialog);
-		// mProgress.getWindow().getAttributes().gravity = Gravity.RIGHT |
-		// Gravity.TOP;
-
+	void startCustomerProgress() {			
 		mProgress.setVisibility(View.VISIBLE);
 	}
-
-	// class RefreshTask extends AsyncTask<String, Integer, String> {
-	// public RefreshTask(Context context) {
-	//
-	// }
-	//
-	// @Override
-	// protected String doInBackground(String... params) {
-	// // en_manual_update = 6;
-	// // startUpdateTimer();//TODO: need test
-	// // while(en_manual_update > 0);
-	// return null;
-	// }
-	//
-	// @Override
-	// protected void onCancelled() {
-	// stopProgressDialog();
-	// super.onCancelled();
-	// }
-	//
-	// @Override
-	// protected void onPostExecute(String result) {
-	// // stopProgressDialog();
-	// }
-	//
-	// @Override
-	// protected void onPreExecute() {
-	// startProgressDialog();
-	// }
-	//
-	// @Override
-	// protected void onProgressUpdate(Integer... values) {
-	//
-	// }
-	// }
-	//
-	// private void startProgressDialog() {
-	// if (progressDialog == null) {
-	// progressDialog = CustomProgressDialog.createDialog(this);
-	// // progressDialog.setMessage("Refresh...");
-	// }
-	//
-	// progressDialog.show();
-	// }
-	//
-	// private void stopProgressDialog() {
-	// if (progressDialog != null) {
-	// progressDialog.dismiss();
-	// progressDialog = null;
-	// }
-	// }
-
 }

@@ -1,14 +1,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_startup"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:gravity="center"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@color/white" >
+    
+    <!--
+@color/whiteblue
+@drawable/icon_bgstyle01
 
-    <ImageView
+<ImageView
+        android:id="@+id/imgview_uistyle"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:scaleType="fitXY"
-        android:src="@drawable/icon_bgstyle01" >
+        android:src="@drawable/icon_bgstyle01"
+         >
     </ImageView>
+    -->
+
 
 </LinearLayout>

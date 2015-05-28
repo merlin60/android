@@ -171,9 +171,9 @@ public class BleTool {
 		boolean bll = context.bindService(gattServiceIntent,
 				mServiceConnection, context.BIND_AUTO_CREATE);
 		if (bll) {
-			Log.i(LOGTAG, "绑定服务gattServiceIntent成功");
+			//Log.i(LOGTAG, "绑定服务gattServiceIntent成功");
 		} else {
-			Log.i(LOGTAG, "绑定服务gattServiceIntent失败");
+			//Log.i(LOGTAG, "绑定服务gattServiceIntent失败");
 		}
 		//context.registerReceiver(mGattUpdateReceiver,	makeGattUpdateIntentFilter());
 		if(m_bluetoothService == null){
