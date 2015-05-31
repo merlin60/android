@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.jinoux.android.bledatawarehouse.BluetoothService;
 import com.jonma.tool.CustomDialog;
 
+import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Application;
@@ -30,17 +31,17 @@ import android.view.Window;
 import android.widget.Toast;
 
 public class BleTool {
-	private BluetoothManager bluetoothManager;
-	private BluetoothAdapter bluetoothAdapter;
 	private Context context;
 	private BleScanCallBack m_bleScanCallBack;
 	private BleServiceCallBack m_bleServiceCallBack;
 	private BluetoothService m_bluetoothService;
 	private BleConnectCallBack m_bleConnectCallBack;
+	private BleConnectCallBackWhenSenddata m_bleConnectCallBackWhenSenddata;
+
 //	private static boolean application.connectStatus = false; // 连接匹配状态（false:未开始连接）
 	private boolean connectIsUncon = false;
 	private Handler mHandler = new Handler();	
-	private static final String LOGTAG = "test";
+	private static final String LOGTAG = "###";
 	private LRHealthApp application; 
 
 	public BleTool(Context context) {
@@ -56,14 +57,18 @@ public class BleTool {
 	 * @return 0:successful
 	 */
 	public int openBle() {
-		bluetoothManager = (BluetoothManager) context
+		application.bluetoothManager = (BluetoothManager) context
 				.getSystemService(Context.BLUETOOTH_SERVICE);
-		bluetoothAdapter = bluetoothManager.getAdapter();
+		application.bluetoothAdapter = application.bluetoothManager.getAdapter();
 		if (!BluetoothAdapter.getDefaultAdapter().isEnabled()) {
 			BluetoothAdapter.getDefaultAdapter().enable();
 			return 1;//new open
 		}
 		return 0;//have opend
+	}
+	
+	public Boolean isOpened() {
+		return BluetoothAdapter.getDefaultAdapter().isEnabled();		
 	}
 
 	/**
@@ -77,7 +82,7 @@ public class BleTool {
 			period = 1000;
 		}
 		
-		if (bluetoothAdapter == null) {
+		if (application.bluetoothAdapter == null) {
 			return -1;
 		}
 		
@@ -86,7 +91,7 @@ public class BleTool {
 		mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-            	//bluetoothAdapter.stopLeScan(mLeScanCallback);
+            	//application.bluetoothAdapter.stopLeScan(mLeScanCallback);
             	//Log.i("===", "scanButtionClickTimes:" + LRHealthApp.getInstance().scanButtionClickTimes + "scanIsDevice:" + LRHealthApp.getInstance().scanIsDevice);
             	if(LRHealthApp.getInstance().scanIsDevice == 0 && LRHealthApp.getInstance().scanButtionClickTimes <= 1){
             		m_bleScanCallBack.scanNoDevice();
@@ -110,27 +115,27 @@ public class BleTool {
             }
         }, period);
 		
-		bluetoothAdapter.startLeScan(mLeScanCallback);
+		application.bluetoothAdapter.startLeScan(mLeScanCallback);
 		
 		return 0;
 	}
 	
 	public int reStartScan() {	
-		if (bluetoothAdapter == null) {
+		if (application.bluetoothAdapter == null) {
 			return -1;
 		}	
 		
-		bluetoothAdapter.startLeScan(mLeScanCallback);
+		application.bluetoothAdapter.startLeScan(mLeScanCallback);
 		
 		return 0;
 	}
 	
 	public int firstStartScan() {	
-		if (bluetoothAdapter == null) {
+		if (application.bluetoothAdapter == null) {
 			return -1;
 		}	
 		
-		bluetoothAdapter.startLeScan(mLeScanCallback);
+		application.bluetoothAdapter.startLeScan(mLeScanCallback);
 		
 		return 0;
 	}
@@ -230,10 +235,12 @@ public class BleTool {
 	/* connect */
 	public void connect(String macAddr, BleConnectCallBack bleConnectCallBack) {
 		// TODO Auto-generated method stub
-		if (bluetoothAdapter == null) {
-			bluetoothAdapter = bluetoothManager.getAdapter();
+		if (application.bluetoothAdapter == null) {
+			application.bluetoothAdapter = application.bluetoothManager.getAdapter();
 			return;
 		}
+		
+		stopScan();
 		
 		m_bluetoothService.gethandler(deviceHandler);
 		Log.d(LOGTAG, "connect:"+macAddr);
@@ -253,10 +260,38 @@ public class BleTool {
             			Log.i("test", "connect timeout");
             			//disconnect();
 						//m_bleConnectCallBack.onConnectFailed();
+            			m_bleConnectCallBack.onConnectTimeout();
 					}
             	}
+            	application.rescanStatusNum--;
             }
         }, 15000);
+	}
+	
+	public void reConnectWhenSenddata(String macAddr, BleConnectCallBackWhenSenddata bleConnectCallBackWhenSenddata) {
+		if (application.bluetoothAdapter == null) {
+			application.bluetoothAdapter = application.bluetoothManager.getAdapter();
+			return;
+		}
+	
+		Log.d(LOGTAG, "connect:"+macAddr);
+		m_bluetoothService.connect(macAddr);
+		m_bleConnectCallBackWhenSenddata = bleConnectCallBackWhenSenddata;
+	}
+	
+	public void disconnectReSenddata(BleConnectCallBackWhenSenddata bleConnectCallBackWhenSenddata) {
+		Log.i(LOGTAG, "disconnect");
+		
+		application.bluetoothManager = (BluetoothManager) context
+				.getSystemService(Context.BLUETOOTH_SERVICE);
+		application.bluetoothAdapter = application.bluetoothManager.getAdapter();
+		if (!BluetoothAdapter.getDefaultAdapter().isEnabled()) {
+			BluetoothAdapter.getDefaultAdapter().enable();
+		}
+		
+		m_bleConnectCallBackWhenSenddata = bleConnectCallBackWhenSenddata;
+		connectIsUncon = true;
+		m_bluetoothService.disconnect();
 	}
 	
 	public void disconnect() {
@@ -270,7 +305,7 @@ public class BleTool {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
-			Log.i(LOGTAG, "action = " + action);
+			Log.i("$$$", "action = " + action);
 			if (BluetoothService.ACTION_GATT_READCHARACTERISTICSUCCESS
 					.equals(action)) { // 连接成功 并读取characteristic成功
 				// String connecttext = "disconnect";
@@ -278,6 +313,10 @@ public class BleTool {
 				// ConnectProgressBarzt(false);
 				if(m_bleConnectCallBack != null){
 					m_bleConnectCallBack.onConnect();
+					if(application.reSendEn){						
+						m_bleConnectCallBackWhenSenddata.onConnect();
+						application.reSendEn = false;
+					}
 				}
 				application.connectStatus = true;
 			} else if (BluetoothService.ACTION_GATT_DISCONNECTED.equals(action)) { // 模块已断开连接
@@ -291,6 +330,10 @@ public class BleTool {
 					Log.d(LOGTAG, "模块已关闭连接，请断开!");
 					if(m_bleConnectCallBack != null){
 						m_bleConnectCallBack.onDisconnect();
+						if(application.reSendEn){						
+							m_bleConnectCallBackWhenSenddata.onDisconnect();
+							application.reSendEn = false;
+						}
 					}
 				//}
 			}
@@ -306,6 +349,17 @@ public class BleTool {
 		public void onConnectFailed();
 		
 		public void onDisconnect();
+		
+		public void onConnectTimeout();
+
+	}
+	
+	public interface BleConnectCallBackWhenSenddata {
+		/**
+		 * when connect successfully, call this call back funciton
+		 */
+		public void onConnect();
+		public void onDisconnect();
 	}
 
 	/* handler of ble service */
@@ -314,7 +368,7 @@ public class BleTool {
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
-			// Log.i("what === "+msg.what);
+			Log.d("$$$", "msg:" + msg.what);
 			switch (msg.what) {
 			case 0:
 				Log.i(LOGTAG, "连接失败");
@@ -324,10 +378,11 @@ public class BleTool {
 					m_bleConnectCallBack.onConnectFailed();
 				}
 				break;
-			case 1:
+			case 1://send data call back
 				String str = (String) msg.obj;
 				// str = Tools.bytesToHexString(str.getBytes());
 				Log.d(LOGTAG, "received data:" + str);
+				application.sendStatusBoolean= true; 
 				break;
 			case 2:
 				// String ss = (String) msg.obj;
@@ -340,11 +395,12 @@ public class BleTool {
 	};
 
 	public int stopScan() {
-		if (bluetoothAdapter == null) {
+		Log.i("===", "stop scan");
+		if (application.bluetoothAdapter == null) {
 			return -1;
 		}
 
-		bluetoothAdapter.stopLeScan(mLeScanCallback);
+		application.bluetoothAdapter.stopLeScan(mLeScanCallback);
 		return 0;
 	}
 

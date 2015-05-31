@@ -9,6 +9,7 @@ import android.R.integer;
 import android.app.Activity;
 import android.app.Application;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
 
 public class LRHealthApp extends Application{
 	public BluetoothService mbluetoothService;
@@ -16,11 +17,22 @@ public class LRHealthApp extends Application{
 	private List<Activity> mList = new LinkedList<Activity>();  
 	private static LRHealthApp instance; 
 	public boolean connectStatus = false; 
+	public int rescanStatusNum = 0;
 	public int scanIsDevice = 0;
 	public int scanButtionClickTimes = 0;
 	private int m_nScreenW, m_nScreenH, m_nScreenDpi;
 	private float m_fScreenDensity;
-	
+	public Boolean sendStatusBoolean = false;
+	public Boolean reConnWhenResendStatus = false;
+	public Boolean reSendEn = false;
+	public Boolean allSenddataButtonEn = true;
+	public BluetoothAdapter bluetoothAdapter;
+	public BluetoothManager bluetoothManager;
+	public BleTool m_bleTool;
+	public String macBleModule;// 00:1B:35:0B:5E:42
+
+
+
 	public void setScreenSize(int w, int h, int dpi, float den)
 	{
 		m_nScreenW = w;
