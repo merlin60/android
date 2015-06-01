@@ -43,6 +43,9 @@ public class BleTool {
 	private Handler mHandler = new Handler();	
 	private static final String LOGTAG = "###";
 	private LRHealthApp application; 
+	
+	private long connectTime = 0;
+	private Handler con_Handler = new Handler();
 
 	public BleTool(Context context) {
 		super();
@@ -172,6 +175,9 @@ public class BleTool {
 	 */
 	@SuppressLint("InlinedApi")
 	public void service_init(BleServiceCallBack bleServiceCallBack) {
+		Log.i("===", "service_init");
+		m_bleServiceCallBack = bleServiceCallBack;
+
 		Intent gattServiceIntent = new Intent(context, BluetoothService.class);
 		boolean bll = context.bindService(gattServiceIntent,
 				mServiceConnection, context.BIND_AUTO_CREATE);
@@ -185,7 +191,12 @@ public class BleTool {
 			registerReceiver();
 		}
 
-		m_bleServiceCallBack = bleServiceCallBack;
+		if(m_bleServiceCallBack == null){
+			Log.i("@@@init", "m_bleServiceCallBack null");
+		}else{
+			Log.i("@@@init", "m_bleServiceCallBack not null");
+
+		}
 	}
 
 	private static IntentFilter makeGattUpdateIntentFilter() {
@@ -208,6 +219,9 @@ public class BleTool {
 				Log.d(LOGTAG, "m_bluetoothService is null");
 			} else {
 				Log.d(LOGTAG, "m_bluetoothService is not null");
+				if(m_bleServiceCallBack == null){
+					Log.i("***", "m_bleServiceCallBack null");
+				}
 				m_bleServiceCallBack.onBuild();
 
 			}
@@ -245,34 +259,34 @@ public class BleTool {
 		m_bluetoothService.gethandler(deviceHandler);
 		Log.d(LOGTAG, "connect:"+macAddr);
 		m_bluetoothService.connect(macAddr);
+		connectTime = System.currentTimeMillis();
 		m_bleConnectCallBack = bleConnectCallBack;
 		
 		connectIsUncon = false;
-		
-		Handler con_Handler = new Handler();
+		Log.i("===", "new connect");
+
 		con_Handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-            	Log.i("test1", "connect timeout");
-            	Log.i("test1", (application.connectStatus == false)?"application.connectStatus == false":"application.connectStatus != false");
-            	if(application.connectStatus == false && connectIsUncon == false){
+            	Log.i("===", "time: " + (System.currentTimeMillis()-connectTime));
+            	if(application.connectStatus == false && ( (System.currentTimeMillis()-connectTime) >= 15000)){
             		if(m_bleConnectCallBack != null){
-            			Log.i("test", "connect timeout");
+            			Log.i("!!!", "connect timeout");
             			//disconnect();
 						//m_bleConnectCallBack.onConnectFailed();
             			m_bleConnectCallBack.onConnectTimeout();
 					}
             	}
-            	application.rescanStatusNum--;
+            	application.reConnStatusNum--;
             }
         }, 15000);
 	}
 	
 	public void reConnectWhenSenddata(String macAddr, BleConnectCallBackWhenSenddata bleConnectCallBackWhenSenddata) {
-		if (application.bluetoothAdapter == null) {
-			application.bluetoothAdapter = application.bluetoothManager.getAdapter();
-			return;
-		}
+//		if (application.bluetoothAdapter == null) {
+//			application.bluetoothAdapter = application.bluetoothManager.getAdapter();
+//			return;
+//		}
 	
 		Log.d(LOGTAG, "connect:"+macAddr);
 		m_bluetoothService.connect(macAddr);
@@ -282,22 +296,26 @@ public class BleTool {
 	public void disconnectReSenddata(BleConnectCallBackWhenSenddata bleConnectCallBackWhenSenddata) {
 		Log.i(LOGTAG, "disconnect");
 		
-		application.bluetoothManager = (BluetoothManager) context
-				.getSystemService(Context.BLUETOOTH_SERVICE);
-		application.bluetoothAdapter = application.bluetoothManager.getAdapter();
-		if (!BluetoothAdapter.getDefaultAdapter().isEnabled()) {
-			BluetoothAdapter.getDefaultAdapter().enable();
-		}
+//		application.bluetoothManager = (BluetoothManager) context
+//				.getSystemService(Context.BLUETOOTH_SERVICE);
+//		application.bluetoothAdapter = application.bluetoothManager.getAdapter();
+//		if (!BluetoothAdapter.getDefaultAdapter().isEnabled()) {
+//			BluetoothAdapter.getDefaultAdapter().enable();
+//		}
 		
 		m_bleConnectCallBackWhenSenddata = bleConnectCallBackWhenSenddata;
 		connectIsUncon = true;
 		m_bluetoothService.disconnect();
+		connectTime = System.currentTimeMillis();
+		Log.i("===", "re-set time");
 	}
 	
 	public void disconnect() {
 		Log.i(LOGTAG, "disconnect");
 		connectIsUncon = true;
 		m_bluetoothService.disconnect();
+		connectTime = System.currentTimeMillis();
+		Log.i("===", "re-set time");
 	}	
 
 	// 接收广播 sevice 通过接收广播来知道是否连接成功，handler还可以根据连接是否成功做出相应动作
@@ -375,6 +393,8 @@ public class BleTool {
 				connectIsUncon = true;
 				application.connectStatus = false;
 				if(m_bleConnectCallBack != null){
+					connectTime = System.currentTimeMillis();
+					Log.i("===", "re-set time");
 					m_bleConnectCallBack.onConnectFailed();
 				}
 				break;

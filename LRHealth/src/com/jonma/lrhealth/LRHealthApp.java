@@ -17,7 +17,7 @@ public class LRHealthApp extends Application{
 	private List<Activity> mList = new LinkedList<Activity>();  
 	private static LRHealthApp instance; 
 	public boolean connectStatus = false; 
-	public int rescanStatusNum = 0;
+	public int reConnStatusNum = 0;
 	public int scanIsDevice = 0;
 	public int scanButtionClickTimes = 0;
 	private int m_nScreenW, m_nScreenH, m_nScreenDpi;
@@ -30,6 +30,7 @@ public class LRHealthApp extends Application{
 	public BluetoothManager bluetoothManager;
 	public BleTool m_bleTool;
 	public String macBleModule;// 00:1B:35:0B:5E:42
+	public int devicelistTimerCnt = 0;
 
 
 
