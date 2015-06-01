@@ -216,8 +216,7 @@ public class DeviceListActivity extends Activity {
 	@Override
 	public void onResume() {
 		Log.d(LOGTAG, "device list activity resume");
-		mySharedSetting = new SharedSetting(
-				DeviceListActivity.this);
+		mySharedSetting = new SharedSetting(DeviceListActivity.this);
 		if (unregisterReceiverFlag == false) {
 			unregisterReceiverFlag = true;
 			application.m_bleTool.registerReceiver();
@@ -319,7 +318,7 @@ public class DeviceListActivity extends Activity {
 				updateBluetoothDevList();
 
 				// scan bt
-				//m_listInfo.clear();
+				// m_listInfo.clear();
 				application.m_bleTool.stopScan();
 				if (application.connectStatus == true) {
 					application.connectStatus = false;
@@ -393,7 +392,7 @@ public class DeviceListActivity extends Activity {
 
 			if (application.connectStatus == true) {
 				application.connectStatus = false;
-				if (application.m_bleTool.getBleService() != null){
+				if (application.m_bleTool.getBleService() != null) {
 					application.m_bleTool.disconnect(); // disconnect
 				}
 				mySharedSetting.saveLastConndevice(null);
@@ -499,7 +498,6 @@ public class DeviceListActivity extends Activity {
 		@Override
 		public void scanListening(BluetoothDevice device) {
 			// TODO Auto-generated method stub
-			application.scanIsDevice = 1;
 			// android.util.Log.d(LOGTAG, device.getAddress());
 
 			/* must put this if before checkIsExit() */
@@ -525,13 +523,14 @@ public class DeviceListActivity extends Activity {
 			map = new HashMap<String, Object>();
 			if (device.getName().length() >= 3
 					&& device.getName().contains("BLE")) {
+				application.scanIsDevice = 1;
 				map.put(ObjectName,
 						getResources().getString(R.string.devicename));
 			} else {
 				return;// only search BLE device
 
-				//map.put(ObjectName, device.getName());
-				//Log.i("===", "non-ble device");
+				 //map.put(ObjectName, device.getName());
+				 //Log.i("===", "non-ble device");
 			}
 			// Log.i("===", "2" + device.getName());
 			map.put(ObjectDetail, device.getAddress());
@@ -545,20 +544,19 @@ public class DeviceListActivity extends Activity {
 			// if (device.getName().equalsIgnoreCase(nameBleModule)) {
 			application.macBleModule = device.getAddress();
 			android.util.Log.d(LOGTAG, "finded " + application.macBleModule);
-			//application.m_bleTool.service_init(m_bleServiceCallBack); //TODO 0
+			// application.m_bleTool.service_init(m_bleServiceCallBack); //TODO
+			// 0
 			// }
 
 			Message message1 = Message.obtain();
 			message1.what = MESSAGE_FINDDEVICE;
 			m_handler.sendMessage(message1);
-			
-			/*only run once when first open app*/	
-			Log.i("===", "mark1");
+
+			/* only run once when first open app */
 
 			if (isFirstScan == true) {
 				String lastMac = mySharedSetting.queryLastConndevice();
 				if (lastMac != null) {
-					Log.i("===", "lastmac: " + lastMac + " curlistviewid: " + curListviewId);
 					if (device.getAddress().toString().equals(lastMac)) {
 						reConneStatus = false;
 						application.reConnStatusNum = 0;
@@ -566,9 +564,7 @@ public class DeviceListActivity extends Activity {
 						curConnectDeviceMac = lastMac;
 						application.macBleModule = lastMac;
 						application.m_bleTool.stopScan();
-						curListviewId = m_listInfo.size()-1;
-						Log.i("===", "lastmac: " + lastMac + " curlistviewid: " + curListviewId);
-						Log.i("***", "send message");
+						curListviewId = m_listInfo.size() - 1;
 						m_listInfo.get(curListviewId).put(ObjectStatus,
 								getResources().getString(lvConnectStaDoing));
 
@@ -576,15 +572,14 @@ public class DeviceListActivity extends Activity {
 						Message message2 = Message.obtain();
 						message2.what = MESSAGE_UPDATELIST;
 						m_handler.sendMessage(message2);
-						application.m_bleTool.connect(lastMac, m_bleConnectCallBack);
-						
+						application.m_bleTool.connect(lastMac,
+								m_bleConnectCallBack);
+
 					}
-				}else{
-					Log.i("===", "lastmac: " + "null");
+				} else {
 					isFirstScan = false;
 				}
 			}
-			Log.i("===", "mark");
 
 		}
 
@@ -666,18 +661,33 @@ public class DeviceListActivity extends Activity {
 
 		public void onConnectTimeout() {
 			Log.i("***", "time out send message");
-			application.reConnStatusNum = 2;// stop re-conn
-			reConneStatus = false;
-			m_listInfo.get(curListviewId).put(ObjectStatus,
-					getResources().getString(lvConnectStaNot));
+			if (application.reConnStatusNum < 2) {
+				application.reConnStatusNum = 1; // re-conn once
+				//application.m_bleTool.unregisterReceiver();
+				application.m_bleTool.registerReceiver();
 
-			// send message
-			Message message = Message.obtain();
-			message.what = MESSAGE_UPDATELIST;
-			m_handler.sendMessage(message);
-			application.connectStatus = false;
-			
-			//startScanBluetoothDev();
+				application.m_bleTool.disconnect();
+				application.m_bleTool.service_init(m_bleServiceCallBack);
+				mHandler.postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						reScanConn();
+					}
+				}, 2 * 100);
+			} else {
+				// application.reConnStatusNum = 2;// stop re-conn
+				reConneStatus = false;
+				m_listInfo.get(curListviewId).put(ObjectStatus,
+						getResources().getString(lvConnectStaNot));
+
+				// send message
+				Message message = Message.obtain();
+				message.what = MESSAGE_UPDATELIST;
+				m_handler.sendMessage(message);
+				application.connectStatus = false;
+
+				// startScanBluetoothDev();
+			}
 		}
 	};
 

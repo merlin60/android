@@ -89,13 +89,16 @@ public class BleTool {
 			return -1;
 		}
 		
-		m_bleScanCallBack = bleScanCallBack;		
+		m_bleScanCallBack = bleScanCallBack;
+		LRHealthApp.getInstance().scanIsDevice = 0;
+    	//Log.i("===", "scanIsDevice:" + LRHealthApp.getInstance().scanIsDevice);
+
 		
 		mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
             	//application.bluetoothAdapter.stopLeScan(mLeScanCallback);
-            	//Log.i("===", "scanButtionClickTimes:" + LRHealthApp.getInstance().scanButtionClickTimes + "scanIsDevice:" + LRHealthApp.getInstance().scanIsDevice);
+            	Log.i("===", "scanButtionClickTimes:" + LRHealthApp.getInstance().scanButtionClickTimes + "scanIsDevice:" + LRHealthApp.getInstance().scanIsDevice);
             	if(LRHealthApp.getInstance().scanIsDevice == 0 && LRHealthApp.getInstance().scanButtionClickTimes <= 1){
             		m_bleScanCallBack.scanNoDevice();
             		
@@ -277,7 +280,6 @@ public class BleTool {
             			m_bleConnectCallBack.onConnectTimeout();
 					}
             	}
-            	application.reConnStatusNum--;
             }
         }, 15000);
 	}
