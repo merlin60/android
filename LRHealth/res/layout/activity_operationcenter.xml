@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/icon_bgstyle10"
-    android:orientation="vertical">
+    android:orientation="vertical" >
     
     <FrameLayout
         android:id="@+id/layout_bgstring"
@@ -22,9 +22,10 @@
     
     <LinearLayout
         android:id="@+id/linelayout_vent"
-        android:layout_width="fill_parent"
+        android:layout_width="450dp"
         android:layout_height="150dp"
         android:background="@drawable/icon_title00"
+        android:layout_centerHorizontal="true"
         android:gravity="center"
         android:orientation="vertical"
         android:layout_above="@+id/linelayout_menu"
@@ -50,8 +51,6 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="105dp"
-            android:layout_marginLeft="135dp"
-            android:layout_marginRight="135dp"
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:orientation="horizontal" >
@@ -83,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginLeft="100dp"
+                android:layout_marginLeft="80dp"
                 android:gravity="center"  >
                 
 			<ImageButton
@@ -107,9 +106,10 @@
 
     <LinearLayout
         android:id="@+id/linelayout_refri"
-        android:layout_width="fill_parent"
+        android:layout_width="450dp"
         android:layout_height="150dp"
         android:background="@drawable/icon_title00"
+        android:layout_centerHorizontal="true"
         android:gravity="center"
         android:orientation="vertical"
         android:layout_above="@+id/linelayout_menu"
@@ -135,8 +135,6 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="105dp"
-            android:layout_marginLeft="135dp"
-            android:layout_marginRight="135dp"
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:orientation="horizontal" >
@@ -169,7 +167,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginLeft="100dp"
+                android:layout_marginLeft="80dp"
                 android:gravity="center" >
             <ImageButton
                 android:id="@+id/button_refriback"
@@ -192,9 +190,10 @@
 
     <LinearLayout
         android:id="@+id/linelayout_heat"
-        android:layout_width="fill_parent"
+        android:layout_width="450dp"
         android:layout_height="150dp"
         android:background="@drawable/icon_title00"
+        android:layout_centerHorizontal="true"
         android:gravity="center"
         android:orientation="vertical"
         android:layout_above="@+id/linelayout_menu"
@@ -220,8 +219,6 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="105dp"
-            android:layout_marginLeft="135dp"
-            android:layout_marginRight="135dp"
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:orientation="horizontal" >
@@ -253,7 +250,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginLeft="100dp"
+                android:layout_marginLeft="80dp"
                 android:gravity="center" >
             <ImageButton
                 android:id="@+id/button_heatback"
@@ -276,9 +273,10 @@
 
     <LinearLayout
         android:id="@+id/linelayout_setting"
-        android:layout_width="fill_parent"
+        android:layout_width="450dp"
         android:layout_height="150dp"
         android:background="@drawable/icon_title00"
+        android:layout_centerHorizontal="true"
         android:gravity="center"
         android:orientation="vertical"
         android:layout_above="@+id/linelayout_menu"
@@ -389,21 +387,21 @@
         android:id="@+id/linelayout_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"        
-        android:background="@drawable/icon_menubg00"
-        android:gravity="bottom|center_horizontal"
+        android:background="@drawable/icon_menubg00"        
         android:orientation="horizontal"
         android:layout_centerInParent="true"
+        android:gravity="bottom|center_horizontal"
         android:visibility="visible" >
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="20dp"
             android:orientation="vertical" >
             <ImageView
                     android:id="@+id/imageview_ventselectst"
-                    android:layout_width="90dp"
+                    android:layout_width="80dp"
                     android:layout_height="20dp"
                     android:visibility="gone"
                     android:src="@drawable/icon_selectstatus" />
@@ -422,12 +420,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="20dp"
             android:orientation="vertical" >
             
              <ImageView
                     android:id="@+id/imageview_refriselectst"
-                    android:layout_width="90dp"
+                    android:layout_width="80dp"
                     android:layout_height="20dp"
                     android:visibility="gone"
                     android:src="@drawable/icon_selectstatus" />
@@ -446,12 +444,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="20dp"
             android:orientation="vertical" >
             
             <ImageView
                     android:id="@+id/imageview_heatselectst"
-                    android:layout_width="90dp"
+                    android:layout_width="80dp"
                     android:layout_height="20dp"
                     android:visibility="gone"
                     android:src="@drawable/icon_selectstatus" />
@@ -470,12 +468,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="20dp"
             android:orientation="vertical" >
             
              <ImageView
                     android:id="@+id/imageview_settingselectst"
-                    android:layout_width="90dp"
+                    android:layout_width="80dp"
                     android:layout_height="20dp"
                     android:visibility="visible"
                     android:src="@drawable/icon_selectstatus" />
@@ -494,12 +492,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:orientation="vertical" >
             
             <ImageView
                     android:id="@+id/imageview_backselectst"
-                    android:layout_width="90dp"
+                    android:layout_width="80dp"
                     android:layout_height="20dp"
                     android:visibility="gone"
                     android:src="@drawable/icon_selectstatus" />

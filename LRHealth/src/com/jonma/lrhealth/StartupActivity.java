@@ -45,6 +45,7 @@ public class StartupActivity extends Activity {
 	private static Button m_btnSetting;
 	private static Button m_btnBack;
 	private static ImageView m_imgViewUIStyle;
+	private static ImageView m_imgViewBgStr;
 	private static LinearLayout m_layout;
 	
 	private static final String LOGTAG = "LRHealth";
@@ -139,15 +140,12 @@ public class StartupActivity extends Activity {
 
 	private void initView() 
 	{
-		m_layout = (LinearLayout) findViewById(R.id.layout_startup);
-		
 		//add startup picture
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-		m_imgViewUIStyle = new ImageView(this);		
-		setViewBackground(m_nValueUIStyle);//set default ui
+		m_layout = (LinearLayout) findViewById(R.id.layout_startup);
+		m_imgViewUIStyle = (ImageView) findViewById(R.id.imgview_uistyle);		
 		
-		m_imgViewUIStyle.setLayoutParams(params);		
-		m_layout.addView(m_imgViewUIStyle);
+		setViewBackground(m_nValueUIStyle);//set default ui		
+		m_layout.invalidate();
 	}
 	
 	private void getScreenSize() 
@@ -168,21 +166,25 @@ public class StartupActivity extends Activity {
 	
 	private void setViewBackground(int style) 
 	{
-		int resId;
+		int resId;		
 		if (style == 0)// rain
 		{
-			resId = R.drawable.icon_bgstyle01;
+			resId = R.drawable.icon_bgstyle10;
 
 		} else if (style == 1)// blue
 		{
-			resId = R.drawable.icon_bgstyle02;
+			resId = R.drawable.icon_bgstyle20;
 
 		} else// shadow
 		{
-			resId = R.drawable.icon_bgstyle03;
+			resId = R.drawable.icon_bgstyle30;
 		}
 		
-		Bitmap bitmap = BitmapDecoder.BitmapDecoder(this.getResources(), resId, m_nScreenW, m_nScreenH);			
-		m_imgViewUIStyle.setBackground(new BitmapDrawable(this.getResources(), bitmap));
+		Bitmap bitmap;
+		bitmap = BitmapDecoder.BitmapDecoderBySampleSize(this.getResources(), resId, m_nScreenW, m_nScreenH, 4);	
+		if (null != bitmap) 
+		{
+			m_imgViewUIStyle.setBackground(new BitmapDrawable(this.getResources(), bitmap));
+		}		
 	}
 }
