@@ -27,13 +27,14 @@
     <string name="scanNoDevice">没有发现任何设备!</string>
     <string name="cancel">取消</string>
     <string name="devicename">左右沙发</string>
-    	<string name="text_ventrunstatus">运行</string>
-	<string name="text_ventstopstatus">停止</string>
-	<string name="text_ventviewexit">退出</string>
-	<string name="text_refrilevelsetting">档位设置</string>
-	<string name="text_refriviewexit">退出</string>
-	<string name="text_heatlevelsetting">档位设置</string>
-	<string name="text_heatviewexit">退出</string>
-	
+    <string name="text_ventrunstatus">运行</string>
+    <string name="text_ventstopstatus">停止</string>
+    <string name="text_ventviewexit">退出</string>
+    <string name="text_refrilevelsetting">档位设置</string>
+    <string name="text_refriviewexit">退出</string>
+    <string name="text_heatlevelsetting">档位设置</string>
+    <string name="text_heatviewexit">退出</string>
+    <string name="text_reconnect">检测到连接已断开，重新连接。。。</string>
+    <string name="text_reconnectsucc">重新连接成功</string>
 
 </resources>

@@ -17,6 +17,7 @@ public class LRHealthApp extends Application{
 	private List<Activity> mList = new LinkedList<Activity>();  
 	private static LRHealthApp instance; 
 	public boolean connectStatus = false; 
+	public boolean isDisconnUnexpecedly = false;
 	public int reConnStatusNum = 0;
 	public int scanIsDevice = 0;
 	public int scanButtionClickTimes = 0;
@@ -31,9 +32,14 @@ public class LRHealthApp extends Application{
 	public BleTool m_bleTool;
 	public String macBleModule;// 00:1B:35:0B:5E:42
 	public int devicelistTimerCnt = 0;
+	
+	private ConnectCallback connInterface;
+	
+	public int curActivity;
+	public static final int DEVICE = 0x001;
+	public static final int OPER = 0x002;
 
-
-
+	
 	public void setScreenSize(int w, int h, int dpi, float den)
 	{
 		m_nScreenW = w;
@@ -94,5 +100,17 @@ public class LRHealthApp extends Application{
     public void onLowMemory() {   
         super.onLowMemory();       
         System.gc();   
-    }  
+    }
+    
+    public void initConn(ConnectCallback connectInter) {
+    	connInterface = connectInter;
+    }
+    
+    public void conn(){
+    	connInterface.connCallback();
+    }
+    
+    public interface ConnectCallback {
+    	public void connCallback();
+    }
 }

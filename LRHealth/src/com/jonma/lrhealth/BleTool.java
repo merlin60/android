@@ -7,6 +7,7 @@ import com.jonma.tool.CustomDialog;
 
 import android.R.integer;
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.app.Dialog;
@@ -37,13 +38,15 @@ public class BleTool {
 	private BluetoothService m_bluetoothService;
 	private BleConnectCallBack m_bleConnectCallBack;
 	private BleConnectCallBackWhenSenddata m_bleConnectCallBackWhenSenddata;
+	private OperationCallBack operationInter;
 
-//	private static boolean application.connectStatus = false; // 连接匹配状态（false:未开始连接）
+	// private static boolean application.connectStatus = false; //
+	// 连接匹配状态（false:未开始连接）
 	private boolean connectIsUncon = false;
-	private Handler mHandler = new Handler();	
+	private Handler mHandler = new Handler();
 	private static final String LOGTAG = "###";
-	private LRHealthApp application; 
-	
+	private LRHealthApp application;
+
 	private long connectTime = 0;
 	private Handler con_Handler = new Handler();
 
@@ -62,87 +65,105 @@ public class BleTool {
 	public int openBle() {
 		application.bluetoothManager = (BluetoothManager) context
 				.getSystemService(Context.BLUETOOTH_SERVICE);
-		application.bluetoothAdapter = application.bluetoothManager.getAdapter();
+		application.bluetoothAdapter = application.bluetoothManager
+				.getAdapter();
 		if (!BluetoothAdapter.getDefaultAdapter().isEnabled()) {
 			BluetoothAdapter.getDefaultAdapter().enable();
-			return 1;//new open
+			return 1;// new open
 		}
-		return 0;//have opend
+		return 0;// have opend
 	}
-	
+
 	public Boolean isOpened() {
-		return BluetoothAdapter.getDefaultAdapter().isEnabled();		
+		return BluetoothAdapter.getDefaultAdapter().isEnabled();
 	}
 
 	/**
 	 * 
 	 * @param bleScanCallBack
-	 * @param period scan time. stop scanning automatically when the time is up.
+	 * @param period
+	 *            scan time. stop scanning automatically when the time is up.
 	 * @return
 	 */
 	public int startScan(BleScanCallBack bleScanCallBack, long period) {
-		if(period == 0){
+		if (period == 0) {
 			period = 1000;
 		}
-		
+
 		if (application.bluetoothAdapter == null) {
 			return -1;
 		}
-		
+
 		m_bleScanCallBack = bleScanCallBack;
 		LRHealthApp.getInstance().scanIsDevice = 0;
-    	//Log.i("===", "scanIsDevice:" + LRHealthApp.getInstance().scanIsDevice);
+		// Log.i("===", "scanIsDevice:" +
+		// LRHealthApp.getInstance().scanIsDevice);
 
-		
 		mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-            	//application.bluetoothAdapter.stopLeScan(mLeScanCallback);
-            	Log.i("===", "scanButtionClickTimes:" + LRHealthApp.getInstance().scanButtionClickTimes + "scanIsDevice:" + LRHealthApp.getInstance().scanIsDevice);
-            	if(LRHealthApp.getInstance().scanIsDevice == 0 && LRHealthApp.getInstance().scanButtionClickTimes <= 1){
-            		m_bleScanCallBack.scanNoDevice();
-            		
-            		LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);    
-            		final View loginLayout = inflater.inflate(R.layout.dialoggeneral, null);            		
-            		CustomDialog.Builder customBuilder = new CustomDialog.Builder(context);
-            		customBuilder.setView(loginLayout)
-            			.setMessage(context.getResources().getString(R.string.scanNoDevice))
-            			.setNegativeButton(context.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener(){
-            				public void onClick(DialogInterface dialog, int which) {
-            					//TODO:
-            					dialog.dismiss(); 
-            				}
-            			});
-            		Dialog scanDialog = customBuilder.create();
-            		scanDialog.show();
-            	}
-            	
-            	LRHealthApp.getInstance().scanButtionClickTimes--;
-            }
-        }, period);
-		
+			@Override
+			public void run() {
+				// application.bluetoothAdapter.stopLeScan(mLeScanCallback);
+				Log.i("===",
+						"scanButtionClickTimes:"
+								+ LRHealthApp.getInstance().scanButtionClickTimes
+								+ "scanIsDevice:"
+								+ LRHealthApp.getInstance().scanIsDevice);
+				if (LRHealthApp.getInstance().scanIsDevice == 0
+						&& LRHealthApp.getInstance().scanButtionClickTimes <= 1) {
+					m_bleScanCallBack.scanNoDevice();
+
+					LayoutInflater inflater = (LayoutInflater) context
+							.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+					final View loginLayout = inflater.inflate(
+							R.layout.dialoggeneral, null);
+					CustomDialog.Builder customBuilder = new CustomDialog.Builder(
+							context);
+					customBuilder
+							.setView(loginLayout)
+							.setMessage(
+									context.getResources().getString(
+											R.string.scanNoDevice))
+							.setNegativeButton(
+									context.getResources().getString(
+											R.string.cancel),
+									new DialogInterface.OnClickListener() {
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+											// TODO:
+											dialog.dismiss();
+										}
+									});
+					Dialog scanDialog = customBuilder.create();
+					scanDialog.show();
+				}
+
+				LRHealthApp.getInstance().scanButtionClickTimes--;
+			}
+		}, period);
+
 		application.bluetoothAdapter.startLeScan(mLeScanCallback);
-		
+
 		return 0;
 	}
-	
-	public int reStartScan() {	
+
+	public int reStartScan() {
 		if (application.bluetoothAdapter == null) {
 			return -1;
-		}	
-		
+		}
+
 		application.bluetoothAdapter.startLeScan(mLeScanCallback);
-		
+
 		return 0;
 	}
-	
-	public int firstStartScan() {	
+
+	public int firstStartScan() {
 		if (application.bluetoothAdapter == null) {
 			return -1;
-		}	
-		
+		}
+
 		application.bluetoothAdapter.startLeScan(mLeScanCallback);
-		
+
 		return 0;
 	}
 
@@ -165,7 +186,7 @@ public class BleTool {
 		 *            the devie that have been founded.
 		 */
 		public void scanListening(BluetoothDevice device);
-		
+
 		public void scanNoDevice();
 
 	}
@@ -185,18 +206,19 @@ public class BleTool {
 		boolean bll = context.bindService(gattServiceIntent,
 				mServiceConnection, context.BIND_AUTO_CREATE);
 		if (bll) {
-			//Log.i(LOGTAG, "绑定服务gattServiceIntent成功");
+			// Log.i(LOGTAG, "绑定服务gattServiceIntent成功");
 		} else {
-			//Log.i(LOGTAG, "绑定服务gattServiceIntent失败");
+			// Log.i(LOGTAG, "绑定服务gattServiceIntent失败");
 		}
-		//context.registerReceiver(mGattUpdateReceiver,	makeGattUpdateIntentFilter());
-		if(m_bluetoothService == null){
+		// context.registerReceiver(mGattUpdateReceiver,
+		// makeGattUpdateIntentFilter());
+		if (m_bluetoothService == null) {
 			registerReceiver();
 		}
 
-		if(m_bleServiceCallBack == null){
+		if (m_bleServiceCallBack == null) {
 			Log.i("@@@init", "m_bleServiceCallBack null");
-		}else{
+		} else {
 			Log.i("@@@init", "m_bleServiceCallBack not null");
 
 		}
@@ -222,7 +244,7 @@ public class BleTool {
 				Log.d(LOGTAG, "m_bluetoothService is null");
 			} else {
 				Log.d(LOGTAG, "m_bluetoothService is not null");
-				if(m_bleServiceCallBack == null){
+				if (m_bleServiceCallBack == null) {
 					Log.i("***", "m_bleServiceCallBack null");
 				}
 				m_bleServiceCallBack.onBuild();
@@ -253,72 +275,79 @@ public class BleTool {
 	public void connect(String macAddr, BleConnectCallBack bleConnectCallBack) {
 		// TODO Auto-generated method stub
 		if (application.bluetoothAdapter == null) {
-			application.bluetoothAdapter = application.bluetoothManager.getAdapter();
+			application.bluetoothAdapter = application.bluetoothManager
+					.getAdapter();
 			return;
 		}
-		
+
 		stopScan();
-		
+
 		m_bluetoothService.gethandler(deviceHandler);
-		Log.d(LOGTAG, "connect:"+macAddr);
+		Log.d(LOGTAG, "connect:" + macAddr);
 		m_bluetoothService.connect(macAddr);
 		connectTime = System.currentTimeMillis();
 		m_bleConnectCallBack = bleConnectCallBack;
-		
+
 		connectIsUncon = false;
 		Log.i("===", "new connect");
 
 		con_Handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-            	Log.i("===", "time: " + (System.currentTimeMillis()-connectTime));
-            	if(application.connectStatus == false && ( (System.currentTimeMillis()-connectTime) >= 15000)){
-            		if(m_bleConnectCallBack != null){
-            			Log.i("!!!", "connect timeout");
-            			//disconnect();
-						//m_bleConnectCallBack.onConnectFailed();
-            			m_bleConnectCallBack.onConnectTimeout();
+			@Override
+			public void run() {
+				Log.i("===", "time: "
+						+ (System.currentTimeMillis() - connectTime));
+				if (application.connectStatus == false
+						&& ((System.currentTimeMillis() - connectTime) >= 15000)) {
+					if (m_bleConnectCallBack != null) {
+						Log.i("!!!", "connect timeout");
+						// disconnect();
+						// m_bleConnectCallBack.onConnectFailed();
+						m_bleConnectCallBack.onConnectTimeout();
 					}
-            	}
-            }
-        }, 15000);
+				}
+			}
+		}, 15000);
 	}
-	
-	public void reConnectWhenSenddata(String macAddr, BleConnectCallBackWhenSenddata bleConnectCallBackWhenSenddata) {
-//		if (application.bluetoothAdapter == null) {
-//			application.bluetoothAdapter = application.bluetoothManager.getAdapter();
-//			return;
-//		}
-	
-		Log.d(LOGTAG, "connect:"+macAddr);
+
+	public void reConnectWhenSenddata(String macAddr,
+			BleConnectCallBackWhenSenddata bleConnectCallBackWhenSenddata) {
+		// if (application.bluetoothAdapter == null) {
+		// application.bluetoothAdapter =
+		// application.bluetoothManager.getAdapter();
+		// return;
+		// }
+
+		Log.d(LOGTAG, "connect:" + macAddr);
 		m_bluetoothService.connect(macAddr);
 		m_bleConnectCallBackWhenSenddata = bleConnectCallBackWhenSenddata;
 	}
-	
-	public void disconnectReSenddata(BleConnectCallBackWhenSenddata bleConnectCallBackWhenSenddata) {
+
+	public void disconnectReSenddata(
+			BleConnectCallBackWhenSenddata bleConnectCallBackWhenSenddata) {
 		Log.i(LOGTAG, "disconnect");
-		
-//		application.bluetoothManager = (BluetoothManager) context
-//				.getSystemService(Context.BLUETOOTH_SERVICE);
-//		application.bluetoothAdapter = application.bluetoothManager.getAdapter();
-//		if (!BluetoothAdapter.getDefaultAdapter().isEnabled()) {
-//			BluetoothAdapter.getDefaultAdapter().enable();
-//		}
-		
+
+		// application.bluetoothManager = (BluetoothManager) context
+		// .getSystemService(Context.BLUETOOTH_SERVICE);
+		// application.bluetoothAdapter =
+		// application.bluetoothManager.getAdapter();
+		// if (!BluetoothAdapter.getDefaultAdapter().isEnabled()) {
+		// BluetoothAdapter.getDefaultAdapter().enable();
+		// }
+
 		m_bleConnectCallBackWhenSenddata = bleConnectCallBackWhenSenddata;
 		connectIsUncon = true;
 		m_bluetoothService.disconnect();
 		connectTime = System.currentTimeMillis();
 		Log.i("===", "re-set time");
 	}
-	
+
 	public void disconnect() {
 		Log.i(LOGTAG, "disconnect");
 		connectIsUncon = true;
 		m_bluetoothService.disconnect();
 		connectTime = System.currentTimeMillis();
 		Log.i("===", "re-set time");
-	}	
+	}
 
 	// 接收广播 sevice 通过接收广播来知道是否连接成功，handler还可以根据连接是否成功做出相应动作
 	private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
@@ -331,31 +360,43 @@ public class BleTool {
 				// String connecttext = "disconnect";
 				// connectButton.setText(connecttext);
 				// ConnectProgressBarzt(false);
-				if(m_bleConnectCallBack != null){
-					m_bleConnectCallBack.onConnect();
-					if(application.reSendEn){						
+				if (m_bleConnectCallBack != null) {
+					//if (application.curActivity == application.DEVICE)
+					{
+						m_bleConnectCallBack.onConnect();
+					}
+					if (application.curActivity == application.OPER) {
+						operationInter.onConnect();
+					}
+					if (application.reSendEn) {
 						m_bleConnectCallBackWhenSenddata.onConnect();
 						application.reSendEn = false;
 					}
 				}
 				application.connectStatus = true;
 			} else if (BluetoothService.ACTION_GATT_DISCONNECTED.equals(action)) { // 模块已断开连接
-				Log.i("test", (application.connectStatus == true)?"true":"false");
+				Log.i("test", (application.connectStatus == true) ? "true"
+						: "false");
 				connectIsUncon = true;
-				//if (application.connectStatus == true) { // 正在连接中
-					// showAlertDialog(
-					// "模块已关闭连接，请断开!",
-					// getResources().getString(
-					// R.string.alertOneButtonTitle), null, 0);
-					Log.d(LOGTAG, "模块已关闭连接，请断开!");
-					if(m_bleConnectCallBack != null){
+				// if (application.connectStatus == true) { // 正在连接中
+				// showAlertDialog(
+				// "模块已关闭连接，请断开!",
+				// getResources().getString(
+				// R.string.alertOneButtonTitle), null, 0);
+				Log.d(LOGTAG, "模块已关闭连接，请断开!");
+				if (m_bleConnectCallBack != null) {
+					if (application.curActivity == application.DEVICE) {
 						m_bleConnectCallBack.onDisconnect();
-						if(application.reSendEn){						
-							m_bleConnectCallBackWhenSenddata.onDisconnect();
-							application.reSendEn = false;
-						}
 					}
-				//}
+					if (application.curActivity == application.OPER) {
+						operationInter.onDisconnect();
+					}
+					if (application.reSendEn) {
+						m_bleConnectCallBackWhenSenddata.onDisconnect();
+						application.reSendEn = false;
+					}
+				}
+				// }
 			}
 		}
 	};
@@ -365,20 +406,30 @@ public class BleTool {
 		 * when connect successfully, call this call back funciton
 		 */
 		public void onConnect();
-		
+
 		public void onConnectFailed();
-		
+
 		public void onDisconnect();
-		
+
 		public void onConnectTimeout();
 
 	}
-	
+
+	public void initOperationCallBack(OperationCallBack tmp) {
+		operationInter = tmp;
+	}
+
+	public interface OperationCallBack {
+		public void onDisconnect();
+		public void onConnect();
+	}
+
 	public interface BleConnectCallBackWhenSenddata {
 		/**
 		 * when connect successfully, call this call back funciton
 		 */
 		public void onConnect();
+
 		public void onDisconnect();
 	}
 
@@ -394,17 +445,17 @@ public class BleTool {
 				Log.i(LOGTAG, "连接失败");
 				connectIsUncon = true;
 				application.connectStatus = false;
-				if(m_bleConnectCallBack != null){
+				if (m_bleConnectCallBack != null) {
 					connectTime = System.currentTimeMillis();
 					Log.i("===", "re-set time");
 					m_bleConnectCallBack.onConnectFailed();
 				}
 				break;
-			case 1://send data call back
+			case 1:// send data call back
 				String str = (String) msg.obj;
 				// str = Tools.bytesToHexString(str.getBytes());
 				Log.d(LOGTAG, "received data:" + str);
-				application.sendStatusBoolean= true; 
+				application.sendStatusBoolean = true;
 				break;
 			case 2:
 				// String ss = (String) msg.obj;
@@ -430,15 +481,15 @@ public class BleTool {
 		return m_bluetoothService;
 	}
 
-	public void unregisterReceiver(){
+	public void unregisterReceiver() {
 		context.unregisterReceiver(mGattUpdateReceiver);
 	}
-	
-	public void unbindService() {		
+
+	public void unbindService() {
 		context.unbindService(mServiceConnection);
 	}
-	
-	public void registerReceiver(){
+
+	public void registerReceiver() {
 		context.registerReceiver(mGattUpdateReceiver,
 				makeGattUpdateIntentFilter());
 	}

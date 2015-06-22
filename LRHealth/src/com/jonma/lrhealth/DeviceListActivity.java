@@ -172,7 +172,7 @@ public class DeviceListActivity extends Activity {
 				Message message = new Message();
 				message.what = MESSAGE_SCAN;
 				m_handler.sendMessage(message);
-				timer.cancel(); // 閫�鍑鸿鏃跺櫒
+				timer.cancel(); // 闁拷閸戦缚顓搁弮璺烘珤
 			}
 		}
 	};
@@ -195,6 +195,8 @@ public class DeviceListActivity extends Activity {
 
 		// init view
 		initView();
+		
+		initAPPConn();
 
 		// bt
 		Log.d(LOGTAG, "Open bluetooth and start scan");
@@ -202,7 +204,7 @@ public class DeviceListActivity extends Activity {
 		int ret = openBluetooth();
 
 		timer = new Timer(true);
-		timer.schedule(task, 1000, 500); // 寤舵椂1000ms鍚庢墽琛岋紝1000ms鎵ц涓�娆�
+		timer.schedule(task, 1000, 500); // 瀵よ埖妞�1000ms閸氬孩澧界悰宀嬬礉1000ms閹笛嗩攽娑擄拷濞嗭拷
 		Log.d(LOGTAG, "open and start bluethooth done");
 	}
 
@@ -217,16 +219,27 @@ public class DeviceListActivity extends Activity {
 	public void onResume() {
 		Log.d(LOGTAG, "device list activity resume");
 		mySharedSetting = new SharedSetting(DeviceListActivity.this);
-		if (unregisterReceiverFlag == false) {
-			unregisterReceiverFlag = true;
-			application.m_bleTool.registerReceiver();
-		}
+//		if (unregisterReceiverFlag == false) {
+//			unregisterReceiverFlag = true;
+//			application.m_bleTool.registerReceiver();
+//		}
 
 		if (isFirstStart == false) {
 			goneProShowbtn();
 			application.scanButtionClickTimes = 0;
 		}
 		isFirstStart = false;
+
+		if (application.isDisconnUnexpecedly == true) {
+			application.isDisconnUnexpecedly = false;
+			reConneStatus = false;
+			application.reConnStatusNum = 0;
+			Message message = Message.obtain();
+			message.what = MESSAGE_CONNECT;
+			m_handler.sendMessage(message);
+		}
+		
+		application.curActivity = application.DEVICE;
 		super.onResume();
 	}
 
@@ -245,15 +258,15 @@ public class DeviceListActivity extends Activity {
 	public void onStop() {
 		Log.d(LOGTAG, "device list activity stop");
 
-		if (unregisterReceiverFlag) {
-			if (mbluetoothService != null) {
-				Log.i("===", "unregisterReceiver");
-				application.m_bleTool.unregisterReceiver();
-				unregisterReceiverFlag = false;
-			} else {
-				Log.i("===", "no unregisterReceiver");
-			}
-		}
+//		if (unregisterReceiverFlag) {
+//			if (mbluetoothService != null) {
+//				Log.i("===", "unregisterReceiver");
+//				application.m_bleTool.unregisterReceiver();
+//				unregisterReceiverFlag = false;
+//			} else {
+//				Log.i("===", "no unregisterReceiver");
+//			}
+//		}
 		// application.m_bleTool.stopScan();
 
 		super.onStop();
@@ -267,6 +280,7 @@ public class DeviceListActivity extends Activity {
 			Log.i(LOGTAG, "unbind");
 			application.m_bleTool.disconnect();
 			application.m_bleTool.unbindService();
+			application.m_bleTool.unregisterReceiver();
 		}
 
 		super.onDestroy();
@@ -383,6 +397,7 @@ public class DeviceListActivity extends Activity {
 			// TODO: click, then connect corresponding device
 			reConneStatus = false;
 			application.reConnStatusNum = 0;
+			application.isDisconnUnexpecedly = false;
 
 			curListviewId = position;
 			// application.m_bleTool.stopScan();
@@ -484,13 +499,32 @@ public class DeviceListActivity extends Activity {
 	}
 
 	private int reScanConn() {
-		Log.i("===", "rescan");
 		application.reConnStatusNum++;
+		Log.i("===", "rescan:" + application.reConnStatusNum + "times");
+
 		reConneStatus = true;
 		application.m_bleTool.stopScan();
 		application.m_bleTool.reStartScan();
 
 		return 0;
+	}
+
+	private LRHealthApp.ConnectCallback m_connCallback = new LRHealthApp.ConnectCallback() {
+
+		@Override
+		public void connCallback() {
+			// TODO Auto-generated method stub
+			application.isDisconnUnexpecedly = false;
+			reConneStatus = false;
+			application.reConnStatusNum = 0;
+			Message message = Message.obtain();
+			message.what = MESSAGE_CONNECT;
+			m_handler.sendMessage(message);
+		}
+	};
+
+	private void initAPPConn() {
+		application.initConn(m_connCallback);
 	}
 
 	/* three callback funciton of BleTool */
@@ -529,8 +563,8 @@ public class DeviceListActivity extends Activity {
 			} else {
 				return;// only search BLE device
 
-				 //map.put(ObjectName, device.getName());
-				 //Log.i("===", "non-ble device");
+				// map.put(ObjectName, device.getName());
+				// Log.i("===", "non-ble device");
 			}
 			// Log.i("===", "2" + device.getName());
 			map.put(ObjectDetail, device.getAddress());
@@ -643,9 +677,11 @@ public class DeviceListActivity extends Activity {
 			// TODO Auto-generated method stub
 			Log.i("===", "onDisconnect");
 			// re-connect some times or do nothing
-			if (application.reConnStatusNum >= 2) {// only after re-connect, can
-													// show failed. Or still
-													// show connectting.
+			if (application.reConnStatusNum >= 2
+					&& application.connectStatus == false) {// only after
+															// re-connect, can
+				// show failed. Or still
+				// show connectting.
 				m_listInfo.get(curListviewId).put(ObjectStatus,
 						getResources().getString(lvConnectStaNot));
 
@@ -653,17 +689,26 @@ public class DeviceListActivity extends Activity {
 				Message message = Message.obtain();
 				message.what = MESSAGE_UPDATELIST;
 				m_handler.sendMessage(message);
+				application.connectStatus = false;
 			}
+			if (application.connectStatus == true) {
+				application.isDisconnUnexpecedly = true;
+				m_listInfo.get(curListviewId).put(ObjectStatus,
+						getResources().getString(lvConnectStaNot));
 
-			application.connectStatus = false;
-
+				// send message
+				Message message = Message.obtain();
+				message.what = MESSAGE_UPDATELIST;
+				m_handler.sendMessage(message);
+				application.connectStatus = false;
+			}
 		}
 
 		public void onConnectTimeout() {
 			Log.i("***", "time out send message");
 			if (application.reConnStatusNum < 2) {
 				application.reConnStatusNum = 1; // re-conn once
-				//application.m_bleTool.unregisterReceiver();
+				// application.m_bleTool.unregisterReceiver();
 				application.m_bleTool.registerReceiver();
 
 				application.m_bleTool.disconnect();
