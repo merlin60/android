@@ -125,7 +125,9 @@ public class DeviceListActivity extends Activity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case MESSAGE_UPDATELIST: {
-				updateBluetoothDevList();
+				if (application.curActivity == application.DEVICE) {
+					updateBluetoothDevList();
+				}
 			}
 				break;
 			case MESSAGE_CONNECT:
@@ -172,7 +174,7 @@ public class DeviceListActivity extends Activity {
 				Message message = new Message();
 				message.what = MESSAGE_SCAN;
 				m_handler.sendMessage(message);
-				timer.cancel(); // 闁拷閸戦缚顓搁弮璺烘珤
+				timer.cancel(); // 闂侇偓鎷烽柛鎴︾細椤撴悂寮捄鐑樼彜
 			}
 		}
 	};
@@ -195,7 +197,7 @@ public class DeviceListActivity extends Activity {
 
 		// init view
 		initView();
-		
+
 		initAPPConn();
 
 		// bt
@@ -204,7 +206,7 @@ public class DeviceListActivity extends Activity {
 		int ret = openBluetooth();
 
 		timer = new Timer(true);
-		timer.schedule(task, 1000, 500); // 瀵よ埖妞�1000ms閸氬孩澧界悰宀嬬礉1000ms閹笛嗩攽娑擄拷濞嗭拷
+		timer.schedule(task, 1000, 500); // 鐎点倛鍩栧锟�1000ms闁告艾瀛╂晶鐣屾偘瀹�瀣1000ms闁圭瑳鍡╂斀濞戞搫鎷锋繛鍡嫹
 		Log.d(LOGTAG, "open and start bluethooth done");
 	}
 
@@ -219,10 +221,10 @@ public class DeviceListActivity extends Activity {
 	public void onResume() {
 		Log.d(LOGTAG, "device list activity resume");
 		mySharedSetting = new SharedSetting(DeviceListActivity.this);
-//		if (unregisterReceiverFlag == false) {
-//			unregisterReceiverFlag = true;
-//			application.m_bleTool.registerReceiver();
-//		}
+		// if (unregisterReceiverFlag == false) {
+		// unregisterReceiverFlag = true;
+		// application.m_bleTool.registerReceiver();
+		// }
 
 		if (isFirstStart == false) {
 			goneProShowbtn();
@@ -238,7 +240,7 @@ public class DeviceListActivity extends Activity {
 			message.what = MESSAGE_CONNECT;
 			m_handler.sendMessage(message);
 		}
-		
+
 		application.curActivity = application.DEVICE;
 		super.onResume();
 	}
@@ -258,15 +260,15 @@ public class DeviceListActivity extends Activity {
 	public void onStop() {
 		Log.d(LOGTAG, "device list activity stop");
 
-//		if (unregisterReceiverFlag) {
-//			if (mbluetoothService != null) {
-//				Log.i("===", "unregisterReceiver");
-//				application.m_bleTool.unregisterReceiver();
-//				unregisterReceiverFlag = false;
-//			} else {
-//				Log.i("===", "no unregisterReceiver");
-//			}
-//		}
+		// if (unregisterReceiverFlag) {
+		// if (mbluetoothService != null) {
+		// Log.i("===", "unregisterReceiver");
+		// application.m_bleTool.unregisterReceiver();
+		// unregisterReceiverFlag = false;
+		// } else {
+		// Log.i("===", "no unregisterReceiver");
+		// }
+		// }
 		// application.m_bleTool.stopScan();
 
 		super.onStop();
